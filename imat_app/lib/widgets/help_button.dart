@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// A custom floating action button that will expand to show a chat window.
 class HelpButton extends StatefulWidget {
-  /// Creates a floating chat button.
+  /// Creates a floating help button.
   ///
   /// The [onToggle] callback is called when the button is pressed.
   const HelpButton({
@@ -34,9 +34,11 @@ class _HelpButtonState extends State<HelpButton> {
     // Position the FAB in the bottom-right corner
     return FloatingActionButton(
       onPressed: _toggleExpansion,
-      backgroundColor: Colors.blue,
+      backgroundColor: const Color.fromARGB(255, 0, 169, 211),
+      shape: const CircleBorder(),
       child: Icon(
-        _isExpanded ? Icons.close : Icons.chat,
+        size: 50,
+        _isExpanded ? Icons.close : Icons.help_sharp,
         color: Colors.white,
       ),
       tooltip: 'Chat',
