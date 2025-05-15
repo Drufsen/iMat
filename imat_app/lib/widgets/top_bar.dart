@@ -7,6 +7,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      centerTitle: true,
       backgroundColor: AppTheme.ITColor,
       titleSpacing: 0,
       elevation: 4,
@@ -14,24 +15,26 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: null,
         icon: const Icon(Icons.home, color: Colors.blueGrey),
       ),
-      title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Center(
-          child: Container(
-            height: 40,
-            width: 500,
-            decoration: BoxDecoration(
-              color: AppTheme.colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const TextField(
-              decoration: InputDecoration(
-                hintText: 'Sök efter produkter...',
-                border: InputBorder.none,
-                prefixIcon: Icon(Icons.search),
+      title: Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 40,
+              width: 500,
+              decoration: BoxDecoration(
+                color: AppTheme.colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const TextField(
+                decoration: InputDecoration(
+                  hintText: 'Sök efter produkter...',
+                  border: InputBorder.none,
+                  prefixIcon: Icon(Icons.search),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
       actions: [
@@ -53,5 +56,5 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 20);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
