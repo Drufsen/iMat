@@ -41,7 +41,7 @@ class _HelpButtonState extends State<HelpButton> {
         _isExpanded ? Icons.close : Icons.help_sharp,
         color: Colors.white,
       ),
-      tooltip: 'Chat',
+      tooltip: 'Hjälp',
     );
   }
 }
