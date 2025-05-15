@@ -34,7 +34,7 @@ class HelpWindow extends StatelessWidget {
             child: const Center(
               child: Text(
                 'Skriv ett meddelande nedan eller ring oss på 072-730 99 50.',
-                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold),
+                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ),
