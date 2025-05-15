@@ -15,7 +15,7 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   bool _isChatExpanded = false;
   
-  void _handleChatToggle(bool isExpanded) {
+  void _handleHelpToggle(bool isExpanded) {
     setState(() {
       _isChatExpanded = isExpanded;
     });
@@ -48,8 +48,8 @@ class _MainViewState extends State<MainView> {
         ),
       ),
       // Add the floating action button here
-      floatingActionButton: FloatingChatButton(
-        onToggle: _handleChatToggle,
+      floatingActionButton: HelpButton(
+        onToggle: _handleHelpToggle,
       ),
     );
   }

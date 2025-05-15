@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 /// A custom floating action button that will expand to show a chat window.
-class FloatingChatButton extends StatefulWidget {
+class HelpButton extends StatefulWidget {
   /// Creates a floating chat button.
   ///
   /// The [onToggle] callback is called when the button is pressed.
-  const FloatingChatButton({
+  const HelpButton({
     Key? key,
     this.onToggle,
   }) : super(key: key);
@@ -14,10 +14,10 @@ class FloatingChatButton extends StatefulWidget {
   final Function(bool isExpanded)? onToggle;
 
   @override
-  State<FloatingChatButton> createState() => _FloatingChatButtonState();
+  State<HelpButton> createState() => _HelpButtonState();
 }
 
-class _FloatingChatButtonState extends State<FloatingChatButton> {
+class _HelpButtonState extends State<HelpButton> {
   bool _isExpanded = false;
 
   void _toggleExpansion() {
