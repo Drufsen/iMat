@@ -5,10 +5,7 @@ class FloatingHelpButton extends StatefulWidget {
   /// Creates a floating help button.
   ///
   /// The [onToggle] callback is called when the button is pressed.
-  const FloatingHelpButton({
-    Key? key,
-    this.onToggle,
-  }) : super(key: key);
+  const FloatingHelpButton({super.key, this.onToggle});
 
   /// Called when the button is toggled.
   final Function(bool isExpanded)? onToggle;
@@ -24,7 +21,7 @@ class _FloatingHelpButtonState extends State<FloatingHelpButton> {
     setState(() {
       _isExpanded = !_isExpanded;
     });
-    
+
     // Notify parent widget about the state change
     widget.onToggle?.call(_isExpanded);
   }
@@ -36,12 +33,12 @@ class _FloatingHelpButtonState extends State<FloatingHelpButton> {
       onPressed: _toggleExpansion,
       backgroundColor: const Color.fromARGB(255, 0, 169, 211),
       shape: const CircleBorder(),
+      tooltip: 'Hjälp',
       child: Icon(
         size: 50,
         _isExpanded ? Icons.close : Icons.help_sharp,
         color: Colors.white,
       ),
-      tooltip: 'Hjälp',
     );
   }
 }

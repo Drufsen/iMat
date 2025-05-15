@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HelpWindow extends StatelessWidget {
-  const HelpWindow({Key? key}) : super(key: key);
+  const HelpWindow({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class HelpWindow extends StatelessWidget {
             ],
           ),
         ),
-        
+
         // Help messages area
         Expanded(
           child: Container(
@@ -39,7 +39,7 @@ class HelpWindow extends StatelessWidget {
             ),
           ),
         ),
-        
+
         // Message input
         Padding(
           padding: const EdgeInsets.all(8.0),
