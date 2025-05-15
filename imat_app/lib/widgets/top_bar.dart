@@ -6,7 +6,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      titleSpacing: 0,
+      titleSpacing: 10,
       elevation: 4,
       leading: IconButton(
         onPressed: null,
@@ -16,6 +16,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Container(
           height: 40,
+          width: 150,
           decoration: BoxDecoration(
             color: Colors.blueAccent,
             borderRadius: BorderRadius.circular(8),
