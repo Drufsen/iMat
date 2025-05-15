@@ -59,7 +59,13 @@ class _MainViewState extends State<MainView> with SingleTickerProviderStateMixin
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: null, icon: const Icon(Icons.home, color: Colors.blueGrey,)),
-        title: const Text('iMats produkter')),
+        title: const Text('iMats produkter'),
+        actions: [
+          IconButton(onPressed: null, icon: const Icon(Icons.favorite_border, color: Colors.amberAccent,)),
+          IconButton(onPressed: null, icon: const Icon(Icons.shopping_cart_outlined, color: Colors.teal,)),
+          IconButton(onPressed: null, icon: const Icon(Icons.account_circle_outlined, color: Colors.teal,)),
+          
+        ],),
       body: Stack(
         children: [
           // Main content
