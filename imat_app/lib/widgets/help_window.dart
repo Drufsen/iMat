@@ -16,7 +16,7 @@ class HelpWindow extends StatelessWidget {
               Icon(Icons.chat, color: Colors.white),
               SizedBox(width: 8),
               Text(
-                'Help',
+                'Hjälp',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -33,8 +33,8 @@ class HelpWindow extends StatelessWidget {
             color: Colors.grey[100],
             child: const Center(
               child: Text(
-                'Help messages will appear here',
-                style: TextStyle(color: Colors.grey),
+                'Skriv ett meddelande nedan eller ring oss på 072-730 99 50.',
+                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -48,7 +48,7 @@ class HelpWindow extends StatelessWidget {
               Expanded(
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: 'Type a message...',
+                    hintText: 'Skriv ett meddelande...',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
