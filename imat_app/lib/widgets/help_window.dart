@@ -60,7 +60,7 @@ class HelpWindow extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.send, color: Colors.blue),
+                icon: const Icon(Icons.send, color: Color.fromARGB(255, 0, 169, 211)),
                 onPressed: () {
                   // Send message logic will go here
                 },
