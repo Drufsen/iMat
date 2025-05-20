@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
+import 'package:imat_app/widgets/cart_button.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
 
 class ProductCard extends StatelessWidget {
@@ -27,20 +28,31 @@ class ProductCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.paddingSmall),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(child: iMat.getImage(product)),
+
+              const SizedBox(height: 8),
               ScalableText(
                 product.name,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: AppTheme.paddingSmall),
+
+              const SizedBox(height: 4),
               ScalableText(
                 '${product.price.toStringAsFixed(2)} ${product.unit}',
                 style: const TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: AddToCartButton(product: product),
               ),
             ],
           ),
