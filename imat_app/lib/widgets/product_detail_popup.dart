@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetailDialog extends StatelessWidget {
@@ -29,7 +30,7 @@ class ProductDetailDialog extends StatelessWidget {
                 child: SizedBox(height: 200, child: iMat.getImage(product)),
               ),
               const SizedBox(height: 16),
-              Text(
+              ScalableText(
                 product.name,
                 style: const TextStyle(
                   fontSize: 24,
@@ -37,12 +38,12 @@ class ProductDetailDialog extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
+              ScalableText(
                 '${product.price.toStringAsFixed(2)} ${product.unit}',
                 style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 16),
-              Text(description, style: const TextStyle(fontSize: 16)),
+              ScalableText(description, style: const TextStyle(fontSize: 16)),
               const SizedBox(height: 24),
               Align(
                 alignment: Alignment.centerRight,
@@ -60,7 +61,10 @@ class ProductDetailDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text("Stäng", style: TextStyle(fontSize: 16)),
+                  child: const ScalableText(
+                    "Stäng",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ],

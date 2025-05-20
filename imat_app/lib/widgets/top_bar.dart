@@ -8,7 +8,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      backgroundColor: AppTheme.ITColor,
+      backgroundColor: AppTheme.colorScheme.primary,
       titleSpacing: 0,
       elevation: 4,
       leading: IconButton(

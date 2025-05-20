@@ -30,7 +30,7 @@ class ProductCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(child: iMat.getImage(product)),
-              Text(
+              ScalableText(
                 product.name,
                 style: const TextStyle(
                   fontSize: 16,
@@ -38,7 +38,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppTheme.paddingSmall),
-              Text(
+              ScalableText(
                 '${product.price.toStringAsFixed(2)} ${product.unit}',
                 style: const TextStyle(fontSize: 14),
               ),

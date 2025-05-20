@@ -33,12 +33,11 @@ class _MainViewState extends State<MainView> {
             }
             : allProducts;
 
-
     return Scaffold(
       appBar: TopBar(),
       body: Stack(
         children: [
-          Padding(Product_grid
+          Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

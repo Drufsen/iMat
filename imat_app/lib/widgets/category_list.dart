@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat/util/product_categories.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 
 class CategoryList extends StatelessWidget {
   final void Function(ProductCategory) onCategorySelected;
@@ -37,7 +38,7 @@ class CategoryList extends StatelessWidget {
               onPressed: () {
                 onCategorySelected(category);
               },
-              child: Text(categoryName),
+              child: ScalableText(categoryName),
             ),
           );
         },
