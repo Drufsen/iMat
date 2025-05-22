@@ -78,11 +78,14 @@ class _TopBarState extends State<TopBar> {
     return AppBar(
       centerTitle: true,
       backgroundColor: AppTheme.colorScheme.primary,
-      titleSpacing: 0,
+      titleSpacing: 10,
       elevation: 4,
-      leading: IconButton(
-        onPressed: null,
-        icon: const Icon(Icons.home, color: Colors.blueGrey),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 40),
+        child: IconButton(
+          onPressed: null,
+          icon: const Icon(Icons.home, color: Colors.tealAccent, size: 35,),
+        ),
       ),
       title: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -105,19 +108,65 @@ class _TopBarState extends State<TopBar> {
         ],
       ),
       actions: [
-        IconButton(
-          onPressed: null,
-          icon: const Icon(Icons.favorite_border, color: Colors.amberAccent),
-          hoverColor: AppTheme.colorScheme.inversePrimary,
-        ),
-        IconButton(
-          key: _cartIconKey,
-          icon: const Icon(Icons.shopping_cart_outlined, color: Colors.teal),
-          onPressed: _toggleCartPopup,
-        ),
-        IconButton(
-          onPressed: null,
-          icon: const Icon(Icons.account_circle_outlined, color: Colors.teal),
+        Padding(
+          padding: const EdgeInsets.only(right: 50),
+          child:
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                 IconButton(
+                    onPressed: null,
+                    icon: const Icon(Icons.favorite_outlined, color: Colors.tealAccent, size: 35,),
+                    hoverColor: AppTheme.colorScheme.inversePrimary,
+                    
+                  ),
+
+                Builder(
+                  builder: (context) {
+                    return IconButton(
+                      icon: const Icon(
+                        Icons.shopping_cart_outlined,
+                        color: Colors.tealAccent,
+                        size: 35,
+                      ),
+                      onPressed: () {
+                        final RenderBox button =
+                            context.findRenderObject() as RenderBox;
+                        final overlay =
+                            Overlay.of(context).context.findRenderObject() as RenderBox;
+                        final position = RelativeRect.fromRect(
+                          Rect.fromPoints(
+                            button.localToGlobal(Offset.zero, ancestor: overlay),
+                            button.localToGlobal(
+                              button.size.bottomRight(Offset.zero),
+                              ancestor: overlay,
+                            ),
+                          ),
+                          Offset.zero & overlay.size,
+                        );
+                
+                        showMenu(
+                          context: context,
+                          position: position,
+                          items: [
+                            PopupMenuItem(
+                              enabled: false,
+                              padding: EdgeInsets.zero,
+                              child: SizedBox(width: 300, child: CartPopupMenu()),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                
+                IconButton(
+                  onPressed: null,
+                  icon: const Icon(Icons.account_circle_outlined, color: Colors.tealAccent, size: 35,),
+                ),
+              ],
+            ),
         ),
       ],
     );
