@@ -15,12 +15,26 @@ class CategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Create a sorted copy of the categories with "Okänd kategori" last
+    final sortedCategories = List<ProductCategory>.from(ProductCategory.values)
+      ..sort((a, b) {
+        // Special handling for "Okänd kategori"
+        final nameA = getCategoryName(a);
+        final nameB = getCategoryName(b);
+
+        if (nameA == "Okänd kategori") return 1; // Push A to the end
+        if (nameB == "Okänd kategori") return -1; // Push B to the end
+
+        // Normal alphabetical comparison for other categories
+        return nameA.compareTo(nameB);
+      });
+
     return SizedBox(
       width: 200,
       child: ListView.builder(
-        itemCount: ProductCategory.values.length,
+        itemCount: sortedCategories.length,
         itemBuilder: (context, index) {
-          final category = ProductCategory.values[index];
+          final category = sortedCategories[index];
           final categoryName = getCategoryName(category);
           final isSelected = category == selected;
 
