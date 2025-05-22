@@ -5,7 +5,8 @@ class TransactionHistoryModal extends StatefulWidget {
   const TransactionHistoryModal({super.key});
 
   @override
-  State<TransactionHistoryModal> createState() => _TransactionHistoryModalState();
+  State<TransactionHistoryModal> createState() =>
+      _TransactionHistoryModalState();
 }
 
 class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
@@ -67,9 +68,7 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 0,
       backgroundColor: Colors.transparent,
       child: contentBox(context),
@@ -110,7 +109,7 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                 Text(
                   'Köphistorik',
                   style: TextStyle(
-                    fontSize: 24, 
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: AppTheme.colorScheme.onPrimary,
                   ),
@@ -134,7 +133,7 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
               children: [
                 // Left side - Transaction list
                 Container(
-                  width: 300,
+                  width: 275,
                   decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
@@ -149,21 +148,22 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                     itemBuilder: (context, index) {
                       final transaction = _transactions[index];
                       final isSelected = index == _selectedTransactionIndex;
-                      
+
                       return ListTile(
-                        tileColor: isSelected 
-                            ? AppTheme.colorScheme.primaryContainer 
-                            : Colors.transparent,
-                        leading: CircleAvatar(
-                          backgroundColor: AppTheme.colorScheme.primary,
-                          child: Text(
-                            (index + 1).toString(),
-                            style: TextStyle(
-                              color: AppTheme.colorScheme.onPrimary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                        tileColor:
+                            isSelected
+                                ? AppTheme.colorScheme.primaryContainer
+                                : Colors.transparent,
+                        // leading: CircleAvatar(
+                        //   backgroundColor: AppTheme.colorScheme.primary,
+                        //   child: Text(
+                        //     (index + 1).toString(),
+                        //     style: TextStyle(
+                        //       color: AppTheme.colorScheme.onPrimary,
+                        //       fontWeight: FontWeight.bold,
+                        //     ),
+                        //   ),
+                        // ),
                         title: Text(
                           '${transaction.dateFormatted} | ${transaction.totalAmount.toStringAsFixed(2)} kr',
                           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -178,11 +178,16 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                     },
                   ),
                 ),
-                
+
                 // Right side - Receipt detail
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 12), // Further reduced padding, especially top/bottom
+                    padding: const EdgeInsets.fromLTRB(
+                      24,
+                      16,
+                      24,
+                      12,
+                    ), // Further reduced padding, especially top/bottom
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -195,26 +200,39 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                                 Text(
                                   '${_transactions[_selectedTransactionIndex].dateFormatted}',
                                   style: const TextStyle(
-                                    fontSize: 18, // Keep the larger font size for the date
-                                    fontWeight: FontWeight.bold, // Keep the date bold
+                                    fontSize:
+                                        18, // Keep the larger font size for the date
+                                    fontWeight:
+                                        FontWeight.bold, // Keep the date bold
                                   ),
                                 ),
                                 const SizedBox(width: 16),
                                 Text(
                                   'Kvitto #${_transactions[_selectedTransactionIndex].id}',
                                   style: TextStyle(
-                                    fontSize: 15, // Smaller font for the receipt number
-                                    color: AppTheme.colorScheme.onSurfaceVariant, // Use the secondary color
+                                    fontSize:
+                                        15, // Smaller font for the receipt number
+                                    color:
+                                        AppTheme
+                                            .colorScheme
+                                            .onSurfaceVariant, // Use the secondary color
                                   ),
                                 ),
                               ],
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8), // Even less space since we removed one row
-                        const Divider(thickness: 1, height: 1), // Thinner divider with no height
+                        const SizedBox(
+                          height: 8,
+                        ), // Even less space since we removed one row
+                        const Divider(
+                          thickness: 1,
+                          height: 1,
+                        ), // Thinner divider with no height
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6), // Minimal padding
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 6,
+                          ), // Minimal padding
                           child: Row(
                             children: [
                               const Expanded(
@@ -263,28 +281,42 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                             ],
                           ),
                         ),
-                        const Divider(thickness: 1, height: 1), // Thinner divider with no height
+                        const Divider(
+                          thickness: 1,
+                          height: 1,
+                        ), // Thinner divider with no height
                         Expanded(
                           child: ListView.builder(
-                            itemCount: _transactions[_selectedTransactionIndex].items.length,
+                            itemCount:
+                                _transactions[_selectedTransactionIndex]
+                                    .items
+                                    .length,
                             itemBuilder: (context, index) {
-                              final item = _transactions[_selectedTransactionIndex].items[index];
+                              final item =
+                                  _transactions[_selectedTransactionIndex]
+                                      .items[index];
                               return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4), // Minimal spacing between items
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                ), // Minimal spacing between items
                                 child: Row(
                                   children: [
                                     Expanded(
                                       flex: 4,
                                       child: Text(
                                         item.name,
-                                        style: const TextStyle(fontSize: 15), // Slightly smaller text
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                        ), // Slightly smaller text
                                       ),
                                     ),
                                     Expanded(
                                       flex: 1,
                                       child: Text(
                                         '${item.quantity} st',
-                                        style: const TextStyle(fontSize: 15), // Slightly smaller text
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                        ), // Slightly smaller text
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -292,7 +324,9 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                                       flex: 2,
                                       child: Text(
                                         '${item.price.toStringAsFixed(2)} kr',
-                                        style: const TextStyle(fontSize: 15), // Slightly smaller text
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                        ), // Slightly smaller text
                                         textAlign: TextAlign.right,
                                       ),
                                     ),
@@ -300,7 +334,9 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                                       flex: 2,
                                       child: Text(
                                         '${(item.price * item.quantity).toStringAsFixed(2)} kr',
-                                        style: const TextStyle(fontSize: 15), // Slightly smaller text
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                        ), // Slightly smaller text
                                         textAlign: TextAlign.right,
                                       ),
                                     ),
@@ -310,9 +346,15 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                             },
                           ),
                         ),
-                        const Divider(thickness: 1, height: 1), // Thinner divider with no height
+                        const Divider(
+                          thickness: 1,
+                          height: 1,
+                        ), // Thinner divider with no height
                         Padding(
-                          padding: const EdgeInsets.only(top: 8, bottom: 0), // Minimal padding, especially at bottom
+                          padding: const EdgeInsets.only(
+                            top: 8,
+                            bottom: 0,
+                          ), // Minimal padding, especially at bottom
                           child: Row(
                             children: [
                               const Spacer(flex: 5),
@@ -368,7 +410,10 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.colorScheme.secondary,
                         foregroundColor: AppTheme.colorScheme.onSecondary,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -376,16 +421,19 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Utskrift av kvitto skickad'),
+                            content: Text('Kvitto sparat som PDF'),
                           ),
                         );
                       },
-                      icon: const Icon(Icons.print),
-                      label: const Text('Skriv ut kvitto'),
+                      icon: const Icon(Icons.picture_as_pdf),
+                      label: const Text('Spara som PDF'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.colorScheme.primary,
                         foregroundColor: AppTheme.colorScheme.onPrimary,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
                       ),
                     ),
                   ],
