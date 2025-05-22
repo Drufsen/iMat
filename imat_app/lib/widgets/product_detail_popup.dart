@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/widgets/cart_button.dart';
+import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
-import 'package:provider/provider.dart';
 
 class ProductDetailDialog extends StatelessWidget {
   final Product product;
@@ -21,7 +22,7 @@ class ProductDetailDialog extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: SizedBox(
-          width: 400, // Control dialog width
+          width: 420, // Limit dialog width
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,28 +45,23 @@ class ProductDetailDialog extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               ScalableText(description, style: const TextStyle(fontSize: 16)),
+
               const SizedBox(height: 24),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.primary, // Themed color
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
+
+              // ✅ Row with buttons aligned to left and right
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.primary,
+                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    child: const Text("Stäng"),
                   ),
-                  child: const ScalableText(
-                    "Stäng",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
+                  AddToCartButton(product: product),
+                ],
               ),
             ],
           ),
