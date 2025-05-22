@@ -149,31 +149,41 @@ class _TransactionHistoryModalState extends State<TransactionHistoryModal> {
                       final transaction = _transactions[index];
                       final isSelected = index == _selectedTransactionIndex;
 
-                      return ListTile(
-                        tileColor:
+                      return Material(
+                        elevation: isSelected ? 2 : 0,
+                        shadowColor:
                             isSelected
-                                ? AppTheme.colorScheme.primaryContainer
+                                ? AppTheme.colorScheme.shadow.withOpacity(0.4)
                                 : Colors.transparent,
-                        // leading: CircleAvatar(
-                        //   backgroundColor: AppTheme.colorScheme.primary,
-                        //   child: Text(
-                        //     (index + 1).toString(),
-                        //     style: TextStyle(
-                        //       color: AppTheme.colorScheme.onPrimary,
-                        //       fontWeight: FontWeight.bold,
-                        //     ),
-                        //   ),
-                        // ),
-                        title: Text(
-                          '${transaction.dateFormatted} | ${transaction.totalAmount.toStringAsFixed(2)} kr',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        color:
+                            isSelected
+                                ? AppTheme.colorScheme.secondaryContainer
+                                : Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side:
+                              isSelected
+                                  ? BorderSide(
+                                    color: AppTheme
+                                        .colorScheme
+                                        .secondaryContainer
+                                        .withOpacity(0.3),
+                                    width: 0,
+                                  )
+                                  : BorderSide.none,
                         ),
-                        subtitle: Text('Kvitto #${transaction.id}'),
-                        onTap: () {
-                          setState(() {
-                            _selectedTransactionIndex = index;
-                          });
-                        },
+                        child: ListTile(
+                          title: Text(
+                            '${transaction.dateFormatted} | ${transaction.totalAmount.toStringAsFixed(2)} kr',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text('Kvitto #${transaction.id}'),
+                          onTap: () {
+                            setState(() {
+                              _selectedTransactionIndex = index;
+                            });
+                          },
+                        ),
                       );
                     },
                   ),
