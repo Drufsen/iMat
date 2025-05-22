@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/cart_button.dart';
+import 'package:imat_app/widgets/close-button.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
@@ -52,14 +54,7 @@ class ProductDetailDialog extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: TextButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.primary,
-                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    child: const Text("Stäng"),
-                  ),
+                  CloseButtonWidget(),
                   AddToCartButton(product: product),
                 ],
               ),

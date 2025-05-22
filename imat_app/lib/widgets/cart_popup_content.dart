@@ -1,66 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/widgets/car_item_tile.dart';
+import 'package:imat_app/widgets/cart_total_row.dart';
+import 'package:imat_app/widgets/close-button.dart';
+import 'package:imat_app/widgets/empty_cart_message.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
-import 'package:imat_app/model/imat/shopping_item.dart';
 
 class CartPopupMenu extends StatelessWidget {
-  const CartPopupMenu({super.key});
+  final VoidCallback? onClose;
+
+  const CartPopupMenu({super.key, this.onClose});
 
   @override
   Widget build(BuildContext context) {
     final iMat = context.watch<ImatDataHandler>();
     final items = iMat.getShoppingCart().items;
-    final total = iMat.shoppingCartTotal();
 
-    if (items.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text('Din kundvagn är tom.'),
-      );
-    }
+    if (items.isEmpty) return const EmptyCartMessage();
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxHeight: 400, maxWidth: 300),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ...items.map(
-              (item) => ListTile(
-                dense: true,
-                title: Text(item.product.name),
-                subtitle: Text(
-                  '${item.amount.toInt()} st • ${item.product.price.toStringAsFixed(2)} ${item.product.unit}',
-                ),
-                trailing: IconButton(
-                  icon: const Icon(
-                    Icons.remove_circle_outline,
-                    color: Colors.redAccent,
-                  ),
-                  onPressed: () {
-                    iMat.shoppingCartRemove(item);
-                  },
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        constraints: const BoxConstraints(maxHeight: 420, maxWidth: 320),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.teal, width: 5),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ...items.map((item) => CartItemTile(item: item)).toList(),
+              const Divider(thickness: 1.5),
+              const CartTotalRow(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8, bottom: 8),
+                  child: CloseButtonWidget(onPressed: onClose),
                 ),
               ),
-            ),
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Totalt:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '${total.toStringAsFixed(2)} kr',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
