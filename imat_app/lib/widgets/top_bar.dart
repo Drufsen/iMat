@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
+import 'package:imat_app/widgets/transaction_history_modal.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
   const TopBar({super.key});
@@ -15,6 +16,15 @@ class TopBar extends StatefulWidget implements PreferredSizeWidget {
 class _TopBarState extends State<TopBar> {
   final GlobalKey _cartIconKey = GlobalKey();
   late CartOverlayController _cartOverlayController;
+
+  void _showTransactionHistory(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const TransactionHistoryModal();
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -90,9 +100,9 @@ class _TopBarState extends State<TopBar> {
                     ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => _showTransactionHistory(context),
                 icon: const Icon(
-                  Icons.account_circle_outlined,
+                  Icons.receipt_long,
                   color: Colors.tealAccent,
                   size: 35,
                 ),
