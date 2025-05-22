@@ -28,10 +28,7 @@ class TextSizeSlider extends StatelessWidget {
             children: [
               ScalableText(
                 'Text Size',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               // Sample text that changes size
