@@ -49,8 +49,11 @@ class ProductGrid extends StatelessWidget {
                       onTap: () {
                         showDialog(
                           context: context,
-                          barrierDismissible: false,
-                          barrierColor: Colors.black.withOpacity(0.5),
+                          barrierDismissible:
+                              false, // ⛔ Don't allow tap-to-close outside the dialog
+                          barrierColor: Colors.black.withOpacity(
+                            0.5,
+                          ), // ✅ Dimmed background
                           builder:
                               (context) =>
                                   ProductDetailDialog(product: product),

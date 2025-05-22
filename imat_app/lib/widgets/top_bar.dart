@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
+import 'package:imat_app/widgets/cart_popup_content.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   const TopBar({super.key});
@@ -43,10 +44,45 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
           icon: const Icon(Icons.favorite_border, color: Colors.amberAccent),
           hoverColor: AppTheme.colorScheme.inversePrimary,
         ),
-        IconButton(
-          onPressed: null,
-          icon: const Icon(Icons.shopping_cart_outlined, color: Colors.teal),
+        Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.shopping_cart_outlined,
+                color: Colors.teal,
+              ),
+              onPressed: () {
+                final RenderBox button =
+                    context.findRenderObject() as RenderBox;
+                final overlay =
+                    Overlay.of(context).context.findRenderObject() as RenderBox;
+                final position = RelativeRect.fromRect(
+                  Rect.fromPoints(
+                    button.localToGlobal(Offset.zero, ancestor: overlay),
+                    button.localToGlobal(
+                      button.size.bottomRight(Offset.zero),
+                      ancestor: overlay,
+                    ),
+                  ),
+                  Offset.zero & overlay.size,
+                );
+
+                showMenu(
+                  context: context,
+                  position: position,
+                  items: [
+                    PopupMenuItem(
+                      enabled: false,
+                      padding: EdgeInsets.zero,
+                      child: SizedBox(width: 300, child: CartPopupMenu()),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
         ),
+
         IconButton(
           onPressed: null,
           icon: const Icon(Icons.account_circle_outlined, color: Colors.teal),

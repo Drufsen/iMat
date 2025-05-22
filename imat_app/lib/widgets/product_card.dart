@@ -28,9 +28,36 @@ class ProductCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.paddingSmall),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(child: iMat.getImage(product)),
+              Stack(
+                children: [
+                  SizedBox(height: 100, child: iMat.getImage(product)),
+                  if (iMat.getQuantityInCart(product) > 0)
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          iMat.getQuantityInCart(product).toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
 
               const SizedBox(height: 8),
               ScalableText(
@@ -41,19 +68,14 @@ class ProductCard extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-
               const SizedBox(height: 4),
               ScalableText(
                 '${product.price.toStringAsFixed(2)} ${product.unit}',
                 style: const TextStyle(fontSize: 14),
                 textAlign: TextAlign.center,
               ),
-
-              const SizedBox(height: 8),
-              Align(
-                alignment: Alignment.centerRight,
-                child: AddToCartButton(product: product),
-              ),
+              const SizedBox(height: AppTheme.paddingLarge),
+              Center(child: AddToCartButton(product: product)),
             ],
           ),
         ),
