@@ -35,9 +35,9 @@ class _TopBarState extends State<TopBar> {
     double left = position.dx;
     final double screenWidth = overlay.size.width;
 
-    // Shift left if popup would overflow
+    // Shift left if popup would overflow off-screen
     if (left + popupWidth > screenWidth) {
-      left = screenWidth - popupWidth - 8; // optional margin
+      left = screenWidth - popupWidth - 8;
     }
 
     _cartOverlay = OverlayEntry(
@@ -83,8 +83,10 @@ class _TopBarState extends State<TopBar> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 40),
         child: IconButton(
-          onPressed: null,
-          icon: const Icon(Icons.home, color: Colors.tealAccent, size: 35,),
+          onPressed: () {
+            // You can implement a go-home navigation here
+          },
+          icon: const Icon(Icons.home, color: Colors.tealAccent, size: 35),
         ),
       ),
       title: Column(
@@ -110,63 +112,37 @@ class _TopBarState extends State<TopBar> {
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 50),
-          child:
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                 IconButton(
-                    onPressed: null,
-                    icon: const Icon(Icons.favorite_outlined, color: Colors.tealAccent, size: 35,),
-                    hoverColor: AppTheme.colorScheme.inversePrimary,
-                    
-                  ),
-
-                Builder(
-                  builder: (context) {
-                    return IconButton(
-                      icon: const Icon(
-                        Icons.shopping_cart_outlined,
-                        color: Colors.tealAccent,
-                        size: 35,
-                      ),
-                      onPressed: () {
-                        final RenderBox button =
-                            context.findRenderObject() as RenderBox;
-                        final overlay =
-                            Overlay.of(context).context.findRenderObject() as RenderBox;
-                        final position = RelativeRect.fromRect(
-                          Rect.fromPoints(
-                            button.localToGlobal(Offset.zero, ancestor: overlay),
-                            button.localToGlobal(
-                              button.size.bottomRight(Offset.zero),
-                              ancestor: overlay,
-                            ),
-                          ),
-                          Offset.zero & overlay.size,
-                        );
-                
-                        showMenu(
-                          context: context,
-                          position: position,
-                          items: [
-                            PopupMenuItem(
-                              enabled: false,
-                              padding: EdgeInsets.zero,
-                              child: SizedBox(width: 300, child: CartPopupMenu()),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.favorite_outlined,
+                  color: Colors.tealAccent,
+                  size: 35,
                 ),
-                
-                IconButton(
-                  onPressed: null,
-                  icon: const Icon(Icons.account_circle_outlined, color: Colors.tealAccent, size: 35,),
+                hoverColor: AppTheme.colorScheme.inversePrimary,
+              ),
+              IconButton(
+                key: _cartIconKey,
+                icon: const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Colors.tealAccent,
+                  size: 35,
                 ),
-              ],
-            ),
+                onPressed: _toggleCartPopup,
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.account_circle_outlined,
+                  color: Colors.tealAccent,
+                  size: 35,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
