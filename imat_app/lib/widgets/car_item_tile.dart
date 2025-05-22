@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/model/imat/shopping_item.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 
 class CartItemTile extends StatelessWidget {
@@ -16,8 +17,8 @@ class CartItemTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: ListTile(
         dense: true,
-        title: Text(item.product.name),
-        subtitle: Text(
+        title: ScalableText(item.product.name, fontWeight: FontWeight.bold),
+        subtitle: ScalableText(
           '${item.amount.toInt()} st • ${item.product.price.toStringAsFixed(2)} ${item.product.unit}',
         ),
         trailing: IconButton(

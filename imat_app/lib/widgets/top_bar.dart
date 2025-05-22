@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
-import 'package:imat_app/widgets/cart_popup_content.dart';
+import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
   const TopBar({super.key});
@@ -14,63 +14,18 @@ class TopBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _TopBarState extends State<TopBar> {
   final GlobalKey _cartIconKey = GlobalKey();
-  OverlayEntry? _cartOverlay;
+  late CartOverlayController _cartOverlayController;
 
-  void _toggleCartPopup() {
-    if (_cartOverlay != null) {
-      _removeCartPopup();
-      return;
-    }
-
-    final RenderBox button =
-        _cartIconKey.currentContext!.findRenderObject() as RenderBox;
-    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-    final Offset position = button.localToGlobal(
-      Offset.zero,
-      ancestor: overlay,
-    );
-    final Size buttonSize = button.size;
-
-    const double popupWidth = 320;
-    double left = position.dx;
-    final double screenWidth = overlay.size.width;
-
-    // Shift left if popup would overflow off-screen
-    if (left + popupWidth > screenWidth) {
-      left = screenWidth - popupWidth - 8;
-    }
-
-    _cartOverlay = OverlayEntry(
-      builder:
-          (context) => Positioned(
-            left: left,
-            top: position.dy + buttonSize.height + 8,
-            child: Material(
-              color: Colors.transparent,
-              child: Stack(
-                children: [
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: _removeCartPopup,
-                    child: Container(
-                      width: overlay.size.width,
-                      height: overlay.size.height,
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  CartPopupMenu(onClose: _removeCartPopup),
-                ],
-              ),
-            ),
-          ),
-    );
-
-    Overlay.of(context).insert(_cartOverlay!);
+  @override
+  void initState() {
+    super.initState();
+    _cartOverlayController = CartOverlayController();
   }
 
-  void _removeCartPopup() {
-    _cartOverlay?.remove();
-    _cartOverlay = null;
+  @override
+  void dispose() {
+    _cartOverlayController.removeCartPopup();
+    super.dispose();
   }
 
   @override
@@ -83,9 +38,7 @@ class _TopBarState extends State<TopBar> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 40),
         child: IconButton(
-          onPressed: () {
-            // You can implement a go-home navigation here
-          },
+          onPressed: () {},
           icon: const Icon(Icons.home, color: Colors.tealAccent, size: 35),
         ),
       ),
@@ -122,7 +75,6 @@ class _TopBarState extends State<TopBar> {
                   color: Colors.tealAccent,
                   size: 35,
                 ),
-                hoverColor: AppTheme.colorScheme.inversePrimary,
               ),
               IconButton(
                 key: _cartIconKey,
@@ -131,7 +83,11 @@ class _TopBarState extends State<TopBar> {
                   color: Colors.tealAccent,
                   size: 35,
                 ),
-                onPressed: _toggleCartPopup,
+                onPressed:
+                    () => _cartOverlayController.toggleCartPopup(
+                      context,
+                      _cartIconKey,
+                    ),
               ),
               IconButton(
                 onPressed: () {},
