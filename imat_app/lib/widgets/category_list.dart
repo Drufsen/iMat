@@ -15,12 +15,17 @@ class CategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Create a filtered and alphabetically sorted list without "Okänd kategori"
+    final sortedCategories = List<ProductCategory>.from(ProductCategory.values)
+      ..removeWhere((category) => getCategoryName(category) == "Okänd kategori")
+      ..sort((a, b) => getCategoryName(a).compareTo(getCategoryName(b)));
+
     return SizedBox(
       width: 200,
       child: ListView.builder(
-        itemCount: ProductCategory.values.length,
+        itemCount: sortedCategories.length,
         itemBuilder: (context, index) {
-          final category = ProductCategory.values[index];
+          final category = sortedCategories[index];
           final categoryName = getCategoryName(category);
           final isSelected = category == selected;
 

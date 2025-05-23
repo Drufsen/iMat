@@ -74,7 +74,7 @@ class ProductCard extends StatelessWidget {
                 style: const TextStyle(fontSize: 14),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: AppTheme.paddingSmall),
               Center(child: AddToCartButton(product: product)),
             ],
           ),

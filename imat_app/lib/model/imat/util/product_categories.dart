@@ -35,8 +35,18 @@ String getCategoryName(ProductCategory category) {
       return "Nötter och frön";
     case ProductCategory.PASTA:
       return "Pasta";
+    case ProductCategory.POTATO_RICE:
+      return "Potatis och ris";
+    case ProductCategory.ROOT_VEGETABLE:
+      return "Rotfrukter";
+    case ProductCategory.SWEET:
+      return "Sötsaker";
+    case ProductCategory.VEGETABLE_FRUIT:
+      return "Grönsaksfrukter";
+    case ProductCategory.FLOUR_SUGAR_SALT:
+      return "Mjöl, socker och salt";
     default:
-      return "Fika";
+      return "Okänd kategori";
   }
 }
 
