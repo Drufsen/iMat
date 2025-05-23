@@ -52,7 +52,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
                     onPressed: null,
                     icon: const Icon(Icons.favorite_outlined, color: Colors.tealAccent, size: 35,),
                     hoverColor: AppTheme.colorScheme.inversePrimary,
-                    
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   ),
 
                 Builder(
@@ -63,6 +63,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
                         color: Colors.tealAccent,
                         size: 35,
                       ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       onPressed: () {
                         final RenderBox button =
                             context.findRenderObject() as RenderBox;
@@ -98,6 +99,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
                 IconButton(
                   onPressed: null,
                   icon: const Icon(Icons.account_circle_outlined, color: Colors.tealAccent, size: 35,),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 ),
               ],
             ),
