@@ -86,6 +86,7 @@ class _TopBarState extends State<TopBar> {
                   size: 35,
                 ),
               ),
+              const SizedBox(width: 16), // Add spacing here
               IconButton(
                 key: _cartIconKey,
                 icon: const Icon(
@@ -99,10 +100,22 @@ class _TopBarState extends State<TopBar> {
                       _cartIconKey,
                     ),
               ),
+              const SizedBox(width: 16), // Add spacing here
               IconButton(
                 onPressed: () => _showTransactionHistory(context),
                 icon: const Icon(
                   Icons.receipt_long,
+                  color: Colors.tealAccent,
+                  size: 35,
+                ),
+              ),
+              const SizedBox(width: 16), // Add spacing here
+              IconButton(
+                onPressed: () {
+                  // Add settings functionality here
+                },
+                icon: const Icon(
+                  Icons.settings,
                   color: Colors.tealAccent,
                   size: 35,
                 ),
