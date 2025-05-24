@@ -1,49 +1,74 @@
 import 'package:flutter/material.dart';
-import 'package:imat_app/app_theme.dart';
+import 'package:imat_app/model/imat/product.dart';
+import 'package:imat_app/model/imat/util/product_categories.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
-import 'package:imat_app/widgets/product_card.dart';
+import 'package:imat_app/widgets/category_sidebar';
 import 'package:imat_app/widgets/expandable_help_overlay.dart';
+import 'package:imat_app/widgets/filtered_product_selection.dart';
+import 'package:imat_app/widgets/top_bar.dart';
+import 'package:imat_app/widgets/text_size_slider.dart'; // Add this import
 import 'package:provider/provider.dart';
 
-class MainView extends StatelessWidget {
+class MainView extends StatefulWidget {
   const MainView({super.key});
+  @override
+  State<MainView> createState() => _MainViewState();
+}
+
+class _MainViewState extends State<MainView> {
+  ProductCategory? selectedCategory;
 
   @override
   Widget build(BuildContext context) {
     var iMat = context.watch<ImatDataHandler>();
-    var products = iMat.selectProducts;
+    final allProducts = buildCategorizedProducts(iMat);
+
+    final filteredProducts =
+        selectedCategory != null
+            ? {
+              getCategoryName(selectedCategory!):
+                  iMat.selectProducts
+                      .where((p) => p.category == selectedCategory)
+                      .toList(),
+            }
+            : allProducts;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('iMats produkter')),
+      appBar: TopBar(),
       body: Stack(
         children: [
-          // Main content - Product grid
           Padding(
-            padding: const EdgeInsets.all(AppTheme.paddingSmall),
-            child: _buildProductGrid(products, iMat),
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CategorySidebar(
+                  selectedCategory: selectedCategory,
+                  onSelect: (category) {
+                    setState(() {
+                      selectedCategory = category;
+                    });
+                  },
+                ),
+                const SizedBox(width: 25),
+                Expanded(
+                  child: FilteredProductSection(
+                    selectedCategory: selectedCategory,
+                    onClearFilter: () {
+                      setState(() {
+                        selectedCategory = null;
+                      });
+                    },
+                    categorizedProducts: filteredProducts,
+                    iMat: iMat,
+                  ),
+                ),
+              ],
+            ),
           ),
-
-          // Help overlay that includes both button and expandable window
           const ExpandableHelpOverlay(),
         ],
       ),
-    );
-  }
-
-  /// Builds the product grid view
-  Widget _buildProductGrid(List<dynamic> products, ImatDataHandler iMat) {
-    return GridView.builder(
-      itemCount: products.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4, // 4 kolumner
-        crossAxisSpacing: AppTheme.paddingSmall,
-        mainAxisSpacing: AppTheme.paddingSmall,
-        childAspectRatio: 4 / 3,
-      ),
-      itemBuilder: (context, index) {
-        final product = products[index];
-        return ProductCard(product, iMat);
-      },
     );
   }
 }

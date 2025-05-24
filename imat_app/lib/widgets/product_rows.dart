@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HelpOverlay extends StatelessWidget {
-  const HelpOverlay({super.key});
+class ProductRows extends StatelessWidget {
+  const ProductRows({super.key});
 
   @override
   Widget build(BuildContext context) {

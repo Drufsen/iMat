@@ -1,0 +1,24 @@
+// New file: widgets/category_sidebar.dart
+
+import 'package:flutter/material.dart';
+import 'package:imat_app/model/imat/product.dart';
+import 'package:imat_app/widgets/category_list.dart';
+
+class CategorySidebar extends StatelessWidget {
+  final ProductCategory? selectedCategory;
+  final void Function(ProductCategory) onSelect;
+
+  const CategorySidebar({
+    super.key,
+    required this.selectedCategory,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CategoryList(
+      selected: selectedCategory,
+      onCategorySelected: onSelect,
+    );
+  }
+}
