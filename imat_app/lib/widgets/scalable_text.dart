@@ -30,21 +30,22 @@ class ScalableText extends StatelessWidget {
   Widget build(BuildContext context) {
     final textSizeProvider = Provider.of<TextSizeProvider>(context);
     final baseStyle = style ?? DefaultTextStyle.of(context).style;
-    
+
     // Create a new style by combining the base style with any additional properties
     final combinedStyle = baseStyle.copyWith(
       color: color,
       fontWeight: fontWeight,
       decoration: decoration,
     );
-    
+
     // Apply the scaling factor to the fontSize
     final scaledStyle = combinedStyle.copyWith(
-      fontSize: combinedStyle.fontSize != null 
-          ? combinedStyle.fontSize! * textSizeProvider.textScale 
-          : null,
+      fontSize:
+          combinedStyle.fontSize != null
+              ? combinedStyle.fontSize! * textSizeProvider.textScale
+              : null,
     );
-    
+
     return Text(
       text,
       style: scaledStyle,
