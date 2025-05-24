@@ -70,9 +70,6 @@ class HelpWindow extends StatelessWidget {
               ],
             ),
           ),
-
-          // ✅ Text size slider added with padding
-          const Padding(padding: EdgeInsets.all(8.0), child: TextSizeSlider()),
         ],
       ),
     );

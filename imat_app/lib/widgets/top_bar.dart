@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
+import 'package:imat_app/model/Controller/settings_controller.dart';
 import 'package:imat_app/widgets/transaction_history_modal.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
@@ -15,7 +16,9 @@ class TopBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _TopBarState extends State<TopBar> {
   final GlobalKey _cartIconKey = GlobalKey();
+  final GlobalKey _settingsIconKey = GlobalKey();
   late CartOverlayController _cartOverlayController;
+  late SettingsOverlayController _settingsOverlayController;
 
   void _showTransactionHistory(BuildContext context) {
     showDialog(
@@ -30,11 +33,13 @@ class _TopBarState extends State<TopBar> {
   void initState() {
     super.initState();
     _cartOverlayController = CartOverlayController();
+    _settingsOverlayController = SettingsOverlayController();
   }
 
   @override
   void dispose() {
     _cartOverlayController.removeCartPopup();
+    _settingsOverlayController.removeSettingsPopup();
     super.dispose();
   }
 
@@ -137,9 +142,12 @@ class _TopBarState extends State<TopBar> {
               ),
               const SizedBox(width: 16), // Add spacing here
               IconButton(
-                onPressed: () {
-                  // Add settings functionality here
-                },
+                key: _settingsIconKey,
+                onPressed:
+                    () => _settingsOverlayController.toggleSettingsPopup(
+                      context,
+                      _settingsIconKey,
+                    ),
                 icon: const Icon(
                   Icons.settings,
                   color: Colors.tealAccent,
