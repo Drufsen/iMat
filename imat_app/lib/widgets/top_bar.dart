@@ -45,28 +45,54 @@ class _TopBarState extends State<TopBar> {
       backgroundColor: AppTheme.colorScheme.primary,
       titleSpacing: 10,
       elevation: 4,
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 40),
-        child: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.home, color: Colors.tealAccent, size: 35),
-        ),
-      ),
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      leading: null,
+      leadingWidth: 0,
+      title: Row(
         children: [
-          Container(
-            height: 40,
-            width: 500,
-            decoration: BoxDecoration(
-              color: AppTheme.colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
+          Padding(
+            padding: const EdgeInsets.only(left: 40),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.home,
+                    color: Colors.tealAccent,
+                    size: 35,
+                  ),
+                  padding: EdgeInsets.zero,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'iMat',
+                  style: TextStyle(
+                    color: Colors.tealAccent,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            child: const TextField(
-              decoration: InputDecoration(
-                hintText: 'Sök efter produkter...',
-                border: InputBorder.none,
-                prefixIcon: Icon(Icons.search),
+          ),
+          const Expanded(
+            child: Center(
+              child: SizedBox(
+                height: 40,
+                width: 500,
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Sök efter produkter...',
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.search),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.zero,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
