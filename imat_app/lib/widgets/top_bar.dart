@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
 import 'package:imat_app/model/Controller/settings_controller.dart';
+import 'package:imat_app/widgets/search_bar.dart';
 import 'package:imat_app/widgets/transaction_history_modal.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
@@ -79,28 +80,7 @@ class _TopBarState extends State<TopBar> {
               ],
             ),
           ),
-          const Expanded(
-            child: Center(
-              child: SizedBox(
-                height: 40,
-                width: 500,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Sök efter produkter...',
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search),
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding: EdgeInsets.zero,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          const Expanded(child: Center(child: SearchBarWidget())),
         ],
       ),
       actions: [
