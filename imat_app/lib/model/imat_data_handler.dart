@@ -201,6 +201,21 @@ class ImatDataHandler extends ChangeNotifier {
     setExtras(_extras);
   }
 
+  // I ImatDataHandler:
+  Future<void> placeOrder() async {
+    await InternetHandler.placeOrder(); // Vänta på backend-svaret
+    _shoppingCart.clear(); // Rensa lokalt
+    notifyListeners(); // Uppdatera UI
+
+    // Ladda om ordrar från backend
+    var response = await InternetHandler.getOrders();
+    var jsonData = jsonDecode(response) as List;
+
+    _orders.clear();
+    _orders.addAll(jsonData.map((item) => Order.fromJson(item)).toList());
+    notifyListeners();
+  }
+
   // Tar bort key från extras.
   // Sparar data till servern och meddelar GUI:t att data ändrats.
   void removeExtra(String key) {
@@ -322,22 +337,6 @@ class ImatDataHandler extends ChangeNotifier {
   // meddelar GUI:t att kundvagnen ändrats.
   void setShoppingCart() async {
     await InternetHandler.setShoppingCart(_shoppingCart);
-    notifyListeners();
-  }
-
-  void placeOrder() async {
-    await InternetHandler.placeOrder();
-    _shoppingCart.clear();
-    notifyListeners();
-
-    // Reload orders
-    var response = await InternetHandler.getOrders();
-
-    //print('Orders $response');
-    var jsonData = jsonDecode(response) as List;
-
-    _orders.clear();
-    _orders.addAll(jsonData.map((item) => Order.fromJson(item)).toList());
     notifyListeners();
   }
 

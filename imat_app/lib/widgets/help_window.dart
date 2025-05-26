@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:imat_app/widgets/text_size_slider.dart';
 
 class HelpWindow extends StatelessWidget {
   const HelpWindow({super.key});

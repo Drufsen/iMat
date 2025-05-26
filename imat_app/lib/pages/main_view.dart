@@ -6,7 +6,7 @@ import 'package:imat_app/widgets/category_sidebar';
 import 'package:imat_app/widgets/expandable_help_overlay.dart';
 import 'package:imat_app/widgets/filtered_product_selection.dart';
 import 'package:imat_app/widgets/top_bar.dart';
-import 'package:imat_app/widgets/text_size_slider.dart'; // Add this import
+// Add this import
 import 'package:provider/provider.dart';
 
 class MainView extends StatefulWidget {
