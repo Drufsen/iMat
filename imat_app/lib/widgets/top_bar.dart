@@ -3,7 +3,7 @@ import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
 import 'package:imat_app/model/Controller/settings_controller.dart';
 import 'package:imat_app/widgets/search_bar.dart';
-import 'package:imat_app/widgets/transaction_history_modal.dart';
+import 'package:imat_app/widgets/OrderHistoryModalState.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
   const TopBar({super.key});
@@ -25,7 +25,7 @@ class _TopBarState extends State<TopBar> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const TransactionHistoryModal();
+        return const OrderHistoryModal();
       },
     );
   }

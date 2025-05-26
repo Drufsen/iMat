@@ -4,7 +4,7 @@ import 'package:imat_app/providers/text_size_provider.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
 
 class TextSizeSlider extends StatelessWidget {
-  const TextSizeSlider({Key? key}) : super(key: key);
+  const TextSizeSlider({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -73,6 +73,9 @@ class CartPopupMenu extends StatelessWidget {
                     CloseButtonWidget(onPressed: onClose),
                     ElevatedButton.icon(
                       onPressed: () {
+                        if (onClose != null) {
+                          onClose!(); // Stäng varukorgen innan du öppnar checkout
+                        }
                         showDialog(
                           context: context,
                           barrierDismissible: false,
