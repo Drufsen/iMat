@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/cart_button.dart';
 import 'package:imat_app/widgets/close-button.dart';
 import 'package:provider/provider.dart';
