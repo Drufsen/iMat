@@ -33,7 +33,7 @@ class ProductGrid extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             SizedBox(
-              height: 250, // Adjust height to fit ProductCards nicely
+              height: 280, // Adjust height to fit ProductCards nicely
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: products.length,
@@ -42,15 +42,13 @@ class ProductGrid extends StatelessWidget {
                 itemBuilder: (context, idx) {
                   final product = products[idx];
                   return SizedBox(
-                    width: 180,
+                    width: 250,
                     child: ProductCard(
                       product,
                       iMat,
                       onTap: () {
                         showDialog(
                           context: context,
-                          barrierDismissible:
-                              false, // ⛔ Don't allow tap-to-close outside the dialog
                           barrierColor: Colors.black.withOpacity(
                             0.5,
                           ), // ✅ Dimmed background

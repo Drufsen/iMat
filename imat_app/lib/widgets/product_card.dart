@@ -8,74 +8,103 @@ import 'package:imat_app/widgets/scalable_text.dart';
 class ProductCard extends StatelessWidget {
   final Product product;
   final ImatDataHandler iMat;
-  final VoidCallback? onTap; // ✅ Add this line
+  final VoidCallback? onTap;
 
-  const ProductCard(
-    this.product,
-    this.iMat, {
-    super.key,
-    this.onTap,
-  }); // ✅ Update constructor
+  const ProductCard(this.product, this.iMat, {super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final isFavorite = iMat.isFavorite(product);
+
     return InkWell(
-      onTap: onTap, // ✅ Add this
-      borderRadius: BorderRadius.circular(12),
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.teal, width: 3),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.paddingSmall),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Stack(
+            clipBehavior:
+                Clip.none, // Allows the heart icon to overlap the border
             children: [
-              Stack(
+              // Main content of the card
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 100, child: iMat.getImage(product)),
-                  if (iMat.getQuantityInCart(product) > 0)
-                    Positioned(
-                      top: 4,
-                      right: 4,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.redAccent,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          iMat.getQuantityInCart(product).toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
+                  SizedBox(
+                    height: 120,
+                    width: 200,
+                    child: iMat.getImage(product),
+                  ),
+
+                  const SizedBox(height: 8),
+                  ScalableText(
+                    product.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 4),
+                  ScalableText(
+                    '${product.price.toStringAsFixed(2)} ${product.unit}',
+                    style: const TextStyle(fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppTheme.paddingLarge),
+                  Center(
+                    child: SizedBox(
+                      height: 50, // Adjust this value as needed
+                      width:
+                          double
+                              .infinity, // Optional: make it fill horizontally
+                      child: AddToCartButton(product: product),
+                    ),
+                  ),
                 ],
               ),
 
-              const SizedBox(height: 8),
-              ScalableText(
-                product.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              // ❤️ Favorite button in the card's top-right corner
+              // ❤️ Favorite button in the card's top-right corner
+              Positioned(
+                top: -5,
+                right: -1,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white, // White background
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(
+                          0.1,
+                        ), // Optional subtle shadow
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.redAccent,
+                      size: 32, // Slightly smaller for better fit
+                    ),
+                    onPressed: () {
+                      iMat.toggleFavorite(product);
+                    },
+                    padding: const EdgeInsets.all(
+                      8,
+                    ), // Adjust padding to center icon
+                    constraints:
+                        const BoxConstraints(), // Remove default constraints
+                  ),
                 ),
-                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 4),
-              ScalableText(
-                '${product.price.toStringAsFixed(2)} ${product.unit}',
-                style: const TextStyle(fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppTheme.paddingSmall),
-              Center(child: AddToCartButton(product: product)),
             ],
           ),
         ),

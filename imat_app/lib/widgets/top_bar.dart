@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
 import 'package:imat_app/model/Controller/settings_controller.dart';
+import 'package:imat_app/model/Controller/show_favorites.dart';
+import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/widgets/search_bar.dart';
 import 'package:imat_app/widgets/OrderHistoryModalState.dart';
+import 'package:provider/provider.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
   const TopBar({super.key});
@@ -90,7 +93,10 @@ class _TopBarState extends State<TopBar> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  final dataHandler = context.read<ImatDataHandler>();
+                  showFavoritesDialog(context, dataHandler);
+                },
                 icon: const Icon(
                   Icons.favorite_outlined,
                   color: Colors.tealAccent,
