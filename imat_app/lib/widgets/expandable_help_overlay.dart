@@ -5,7 +5,7 @@ import 'package:imat_app/widgets/help_window.dart';
 /// A widget that handles the expandable help feature.
 /// This combines the help button and the expandable help window.
 class ExpandableHelpOverlay extends StatefulWidget {
-  const ExpandableHelpOverlay({Key? key}) : super(key: key);
+  const ExpandableHelpOverlay({super.key});
 
   @override
   State<ExpandableHelpOverlay> createState() => _ExpandableHelpOverlayState();

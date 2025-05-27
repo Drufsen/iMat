@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:imat_app/widgets/text_size_slider.dart';
 
 class HelpWindow extends StatelessWidget {
   const HelpWindow({super.key});
@@ -70,9 +69,6 @@ class HelpWindow extends StatelessWidget {
               ],
             ),
           ),
-
-          // ✅ Text size slider added with padding
-          const Padding(padding: EdgeInsets.all(8.0), child: TextSizeSlider()),
         ],
       ),
     );

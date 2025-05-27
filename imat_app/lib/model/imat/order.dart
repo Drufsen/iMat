@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:imat_app/model/imat/shopping_item.dart';
 
 class Order {
@@ -15,11 +13,10 @@ class Order {
     List jsonItems = json[_items];
 
     List<ShoppingItem> items = [];
-
-    for (int i = 0; i < jsonItems.length; i++) {
-      ShoppingItem item = ShoppingItem.fromJson(jsonItems[i]);
-      items.add(item);
+    for (final jsonItem in jsonItems) {
+      items.add(ShoppingItem.fromJson(jsonItem));
     }
+
     return Order(
       orderNumber,
       DateTime.fromMillisecondsSinceEpoch(timeStamp),
@@ -30,16 +27,14 @@ class Order {
   Map<String, dynamic> toJson() => {
     _orderNumber: orderNumber,
     _date: date.millisecondsSinceEpoch,
-    _items: jsonEncode(items.map((item) => item.toJson()).toList()),
+    _items: items.map((item) => item.toJson()).toList(),
   };
 
   double getTotal() {
-    var total = 0.0;
-
-    for (final item in items) {
-      total = total + item.product.price * item.amount;
-    }
-    return total;
+    return items.fold(
+      0.0,
+      (sum, item) => sum + item.product.price * item.amount,
+    );
   }
 
   static const _orderNumber = 'orderNumber';

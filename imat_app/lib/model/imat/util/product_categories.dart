@@ -53,11 +53,20 @@ String getCategoryName(ProductCategory category) {
 Map<String, List<Product>> buildCategorizedProducts(ImatDataHandler iMat) {
   final Map<String, List<Product>> categorizedProducts = {};
 
+  // Add "Nyligen köpta" if there are previous orders
+  final recentProducts = <Product>{};
   if (iMat.orders.isNotEmpty) {
-    categorizedProducts["Orders"] =
-        iMat.orders.first.items.map((item) => item.product).toList();
+    for (final order in iMat.orders) {
+      for (final item in order.items) {
+        recentProducts.add(item.product);
+      }
+    }
+    if (recentProducts.isNotEmpty) {
+      categorizedProducts['Nyligen köpta'] = recentProducts.toList();
+    }
   }
 
+  // Add regular categories
   for (var category in ProductCategory.values) {
     final productsInCategory =
         iMat.selectProducts
