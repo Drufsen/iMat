@@ -20,6 +20,7 @@ class ImatDataHandler extends ChangeNotifier {
   ImatDataHandler() {
     _setUp();
   }
+  bool isSearching = false;
 
   // Never changing, only loaded on startup
   List<Product> get products => _products;
@@ -76,8 +77,8 @@ class ImatDataHandler extends ChangeNotifier {
   // Sökningen görs utan hänsyn till case och var i strängen search finns.
   // T ex så hittar "me" både Clementin och Lime.
   List<Product> findProducts(String search) {
+    isSearching = search.isNotEmpty;
     final lowerSearch = search.toLowerCase();
-
     return products.where((product) {
       final name = product.name.toLowerCase();
       return name.contains(lowerSearch);
