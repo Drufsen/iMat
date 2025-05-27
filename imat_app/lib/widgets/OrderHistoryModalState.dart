@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/imat/order.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
-import 'package:imat_app/widgets/scalable_text.dart';
+import 'package:imat_app/widgets/close-button.dart';
 import 'package:provider/provider.dart';
 
 class OrderHistoryModal extends StatefulWidget {
@@ -17,7 +17,8 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
 
   @override
   Widget build(BuildContext context) {
-    final orders = context.watch<ImatDataHandler>().orders;
+    final iMat = context.watch<ImatDataHandler>();
+    final orders = iMat.orders;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -31,15 +32,22 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                   decoration: BoxDecoration(
                     color: AppTheme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.teal, width: 5),
                   ),
                   child: const ScalableText("Ingen köphistorik ännu."),
                 ),
               )
-              : _contentBox(context, orders),
+              : _contentBox(context, iMat, orders),
     );
   }
 
-  Widget _contentBox(BuildContext context, List<Order> orders) {
+  Widget _contentBox(
+    BuildContext context,
+    ImatDataHandler iMat,
+    List<Order> orders,
+  ) {
+    final selectedOrder = orders[_selectedOrderIndex];
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
       height: MediaQuery.of(context).size.height * 0.75,
@@ -47,6 +55,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
         shape: BoxShape.rectangle,
         color: AppTheme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.teal, width: 5),
         boxShadow: const [
           BoxShadow(
             color: Colors.black26,
@@ -57,13 +66,46 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
       ),
       child: Column(
         children: [
-          _buildHeader(context),
+          _buildHeader(),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildOrderList(orders),
-                _buildOrderDetails(orders[_selectedOrderIndex]),
+                _buildOrderDetails(selectedOrder),
+              ],
+            ),
+          ),
+          const Divider(thickness: 1.5),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CloseButtonWidget(onPressed: () => Navigator.of(context).pop()),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    // Add all items from the selected order to the cart
+                    for (final item in selectedOrder.items) {
+                      iMat.shoppingCartAdd(item);
+                    }
+                    Navigator.of(context).pop(); // Close modal after adding
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  icon: const Icon(Icons.shopping_cart),
+                  label: const Text("Köp igen"),
+                ),
               ],
             ),
           ),
@@ -72,17 +114,15 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader() {
     return Container(
+      width: double.infinity, // ✅ Fill full width
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.colorScheme.primary,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
+        color: Colors.teal, // ✅ Match border color
       ),
       child: Row(
+
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ScalableText(
@@ -90,12 +130,8 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: AppTheme.colorScheme.onPrimary,
+              color: Colors.white, // ✅ White text for contrast
             ),
-          ),
-          IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: Icon(Icons.close, color: AppTheme.colorScheme.onPrimary),
           ),
         ],
       ),

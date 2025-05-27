@@ -2,43 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
-import 'package:imat_app/model/imat/product.dart';
-import 'package:imat_app/model/imat/shopping_item.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
+import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
 
-class AddToCartButton extends StatelessWidget {
-  final Product product;
+class CartIconWithBadge extends StatelessWidget {
+  final GlobalKey targetKey;
+  final CartOverlayController controller;
 
-  const AddToCartButton({super.key, required this.product});
+  const CartIconWithBadge({
+    super.key,
+    required this.targetKey,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final iMat = context.watch<ImatDataHandler>();
+    final totalQuantity =
+        context.watch<ImatDataHandler>().getTotalCartQuantity();
 
-    return ElevatedButton.icon(
-      onPressed: () {
-        iMat.shoppingCartAdd(ShoppingItem(product, amount: 1));
-        final cleanUnit = product.unit.replaceFirst("kr/", "");
-
-        // Show a snackbar to confirm the addition to the cart
-        // This is a simple way to provide feedback to the user
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              '1 $cleanUnit ${product.name} har lagts till i kundvagnen.',
-            ),
-            duration: const Duration(seconds: 2),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        IconButton(
+          key: targetKey,
+          icon: const Icon(
+            Icons.shopping_cart_outlined,
+            color: Colors.tealAccent,
+            size: 35,
           ),
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.teal,
-        foregroundColor: AppTheme.colorScheme.onPrimary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      ),
-      icon: const Icon(Icons.add_shopping_cart),
-      label: const ScalableText("Lägg till"),
+          onPressed: () => controller.toggleCartPopup(context, targetKey),
+        ),
+        if (totalQuantity > 0)
+          Positioned(
+            top: 4,
+            right: 4,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.redAccent,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+              child: Text(
+                totalQuantity.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

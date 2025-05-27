@@ -28,9 +28,26 @@ class ProductGrid extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ScalableText(
-              category,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: Colors.teal,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    child: ScalableText(
+                      category,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             SizedBox(
@@ -50,9 +67,8 @@ class ProductGrid extends StatelessWidget {
                       onTap: () {
                         showDialog(
                           context: context,
-                          barrierColor: Colors.black.withOpacity(
-                            0.5,
-                          ),
+                          barrierColor: Colors.black.withOpacity(0.5),
+
                           builder:
                               (context) =>
                                   ProductDetailDialog(product: product),

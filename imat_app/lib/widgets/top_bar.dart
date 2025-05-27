@@ -4,6 +4,7 @@ import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
 import 'package:imat_app/model/Controller/settings_controller.dart';
 import 'package:imat_app/model/Controller/show_favorites.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
+import 'package:imat_app/widgets/cart_button.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:imat_app/widgets/search_bar.dart';
 import 'package:imat_app/widgets/OrderHistoryModalState.dart';
@@ -97,21 +98,16 @@ class _TopBarState extends State<TopBar> {
                   size: 35,
                 ),
               ),
-              const SizedBox(width: 16), // Add spacing here
-              IconButton(
-                key: _cartIconKey,
-                icon: Icon(
-                  Icons.shopping_cart_outlined,
-                  color: AppTheme.colorScheme.onPrimary,
-                  size: 35,
-                ),
-                onPressed:
-                    () => _cartOverlayController.toggleCartPopup(
-                      context,
-                      _cartIconKey,
-                    ),
+              const SizedBox(width: 16),
+
+              // Cart icon with badge
+              CartIconWithBadge(
+                targetKey: _cartIconKey,
+                controller: _cartOverlayController,
               ),
-              const SizedBox(width: 16), // Add spacing here
+
+              const SizedBox(width: 16),
+
               IconButton(
                 onPressed: () => _showTransactionHistory(context),
                 icon: Icon(
@@ -120,7 +116,8 @@ class _TopBarState extends State<TopBar> {
                   size: 35,
                 ),
               ),
-              const SizedBox(width: 16), // Add spacing here
+              const SizedBox(width: 16),
+
               IconButton(
                 key: _settingsIconKey,
                 onPressed:

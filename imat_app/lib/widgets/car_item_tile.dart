@@ -18,6 +18,12 @@ class CartItemTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: ListTile(
         dense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+        leading: SizedBox(
+          width: 40,
+          height: 40,
+          child: iMat.getImage(item.product),
+        ),
         title: ScalableText(item.product.name, fontWeight: FontWeight.bold),
         subtitle: ScalableText(
           '${item.amount.toInt()} $cleanUnit • ${item.product.price.toStringAsFixed(2)} ${item.product.unit}',
