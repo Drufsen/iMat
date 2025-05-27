@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/imat/credit_card.dart';
 import 'package:imat_app/model/imat/customer.dart';
 import 'package:imat_app/widgets/cart_review.dart';
 import 'package:imat_app/widgets/confirmation.dart';
 import 'package:imat_app/widgets/delivery_info.dart';
 import 'package:imat_app/widgets/payment.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/widgets/step_progress_bar.dart';
 import 'package:imat_app/widgets/close-button.dart';
@@ -138,17 +140,17 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
                         onPressed: _previousStep,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.teal,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppTheme.colorScheme.onPrimary,
                         ),
-                        child: const Text("Tillbaka"),
+                        child: const ScalableText("Tillbaka"),
                       ),
                   ElevatedButton(
                     onPressed: _nextStep,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppTheme.colorScheme.onPrimary,
                     ),
-                    child: Text(_step == totalSteps - 1 ? "Slutför" : "Nästa"),
+                    child: ScalableText(_step == totalSteps - 1 ? "Slutför" : "Nästa"),
                   ),
                 ],
               ),

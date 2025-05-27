@@ -4,6 +4,7 @@ import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/product_detail_popup.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 
 class ProductGrid extends StatelessWidget {
   final Map<String, List<Product>> categorizedProducts;
@@ -36,7 +37,7 @@ class ProductGrid extends StatelessWidget {
                       horizontal: 12,
                       vertical: 6,
                     ),
-                    child: Text(
+                    child: ScalableText(
                       category,
                       style: const TextStyle(
                         fontSize: 20,
@@ -67,6 +68,7 @@ class ProductGrid extends StatelessWidget {
                         showDialog(
                           context: context,
                           barrierColor: Colors.black.withOpacity(0.5),
+
                           builder:
                               (context) =>
                                   ProductDetailDialog(product: product),

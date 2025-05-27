@@ -34,7 +34,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: Colors.teal, width: 5),
                   ),
-                  child: const Text("Ingen köphistorik ännu."),
+                  child: const ScalableText("Ingen köphistorik ännu."),
                 ),
               )
               : _contentBox(context, iMat, orders),
@@ -122,9 +122,10 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
         color: Colors.teal, // ✅ Match border color
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text(
+
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ScalableText(
             'Köphistorik',
             style: TextStyle(
               fontSize: 24,
@@ -157,10 +158,10 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                     ? AppTheme.colorScheme.secondaryContainer
                     : Colors.transparent,
             child: ListTile(
-              title: Text(
+              title: ScalableText(
                 '${order.date.year}-${order.date.month.toString().padLeft(2, '0')}-${order.date.day.toString().padLeft(2, '0')} | ${order.getTotal().toStringAsFixed(2)} kr',
               ),
-              subtitle: Text('Kvitto #${order.orderNumber}'),
+              subtitle: ScalableText('Kvitto #${order.orderNumber}'),
               onTap: () {
                 setState(() {
                   _selectedOrderIndex = index;
@@ -180,11 +181,11 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            ScalableText(
               '${order.date.year}-${order.date.month.toString().padLeft(2, '0')}-${order.date.day.toString().padLeft(2, '0')}',
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text('Kvitto #${order.orderNumber}'),
+            ScalableText('Kvitto #${order.orderNumber}'),
             const Divider(thickness: 1),
             Expanded(
               child: ListView.builder(
@@ -195,7 +196,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Row(
                       children: [
-                        Expanded(flex: 4, child: Text(item.product.name)),
+                        Expanded(flex: 4, child: ScalableText(item.product.name)),
                         Expanded(
                           flex: 1,
                           child: Text(
@@ -205,14 +206,14 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                         ),
                         Expanded(
                           flex: 2,
-                          child: Text(
+                          child: ScalableText(
                             '${item.product.price.toStringAsFixed(2)} kr',
                             textAlign: TextAlign.right,
                           ),
                         ),
                         Expanded(
                           flex: 2,
-                          child: Text(
+                          child: ScalableText(
                             '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
                             textAlign: TextAlign.right,
                           ),
@@ -229,12 +230,10 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
               child: Row(
                 children: [
                   const Spacer(flex: 5),
-                  const Text(
-                    'Totalt:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ScalableText('Totalt:', style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 12),
-                  Text(
+                  ScalableText(
                     '${order.getTotal().toStringAsFixed(2)} kr',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),

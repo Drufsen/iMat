@@ -66,7 +66,6 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           ),
-
           // ❤️ Favorite button in top-right corner
           Positioned(
             top: -5,

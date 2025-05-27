@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 
 /// A custom floating action button that will expand to show a chat window.
 class FloatingHelpButton extends StatefulWidget {
@@ -31,13 +32,13 @@ class _FloatingHelpButtonState extends State<FloatingHelpButton> {
     // Position the FAB in the bottom-right corner
     return FloatingActionButton(
       onPressed: _toggleExpansion,
-      backgroundColor: const Color.fromARGB(255, 0, 169, 211),
+      backgroundColor: AppTheme.colorScheme.primary,
       shape: const CircleBorder(),
       tooltip: 'Hjälp',
       child: Icon(
         size: 50,
         _isExpanded ? Icons.close : Icons.help_sharp,
-        color: Colors.white,
+        color: AppTheme.colorScheme.onPrimary,
       ),
     );
   }

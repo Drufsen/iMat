@@ -5,6 +5,7 @@ import 'package:imat_app/model/Controller/settings_controller.dart';
 import 'package:imat_app/model/Controller/show_favorites.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/widgets/cart_button.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:imat_app/widgets/search_bar.dart';
 import 'package:imat_app/widgets/OrderHistoryModalState.dart';
 import 'package:provider/provider.dart';
@@ -59,29 +60,22 @@ class _TopBarState extends State<TopBar> {
       leadingWidth: 0,
       title: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 40),
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.home,
-                    color: Colors.tealAccent,
-                    size: 35,
-                  ),
-                  padding: EdgeInsets.zero,
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'iMat',
-                  style: TextStyle(
-                    color: Colors.tealAccent,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.home,
+              color: AppTheme.colorScheme.onPrimary,
+              size: 35,
+            ),
+            padding: EdgeInsets.zero,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'iMat',
+            style: TextStyle(
+              color: AppTheme.colorScheme.onPrimary,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const Expanded(child: Center(child: SearchBarWidget())),
@@ -98,9 +92,9 @@ class _TopBarState extends State<TopBar> {
                   final dataHandler = context.read<ImatDataHandler>();
                   showFavoritesDialog(context, dataHandler);
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.favorite_outlined,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
               ),
@@ -116,9 +110,9 @@ class _TopBarState extends State<TopBar> {
 
               IconButton(
                 onPressed: () => _showTransactionHistory(context),
-                icon: const Icon(
+                icon: Icon(
                   Icons.receipt_long,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
               ),
@@ -131,9 +125,9 @@ class _TopBarState extends State<TopBar> {
                       context,
                       _settingsIconKey,
                     ),
-                icon: const Icon(
+                icon: Icon(
                   Icons.settings,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
               ),
