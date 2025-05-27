@@ -3,6 +3,7 @@ import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/imat/order.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/widgets/close-button.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 
 class OrderHistoryModal extends StatefulWidget {
@@ -122,7 +123,6 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
         color: Colors.teal, // ✅ Match border color
       ),
       child: Row(
-
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ScalableText(
@@ -196,7 +196,10 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Row(
                       children: [
-                        Expanded(flex: 4, child: ScalableText(item.product.name)),
+                        Expanded(
+                          flex: 4,
+                          child: ScalableText(item.product.name),
+                        ),
                         Expanded(
                           flex: 1,
                           child: Text(
@@ -230,7 +233,9 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
               child: Row(
                 children: [
                   const Spacer(flex: 5),
-                  ScalableText('Totalt:', style: TextStyle(fontWeight: FontWeight.bold),
+                  ScalableText(
+                    'Totalt:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 12),
                   ScalableText(
