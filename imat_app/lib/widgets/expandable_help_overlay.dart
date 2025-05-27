@@ -87,8 +87,8 @@ class _ExpandableHelpOverlayState extends State<ExpandableHelpOverlay>
 
         // Floating help button
         Positioned(
-          right: 16,
-          bottom: 16,
+          right: 32,
+          bottom: 20,
           child: FloatingHelpButton(onToggle: _handleHelpToggle),
         ),
       ],

@@ -28,7 +28,7 @@ class FilteredProductSection extends StatelessWidget {
       children: [
         if (selectedCategory != null)
           Align(
-            alignment: Alignment.centerRight,
+            alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: ElevatedButton.icon(

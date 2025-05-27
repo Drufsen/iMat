@@ -225,6 +225,11 @@ class ImatDataHandler extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeOrder(Order order) {
+    _orders.remove(order);
+    notifyListeners();
+  }
+
   // Tar bort key från extras.
   // Sparar data till servern och meddelar GUI:t att data ändrats.
   void removeExtra(String key) {

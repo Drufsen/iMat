@@ -35,7 +35,17 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: Colors.teal, width: 5),
                   ),
-                  child: const ScalableText("Ingen köphistorik ännu."),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const ScalableText("Ingen köphistorik ännu."),
+                      const SizedBox(height: 16),
+                      CloseButtonWidget(
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ],
+                  ),
                 ),
               )
               : _contentBox(context, iMat, orders),
@@ -162,6 +172,12 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                 '${order.date.year}-${order.date.month.toString().padLeft(2, '0')}-${order.date.day.toString().padLeft(2, '0')} | ${order.getTotal().toStringAsFixed(2)} kr',
               ),
               subtitle: ScalableText('Kvitto #${order.orderNumber}'),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: () {
+                  _removeOrder(context, order);
+                },
+              ),
               onTap: () {
                 setState(() {
                   _selectedOrderIndex = index;
@@ -172,6 +188,18 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
         },
       ),
     );
+  }
+
+  void _removeOrder(BuildContext context, Order order) {
+    final iMat = context.read<ImatDataHandler>();
+    iMat.removeOrder(order); // Use the proper method
+
+    setState(() {
+      if (_selectedOrderIndex >= iMat.orders.length) {
+        _selectedOrderIndex =
+            (iMat.orders.isEmpty ? 0 : iMat.orders.length - 1);
+      }
+    });
   }
 
   Widget _buildOrderDetails(Order order) {
