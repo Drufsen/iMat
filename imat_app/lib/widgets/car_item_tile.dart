@@ -12,6 +12,7 @@ class CartItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iMat = context.read<ImatDataHandler>();
+    final cleanUnit = item.product.unit.replaceFirst("kr/", "");
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -19,7 +20,7 @@ class CartItemTile extends StatelessWidget {
         dense: true,
         title: ScalableText(item.product.name, fontWeight: FontWeight.bold),
         subtitle: ScalableText(
-          '${item.amount.toInt()} st • ${item.product.price.toStringAsFixed(2)} ${item.product.unit}',
+          '${item.amount.toInt()} $cleanUnit • ${item.product.price.toStringAsFixed(2)} ${item.product.unit}',
         ),
         trailing: IconButton(
           icon: const Icon(
