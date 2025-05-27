@@ -85,6 +85,14 @@ class ImatDataHandler extends ChangeNotifier {
     }).toList();
   }
 
+  int getTotalCartQuantity() {
+    int total = 0;
+    for (final item in _shoppingCart.items) {
+      total += item.amount.toInt();
+    }
+    return total;
+  }
+
   // Returnerar produkten med productId idNbr eller null
   // om produkten inte finns med i sortimentet.
   Product? getProduct(int idNbr) {

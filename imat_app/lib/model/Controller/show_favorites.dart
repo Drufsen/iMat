@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/widgets/close-button.dart';
-import 'package:imat_app/widgets/cart_button.dart'; // ✅ Add import for AddToCartButton
+import 'package:imat_app/widgets/add_to_cart_button.dart'; // ✅ Add import for AddToCartButton
 import '../../model/imat_data_handler.dart';
 
 void showFavoritesDialog(BuildContext context, ImatDataHandler dataHandler) {
