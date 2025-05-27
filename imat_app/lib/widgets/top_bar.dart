@@ -58,29 +58,22 @@ class _TopBarState extends State<TopBar> {
       leadingWidth: 0,
       title: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 40),
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.home,
-                    color: Colors.tealAccent,
-                    size: 35,
-                  ),
-                  padding: EdgeInsets.zero,
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'iMat',
-                  style: TextStyle(
-                    color: Colors.tealAccent,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.home,
+              color: AppTheme.colorScheme.onPrimary,
+              size: 35,
+            ),
+            padding: EdgeInsets.zero,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'iMat',
+            style: TextStyle(
+              color: AppTheme.colorScheme.onPrimary,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const Expanded(child: Center(child: SearchBarWidget())),
@@ -97,18 +90,18 @@ class _TopBarState extends State<TopBar> {
                   final dataHandler = context.read<ImatDataHandler>();
                   showFavoritesDialog(context, dataHandler);
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.favorite_outlined,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
               ),
               const SizedBox(width: 16), // Add spacing here
               IconButton(
                 key: _cartIconKey,
-                icon: const Icon(
+                icon: Icon(
                   Icons.shopping_cart_outlined,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
                 onPressed:
@@ -120,9 +113,9 @@ class _TopBarState extends State<TopBar> {
               const SizedBox(width: 16), // Add spacing here
               IconButton(
                 onPressed: () => _showTransactionHistory(context),
-                icon: const Icon(
+                icon: Icon(
                   Icons.receipt_long,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
               ),
@@ -134,9 +127,9 @@ class _TopBarState extends State<TopBar> {
                       context,
                       _settingsIconKey,
                     ),
-                icon: const Icon(
+                icon: Icon(
                   Icons.settings,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
               ),
