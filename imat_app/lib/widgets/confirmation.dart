@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 
@@ -44,39 +46,39 @@ class ConfirmationStep extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                const ScalableText(
                   "Bekräftelse",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-                Text("Namn: ${customer.firstName} ${customer.lastName}"),
-                Text(
+                ScalableText("Namn: ${customer.firstName} ${customer.lastName}"),
+                ScalableText(
                   "Adress: ${customer.address}, ${customer.postCode} ${customer.postAddress}",
                 ),
-                Text("Telefon: ${customer.phoneNumber}"),
+                ScalableText("Telefon: ${customer.phoneNumber}"),
                 const SizedBox(height: 12),
-                Text(
+                ScalableText(
                   "Kort: ${card.cardType} •••• ${card.cardNumber.substring(card.cardNumber.length - 4)}",
                 ),
-                Text("Giltig till: ${card.validMonth}/${card.validYear}"),
+                ScalableText("Giltig till: ${card.validMonth}/${card.validYear}"),
                 const SizedBox(height: 16),
                 const Divider(),
                 const SizedBox(height: 12),
-                const Text(
+                const ScalableText(
                   "Välj leveransdatum:",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () => onDateSelected(context),
-                  child: Text(
+                  child: ScalableText(
                     selectedDate == null
                         ? "Välj datum"
                         : "${selectedDate!.day}/${selectedDate!.month} ${selectedDate!.year}",
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                const ScalableText(
                   "Välj leveranstid:",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -88,20 +90,20 @@ class ConfirmationStep extends StatelessWidget {
                       timeSlots.map((slot) {
                         final isSelected = selectedTimeSlot == slot;
                         return ChoiceChip(
-                          label: Text(slot),
+                          label: ScalableText(slot),
                           selected: isSelected,
                           onSelected: (_) => onTimeSlotSelected(slot),
-                          selectedColor: Colors.teal,
-                          backgroundColor: Colors.grey.shade200,
+                          selectedColor: AppTheme.brand,
+                          backgroundColor: AppTheme.colorScheme.tertiaryContainer,
                           labelStyle: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black,
+                            color: isSelected ? AppTheme.colorScheme.onPrimary : Colors.black,
                           ),
                         );
                       }).toList(),
                 ),
                 const SizedBox(height: 16),
                 if (selectedDate != null && selectedTimeSlot != null)
-                  Text(
+                  ScalableText(
                     "Leverans: ${selectedDate!.day}/${selectedDate!.month} ${selectedDate!.year} kl. $selectedTimeSlot",
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -115,7 +117,7 @@ class ConfirmationStep extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                const ScalableText(
                   "Kundvagn:",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
@@ -127,14 +129,14 @@ class ConfirmationStep extends StatelessWidget {
                     itemCount: cart.items.length,
                     itemBuilder: (context, index) {
                       final item = cart.items[index];
-                      return Text(
+                      return ScalableText(
                         "${item.amount.toInt()} x ${item.product.name} (${(item.amount * item.product.price).toStringAsFixed(2)} kr)",
                       );
                     },
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(
+                ScalableText(
                   "Totalt: $total kr",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),

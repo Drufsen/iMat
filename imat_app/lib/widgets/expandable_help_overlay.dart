@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/help_button.dart';
 import 'package:imat_app/widgets/help_window.dart';
 
@@ -64,7 +65,7 @@ class _ExpandableHelpOverlayState extends State<ExpandableHelpOverlay>
                 width: 300,
                 height: _animation.value * 400, // Animate the height
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppTheme.colorScheme.onPrimary,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(

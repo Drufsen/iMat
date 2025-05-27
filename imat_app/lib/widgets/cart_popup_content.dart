@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/car_item_tile.dart';
 import 'package:imat_app/widgets/cart_total_row.dart';
 import 'package:imat_app/widgets/checkout_wizard.dart';
@@ -45,8 +46,8 @@ class CartPopupMenu extends StatelessWidget {
                       context.read<ImatDataHandler>().shoppingCartClear();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal,
-                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.red,
+                      foregroundColor: AppTheme.colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),

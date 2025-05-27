@@ -4,6 +4,7 @@ import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
 import 'package:imat_app/model/Controller/settings_controller.dart';
 import 'package:imat_app/model/Controller/show_favorites.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:imat_app/widgets/search_bar.dart';
 import 'package:imat_app/widgets/OrderHistoryModalState.dart';
 import 'package:provider/provider.dart';

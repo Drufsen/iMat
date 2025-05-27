@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.teal, width: 3),
+          border: Border.all(color: AppTheme.border, width: 3),
         ),
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.paddingSmall),
@@ -69,8 +69,6 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
 
-              // ❤️ Favorite button in the card's top-right corner
-              // ❤️ Favorite button in the card's top-right corner
               Positioned(
                 top: -5,
                 right: -1,

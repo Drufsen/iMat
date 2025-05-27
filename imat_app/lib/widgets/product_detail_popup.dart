@@ -49,7 +49,6 @@ class ProductDetailDialog extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // ✅ Row with buttons aligned to left and right
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

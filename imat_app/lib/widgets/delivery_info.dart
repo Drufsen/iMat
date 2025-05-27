@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 
@@ -31,7 +32,7 @@ class DeliveryInfoStep extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            const ScalableText(
               "Leveransinformation:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -53,7 +54,7 @@ class DeliveryInfoStep extends StatelessWidget {
             const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.only(top: 16.0),
-              child: Text(
+              child: ScalableText(
                 "Vi sparar givna informationen för nästa gång du handlar hos oss.",
                 style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
               ),
