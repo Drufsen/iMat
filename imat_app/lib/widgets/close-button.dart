@@ -12,7 +12,7 @@ class CloseButtonWidget extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: onPressed ?? () => Navigator.of(context).pop(),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
+        backgroundColor: AppTheme.colorScheme.secondary,
         foregroundColor: AppTheme.colorScheme.onPrimary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
