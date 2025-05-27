@@ -39,11 +39,15 @@ class CategoryList extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
+                alignment: Alignment.centerLeft, // Add this line to align text left
               ),
               onPressed: () {
                 onCategorySelected(category);
               },
-              child: ScalableText(categoryName),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: ScalableText(categoryName),
+              ), // Wrap ScalableText with Align widget
             ),
           );
         },
