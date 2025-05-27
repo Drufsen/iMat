@@ -163,8 +163,13 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                         Expanded(flex: 4, child: ScalableText(item.product.name)),
                         Expanded(
                           flex: 1,
+<<<<<<< HEAD
                           child: ScalableText(
                             '${item.amount.toInt()} st',
+=======
+                          child: Text(
+                            '${item.amount.toInt()} ${item.product.unit.replaceFirst("kr/", "")}',
+>>>>>>> ad2c87507525a13e703170a8e4b9a79230300bce
                             textAlign: TextAlign.center,
                           ),
                         ),
