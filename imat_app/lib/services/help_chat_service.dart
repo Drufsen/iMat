@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:imat_app/widgets/help_window.dart';
 
 // Simple service to maintain chat state throughout the app
