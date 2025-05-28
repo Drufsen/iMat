@@ -11,7 +11,9 @@ import 'package:imat_app/widgets/OrderHistoryModalState.dart';
 import 'package:provider/provider.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
-  const TopBar({super.key});
+  final VoidCallback onSearchStarted;
+
+  const TopBar({super.key, required this.onSearchStarted});
 
   @override
   State<TopBar> createState() => _TopBarState();
@@ -78,7 +80,11 @@ class _TopBarState extends State<TopBar> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const Expanded(child: Center(child: SearchBarWidget())),
+          Expanded(
+            child: Center(
+              child: SearchBarWidget(onSearchStarted: widget.onSearchStarted),
+            ),
+          ),
         ],
       ),
       actions: [
