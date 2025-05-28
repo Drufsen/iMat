@@ -84,8 +84,8 @@ class ProductCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: -5,
-              right: -1,
+              top: 10,
+              right: 10,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
