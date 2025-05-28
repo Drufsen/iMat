@@ -53,11 +53,15 @@ String getCategoryName(ProductCategory category) {
 Map<String, List<Product>> buildCategorizedProducts(ImatDataHandler iMat) {
   final Map<String, List<Product>> categorizedProducts = {};
 
-  if (iMat.orders.isNotEmpty) {
-    categorizedProducts["Orders"] =
-        iMat.orders.first.items.map((item) => item.product).toList();
+  // Add "Favoriter" only when not searching
+  if (!iMat.isSearching) {
+    final favoriteProducts = iMat.favorites;
+    if (favoriteProducts.isNotEmpty) {
+      categorizedProducts['Favoriter'] = favoriteProducts;
+    }
   }
 
+  // Add regular categories
   for (var category in ProductCategory.values) {
     final productsInCategory =
         iMat.selectProducts

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 
 class CloseButtonWidget extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -11,14 +12,14 @@ class CloseButtonWidget extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: onPressed ?? () => Navigator.of(context).pop(),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.teal,
-        foregroundColor: Colors.white,
+        backgroundColor: AppTheme.colorScheme.secondary,
+        foregroundColor: AppTheme.colorScheme.onPrimary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         textStyle: const TextStyle(fontWeight: FontWeight.bold),
       ),
       icon: const Icon(Icons.close),
-      label: const Text("Stäng"),
+      label: const ScalableText("Stäng"),
     );
   }
 }

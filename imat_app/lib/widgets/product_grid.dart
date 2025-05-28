@@ -4,6 +4,7 @@ import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/product_detail_popup.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 
 class ProductGrid extends StatelessWidget {
   final Map<String, List<Product>> categorizedProducts;
@@ -27,13 +28,30 @@ class ProductGrid extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              category,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: Colors.teal,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    child: ScalableText(
+                      category,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             SizedBox(
-              height: 250, // Adjust height to fit ProductCards nicely
+              height: 280, // Adjust height to fit ProductCards nicely
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: products.length,
@@ -42,18 +60,15 @@ class ProductGrid extends StatelessWidget {
                 itemBuilder: (context, idx) {
                   final product = products[idx];
                   return SizedBox(
-                    width: 180,
+                    width: 250,
                     child: ProductCard(
                       product,
                       iMat,
                       onTap: () {
                         showDialog(
                           context: context,
-                          barrierDismissible:
-                              false, // ⛔ Don't allow tap-to-close outside the dialog
-                          barrierColor: Colors.black.withOpacity(
-                            0.5,
-                          ), // ✅ Dimmed background
+                          barrierColor: Colors.black.withOpacity(0.5),
+
                           builder:
                               (context) =>
                                   ProductDetailDialog(product: product),

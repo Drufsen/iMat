@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/close-button.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 
 class EmptyCartMessage extends StatelessWidget {
   final VoidCallback? onClose;
@@ -13,8 +15,8 @@ class EmptyCartMessage extends StatelessWidget {
       child: Container(
         constraints: const BoxConstraints(maxWidth: 320),
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.teal, width: 5),
+          color: AppTheme.colorScheme.onPrimary,
+          border: Border.all(color: AppTheme.border, width: 5),
           borderRadius: BorderRadius.circular(16),
         ),
         clipBehavior: Clip.antiAlias,
@@ -23,7 +25,7 @@ class EmptyCartMessage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Din kundvagn är tom.', style: TextStyle(fontSize: 16)),
+            const ScalableText('Din kundvagn är tom.', style: TextStyle(fontSize: 16)),
             const SizedBox(height: 16),
             Align(
               alignment: Alignment.centerLeft,

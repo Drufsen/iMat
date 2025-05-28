@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:imat_app/widgets/text_size_slider.dart';
+import 'package:imat_app/app_theme.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 
 class HelpWindow extends StatelessWidget {
   const HelpWindow({super.key});
@@ -13,13 +14,13 @@ class HelpWindow extends StatelessWidget {
         children: [
           // Header
           Container(
-            color: Colors.blue,
+            color: AppTheme.colorScheme.primary,
             padding: const EdgeInsets.all(12),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.chat, color: Colors.white),
+                Icon(Icons.chat, color: AppTheme.colorScheme.onPrimary),
                 SizedBox(width: 8),
-                Text(
+                ScalableText(
                   'Hjälp',
                   style: TextStyle(
                     color: Colors.white,
@@ -36,7 +37,7 @@ class HelpWindow extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               color: Colors.grey[100],
               child: const Center(
-                child: Text(
+                child: ScalableText(
                   'Skriv ett meddelande nedan eller ring oss på 072-730 99 50.',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
@@ -64,7 +65,7 @@ class HelpWindow extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Color(0xFF00A9D3)),
+                  icon: Icon(Icons.send, color: AppTheme.colorScheme.primary),
                   onPressed: () {},
                 ),
               ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/close-button.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:imat_app/widgets/text_size_slider.dart';
 
 class SettingsPopupContent extends StatelessWidget {
@@ -16,7 +18,7 @@ class SettingsPopupContent extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.teal, width: 5),
+          border: Border.all(color: AppTheme.border, width: 5),
         ),
         clipBehavior: Clip.antiAlias,
         child: SingleChildScrollView(
@@ -30,9 +32,9 @@ class SettingsPopupContent extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 12),
                 child: const Row(
                   children: [
-                    Icon(Icons.settings, color: Colors.teal),
+                    Icon(Icons.settings, color: AppTheme.brand),
                     SizedBox(width: 8),
-                    Text(
+                    ScalableText(
                       'Inställningar',
                       style: TextStyle(
                         fontSize: 18,
@@ -47,7 +49,7 @@ class SettingsPopupContent extends StatelessWidget {
               // Text Size Adjustment
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
+                child: ScalableText(
                   'Textstorlek:',
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),

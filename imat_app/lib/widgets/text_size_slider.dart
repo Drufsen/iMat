@@ -4,7 +4,7 @@ import 'package:imat_app/providers/text_size_provider.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
 
 class TextSizeSlider extends StatelessWidget {
-  const TextSizeSlider({Key? key}) : super(key: key);
+  const TextSizeSlider({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,22 +26,9 @@ class TextSizeSlider extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ScalableText(
-                'Text Size',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              // Sample text that changes size
-              ScalableText(
-                'This text will change size based on the slider',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              // Slider with labels
               Row(
                 children: [
-                  ScalableText('Small', style: TextStyle(fontSize: 14)),
+                  ScalableText('Liten', style: TextStyle(fontSize: 14)),
                   Expanded(
                     child: Slider(
                       value: textSizeProvider.currentSize.index.toDouble(),
@@ -55,13 +42,13 @@ class TextSizeSlider extends StatelessWidget {
                       },
                     ),
                   ),
-                  ScalableText('Large', style: TextStyle(fontSize: 14)),
+                  ScalableText('Stor', style: TextStyle(fontSize: 14)),
                 ],
               ),
               const SizedBox(height: 8),
               // Current size indicator
               ScalableText(
-                'Current: ${textSizeProvider.currentSize.toString().split('.').last}',
+                'Nuvarande: ${textSizeProvider.currentSize.toString().split('.').last}',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
             ],

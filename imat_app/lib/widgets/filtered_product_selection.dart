@@ -1,9 +1,11 @@
 // New file: widgets/filtered_product_section.dart
 
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/widgets/product_grid.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 
 class FilteredProductSection extends StatelessWidget {
   final ProductCategory? selectedCategory;
@@ -26,16 +28,16 @@ class FilteredProductSection extends StatelessWidget {
       children: [
         if (selectedCategory != null)
           Align(
-            alignment: Alignment.centerRight,
+            alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: ElevatedButton.icon(
                 onPressed: onClearFilter,
                 icon: const Icon(Icons.arrow_back),
-                label: const Text("Tillbaka"),
+                label: const ScalableText("Tillbaka"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppTheme.brand,
+                  foregroundColor: AppTheme.colorScheme.onPrimary,
                 ),
               ),
             ),
