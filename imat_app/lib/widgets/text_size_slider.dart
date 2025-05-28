@@ -35,21 +35,27 @@ class TextSizeSlider extends StatelessWidget {
                   // Minus button
                   IconButton(
                     iconSize: 32, // Increased from default size
-                    padding: const EdgeInsets.all(12), // Added padding around icon
+                    padding: const EdgeInsets.all(
+                      12,
+                    ), // Added padding around icon
                     icon: const Icon(Icons.remove_circle_outline),
-                    onPressed: isMinSize
-                        ? null // Disable when at minimum size
-                        : () {
-                            final newIndex = currentIndex - 1;
-                            if (newIndex >= 0) {
-                              textSizeProvider.setTextSize(
-                                TextSize.values[newIndex],
-                              );
-                            }
-                          },
-                    color: isMinSize
-                        ? Colors.grey.shade400 // Grayed out when disabled
-                        : Theme.of(context).primaryColor,
+                    onPressed:
+                        isMinSize
+                            ? null // Disable when at minimum size
+                            : () {
+                              final newIndex = currentIndex - 1;
+                              if (newIndex >= 0) {
+                                textSizeProvider.setTextSize(
+                                  TextSize.values[newIndex],
+                                );
+                              }
+                            },
+                    color:
+                        isMinSize
+                            ? Colors
+                                .grey
+                                .shade400 // Grayed out when disabled
+                            : Theme.of(context).primaryColor,
                   ),
                   Expanded(
                     child: Slider(
@@ -67,21 +73,27 @@ class TextSizeSlider extends StatelessWidget {
                   // Plus button
                   IconButton(
                     iconSize: 32, // Increased from default size
-                    padding: const EdgeInsets.all(12), // Added padding around icon
+                    padding: const EdgeInsets.all(
+                      12,
+                    ), // Added padding around icon
                     icon: const Icon(Icons.add_circle_outline),
-                    onPressed: isMaxSize
-                        ? null // Disable when at maximum size
-                        : () {
-                            final newIndex = currentIndex + 1;
-                            if (newIndex <= 2) {
-                              textSizeProvider.setTextSize(
-                                TextSize.values[newIndex],
-                              );
-                            }
-                          },
-                    color: isMaxSize
-                        ? Colors.grey.shade400 // Grayed out when disabled
-                        : Theme.of(context).primaryColor,
+                    onPressed:
+                        isMaxSize
+                            ? null // Disable when at maximum size
+                            : () {
+                              final newIndex = currentIndex + 1;
+                              if (newIndex <= 2) {
+                                textSizeProvider.setTextSize(
+                                  TextSize.values[newIndex],
+                                );
+                              }
+                            },
+                    color:
+                        isMaxSize
+                            ? Colors
+                                .grey
+                                .shade400 // Grayed out when disabled
+                            : Theme.of(context).primaryColor,
                   ),
                 ],
               ),
@@ -89,7 +101,10 @@ class TextSizeSlider extends StatelessWidget {
               // Current size indicator with proper display names
               ScalableText(
                 'Textstorlek: ${_getSizeLabel(textSizeProvider.currentSize)}',
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),

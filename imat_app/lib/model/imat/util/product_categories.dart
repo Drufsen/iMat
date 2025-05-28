@@ -56,7 +56,6 @@ class CategoryUtils {
   ) {
     final Map<String, List<Product>> categorizedProducts = {};
 
-    // Add "Favoriter" only when not searching
     if (!iMat.isSearching) {
       final favoriteProducts = iMat.favorites;
       if (favoriteProducts.isNotEmpty) {
@@ -64,7 +63,6 @@ class CategoryUtils {
       }
     }
 
-    // Add regular categories
     for (var category in ProductCategory.values) {
       final productsInCategory =
           iMat.selectProducts
@@ -77,14 +75,5 @@ class CategoryUtils {
     }
 
     return categorizedProducts;
-  }
-
-  static List<Product> getProductsForCategory(
-    ImatDataHandler iMat,
-    ProductCategory category,
-  ) {
-    return iMat.selectProducts
-        .where((product) => product.category == category)
-        .toList();
   }
 }
