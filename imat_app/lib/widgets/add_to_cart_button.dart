@@ -57,8 +57,13 @@ class AddToCartButton extends StatelessWidget {
             // Minus-knapp
             InkWell(
               onTap: () {
-                iMat.shoppingCartAdd(ShoppingItem(product, amount: -1));
+                if (currentAmount <= 1) {
+                  iMat.shoppingCartRemove(ShoppingItem(product, amount: 0));
+                } else {
+                  iMat.shoppingCartAdd(ShoppingItem(product, amount: -1));
+                }
               },
+
               borderRadius: BorderRadius.circular(50),
               child: Container(
                 width: 36,
