@@ -29,6 +29,7 @@ class ProductCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
         width: compact ? null : 280, // ✅ Allow null width for compact mode
+        height: compact ? 180 : 300,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
