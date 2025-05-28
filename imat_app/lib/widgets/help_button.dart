@@ -29,14 +29,27 @@ class _FloatingHelpButtonState extends State<FloatingHelpButton> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 70, // Set your custom width
-      height: 70, // Set your custom height
+    return Container(
+      width: 70,
+      height: 70,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5), // Darker shadow
+            spreadRadius: 2, // Larger spread
+            blurRadius: 10, // More blur
+            offset: const Offset(0, 4), // More distance
+          ),
+        ],
+      ),
       child: FloatingActionButton(
         onPressed: _toggleExpansion,
         backgroundColor: AppTheme.colorScheme.primary,
         shape: const CircleBorder(),
         tooltip: 'Hjälp',
+        elevation: 0, // Remove built-in shadow since we have custom shadow
+        highlightElevation: 0,
         child: Icon(
           _isExpanded ? Icons.close : Icons.help_sharp,
           size: 60,
