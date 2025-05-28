@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
+import 'package:imat_app/services/help_chat_service.dart';
 
 class HelpWindow extends StatefulWidget {
   const HelpWindow({super.key});
@@ -11,8 +12,7 @@ class HelpWindow extends StatefulWidget {
 
 class _HelpWindowState extends State<HelpWindow> {
   final TextEditingController _messageController = TextEditingController();
-  final List<ChatMessage> _messages = [];
-  bool _hasResponded = false; // Track if the bot has already sent a response
+  final HelpChatService _chatService = HelpChatService();
   
   @override
   void dispose() {
@@ -24,7 +24,7 @@ class _HelpWindowState extends State<HelpWindow> {
     if (_messageController.text.trim().isNotEmpty) {
       setState(() {
         // Add user message
-        _messages.add(ChatMessage(
+        _chatService.addMessage(ChatMessage(
           text: _messageController.text.trim(),
           isUser: true,
         ));
@@ -32,14 +32,14 @@ class _HelpWindowState extends State<HelpWindow> {
         _messageController.clear();
         
         // Mock response only if we haven't responded yet
-        if (!_hasResponded) {
-          _hasResponded = true; // Mark that we've responded
+        if (!_chatService.hasResponded) {
+          _chatService.hasResponded = true; // Mark that we've responded
           
           // Mock response after a slight delay
           Future.delayed(const Duration(seconds: 1), () {
             if (mounted) {
               setState(() {
-                _messages.add(const ChatMessage(
+                _chatService.addMessage(const ChatMessage(
                   text: "Tack för ditt meddelande! Vi återkommer till dig så snart som möjligt.",
                   isUser: false,
                 ));
@@ -79,7 +79,7 @@ class _HelpWindowState extends State<HelpWindow> {
           child: Container(
             padding: const EdgeInsets.all(12),
             color: Colors.grey[100],
-            child: _messages.isEmpty
+            child: _chatService.messages.isEmpty
                 ? const Center(
                     child: ScalableText(
                       'Skriv ett meddelande nedan eller ring oss på 072-730 99 50.',
@@ -88,8 +88,8 @@ class _HelpWindowState extends State<HelpWindow> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) => _messages[index],
+                    itemCount: _chatService.messages.length,
+                    itemBuilder: (context, index) => _chatService.messages[index],
                   ),
           ),
         ),
