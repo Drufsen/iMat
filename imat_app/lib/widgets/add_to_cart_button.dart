@@ -6,55 +6,31 @@ import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat/shopping_item.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 
-class AddToCartButton extends StatefulWidget {
+class AddToCartButton extends StatelessWidget {
   final Product product;
 
   const AddToCartButton({super.key, required this.product});
 
   @override
-  State<AddToCartButton> createState() => _AddToCartButtonState();
-}
-
-class _AddToCartButtonState extends State<AddToCartButton> {
-  double _amount = 0;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final iMat = context.watch<ImatDataHandler>();
-    final item = iMat.getShoppingCart().items.cast<ShoppingItem?>().firstWhere(
-      (i) => i!.product.productId == widget.product.productId,
-      orElse: () => null,
-    );
-    if (item != null) {
-      _amount = item.amount;
-    }
-  }
-
-  void _increase() {
-    final iMat = context.read<ImatDataHandler>();
-    iMat.shoppingCartAdd(ShoppingItem(widget.product, amount: 1));
-    setState(() => _amount++);
-  }
-
-  void _decrease() {
-    final iMat = context.read<ImatDataHandler>();
-    iMat.shoppingCartAdd(ShoppingItem(widget.product, amount: -1));
-    setState(() {
-      _amount--;
-      if (_amount < 0) {
-        _amount = 0;
-      } else if (_amount == 0) {
-        iMat.shoppingCartRemove(ShoppingItem(widget.product, amount: 0));
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (_amount == 0) {
+    final iMat = context.watch<ImatDataHandler>();
+
+    ShoppingItem? item;
+    try {
+      item = iMat.getShoppingCart().items.firstWhere(
+        (i) => i.product.productId == product.productId,
+      );
+    } catch (_) {
+      item = null;
+    }
+
+    final double currentAmount = item?.amount ?? 0;
+
+    if (currentAmount == 0) {
       return ElevatedButton.icon(
-        onPressed: _increase,
+        onPressed: () {
+          iMat.shoppingCartAdd(ShoppingItem(product, amount: 1));
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.teal,
           foregroundColor: Colors.white,
@@ -71,7 +47,7 @@ class _AddToCartButtonState extends State<AddToCartButton> {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.teal, width: 2),
           borderRadius: BorderRadius.circular(30),
-          color: Colors.white, // Ljus bakgrund
+          color: Colors.white,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Row(
@@ -80,13 +56,15 @@ class _AddToCartButtonState extends State<AddToCartButton> {
           children: [
             // Minus-knapp
             InkWell(
-              onTap: _decrease,
+              onTap: () {
+                iMat.shoppingCartAdd(ShoppingItem(product, amount: -1));
+              },
               borderRadius: BorderRadius.circular(50),
               child: Container(
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: Colors.teal.shade100, // Ljusgrön
+                  color: Colors.teal.shade100,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.remove, color: Colors.teal),
@@ -102,7 +80,7 @@ class _AddToCartButtonState extends State<AddToCartButton> {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                '$_amount',
+                '${currentAmount.toInt()}',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -114,7 +92,9 @@ class _AddToCartButtonState extends State<AddToCartButton> {
 
             // Plus-knapp
             InkWell(
-              onTap: _increase,
+              onTap: () {
+                iMat.shoppingCartAdd(ShoppingItem(product, amount: 1));
+              },
               borderRadius: BorderRadius.circular(50),
               child: Container(
                 width: 36,
