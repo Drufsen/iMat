@@ -112,6 +112,7 @@ class ProductGrid extends StatelessWidget {
               height: 300,
               child: Stack(
                 children: [
+                  // Själva produktlistan
                   ListView.separated(
                     controller: scrollController,
                     scrollDirection: Axis.horizontal,
@@ -126,6 +127,7 @@ class ProductGrid extends StatelessWidget {
                         child: ProductCard(
                           product,
                           iMat,
+                          compact: false,
                           onTap: () {
                             showDialog(
                               context: context,
@@ -139,10 +141,62 @@ class ProductGrid extends StatelessWidget {
                       );
                     },
                   ),
-                  // Arrows omitted for brevity, but you can add them back here if needed
+
+                  // Vänsterpil
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        const scrollAmount = 250.0 * 4; // 4 produkter à 250px
+                        scrollController.animateTo(
+                          scrollController.offset - scrollAmount,
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeOut,
+                        );
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          size: 20,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Högerpil
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        const scrollAmount = 250.0 * 4;
+                        scrollController.animateTo(
+                          scrollController.offset + scrollAmount,
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeOut,
+                        );
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
+
             const SizedBox(height: AppTheme.paddingLarge),
           ],
         );
