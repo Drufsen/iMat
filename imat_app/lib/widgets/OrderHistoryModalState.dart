@@ -115,7 +115,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   icon: const Icon(Icons.shopping_cart),
-                  label: const Text("Köp igen"),
+                  label: const Text("Lägg till i kundvagn"),
                 ),
               ],
             ),
