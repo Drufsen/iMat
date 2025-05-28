@@ -18,7 +18,10 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   ProductCategory? selectedCategory;
-  SortMode sortMode = SortMode.alphabetical; // 🔥 New state for sorting
+  SortMode sortMode = SortMode.alphabetical;
+
+  final TextEditingController searchController = TextEditingController();
+  // 🔥 New state for sorting
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +45,7 @@ class _MainViewState extends State<MainView> {
             selectedCategory = null;
           });
         },
+        searchController: searchController,
       ),
       body: Stack(
         children: [
@@ -80,6 +84,10 @@ class _MainViewState extends State<MainView> {
                             setState(() {
                               selectedCategory = null;
                             });
+                            searchController.clear(); // ✅ Clear search text
+                            iMat.selectSelection(
+                              iMat.products,
+                            ); // ✅ Reset product selection
                           },
                           categorizedProducts: filteredProducts,
                           iMat: iMat,

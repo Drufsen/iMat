@@ -11,8 +11,13 @@ import 'package:provider/provider.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
   final VoidCallback onSearchStarted;
+  final TextEditingController searchController; // 🔥 Add this
 
-  const TopBar({super.key, required this.onSearchStarted});
+  const TopBar({
+    super.key,
+    required this.onSearchStarted,
+    required this.searchController, // 🔥 Add this
+  });
 
   @override
   State<TopBar> createState() => _TopBarState();
@@ -73,7 +78,10 @@ class _TopBarState extends State<TopBar> {
           ),
           Expanded(
             child: Center(
-              child: SearchBarWidget(onSearchStarted: widget.onSearchStarted),
+              child: SearchBarWidget(
+                onSearchStarted: widget.onSearchStarted,
+                controller: widget.searchController, // 🔥 Use this now
+              ),
             ),
           ),
         ],
