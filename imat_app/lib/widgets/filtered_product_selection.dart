@@ -51,15 +51,6 @@ class _FilteredProductSectionState extends State<FilteredProductSection> {
                   foregroundColor: AppTheme.colorScheme.onPrimary,
                 ),
               ),
-              const SizedBox(height: 8),
-              SortingDropdown(
-                currentSort: _sortMode,
-                onSortChanged: (mode) {
-                  setState(() {
-                    _sortMode = mode;
-                  });
-                },
-              ),
             ],
           ),
         Expanded(
