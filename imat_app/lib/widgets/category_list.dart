@@ -7,11 +7,13 @@ import 'package:imat_app/widgets/scalable_text.dart';
 class CategoryList extends StatelessWidget {
   final void Function(ProductCategory) onCategorySelected;
   final ProductCategory? selected;
+  final double width;
 
   const CategoryList({
     super.key,
     required this.onCategorySelected,
     required this.selected,
+    this.width = 200,
   });
 
   @override
@@ -37,7 +39,7 @@ class CategoryList extends StatelessWidget {
         border: Border.all(color: AppTheme.border, width: 4),
       ),
       child: SizedBox(
-        width: 200,
+        width: width,
         child: ListView.builder(
           itemCount: sortedCategories.length,
           itemBuilder: (context, index) {
@@ -45,43 +47,44 @@ class CategoryList extends StatelessWidget {
             final categoryName = CategoryUtils.getCategoryName(category);
             final isSelected = category == selected;
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: isSelected ? AppTheme.brand : AppTheme.colorScheme.onPrimary,
-                            border: Border.all(color: AppTheme.border, width: 2),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () => onCategorySelected(category),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 12,
-                                horizontal: 8,
-                              ),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: ScalableText(
-                                  categoryName,
-                                  style: TextStyle(
-                                    color: isSelected ? AppTheme.colorScheme.onPrimary : Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color:
+                      isSelected
+                          ? AppTheme.brand
+                          : AppTheme.colorScheme.onPrimary,
+                  border: Border.all(color: AppTheme.border, width: 2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => onCategorySelected(category),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 8,
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: ScalableText(
+                        categoryName,
+                        style: TextStyle(
+                          color:
+                              isSelected
+                                  ? AppTheme.colorScheme.onPrimary
+                                  : AppTheme.colorScheme.onSurface,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
