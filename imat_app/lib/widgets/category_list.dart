@@ -40,50 +40,76 @@ class CategoryList extends StatelessWidget {
       ),
       child: SizedBox(
         width: width,
-        child: ListView.builder(
-          itemCount: sortedCategories.length,
-          itemBuilder: (context, index) {
-            final category = sortedCategories[index];
-            final categoryName = CategoryUtils.getCategoryName(category);
-            final isSelected = category == selected;
-
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color:
-                      isSelected
-                          ? AppTheme.brand
-                          : AppTheme.colorScheme.onPrimary,
-                  border: Border.all(color: AppTheme.border, width: 2),
-                  borderRadius: BorderRadius.circular(12),
+        child: Column(
+          children: [
+            // Header for the category list
+            Padding(
+              padding: const EdgeInsets.only(top: 4, bottom: 12),
+              child: ScalableText(
+                'Kategorier',
+                style: TextStyle(
+                  color: AppTheme.colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
                 ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () => onCategorySelected(category),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 8,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: ScalableText(
-                        categoryName,
-                        style: TextStyle(
-                          color:
-                              isSelected
-                                  ? AppTheme.colorScheme.onPrimary
-                                  : AppTheme.colorScheme.onSurface,
-                          fontWeight: FontWeight.bold,
+              ),
+            ),
+            // Divider under the header
+            Divider(
+              color: AppTheme.colorScheme.onPrimary.withOpacity(0.5),
+              thickness: 1.0,
+              height: 1.0,
+            ),
+            const SizedBox(height: 8),
+            // List of categories
+            Expanded(
+              child: ListView.builder(
+                itemCount: sortedCategories.length,
+                itemBuilder: (context, index) {
+                  final category = sortedCategories[index];
+                  final categoryName = CategoryUtils.getCategoryName(category);
+                  final isSelected = category == selected;
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color:
+                            isSelected
+                                ? AppTheme.brand
+                                : AppTheme.colorScheme.onPrimary,
+                        border: Border.all(color: AppTheme.border, width: 2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () => onCategorySelected(category),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 8,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: ScalableText(
+                              categoryName,
+                              style: TextStyle(
+                                color:
+                                    isSelected
+                                        ? AppTheme.colorScheme.onPrimary
+                                        : AppTheme.colorScheme.onSurface,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );
