@@ -48,44 +48,50 @@ class CategoryList extends StatelessWidget {
           Expanded(
             child: SizedBox(
               width: 200,
-              child: ListView.builder(
-                itemCount: sortedCategories.length,
-                itemBuilder: (context, index) {
-                  final category = sortedCategories[index];
-                  final categoryName = getCategoryName(category);
-                  final isSelected = category == selected;
+              child: ClipRRect(
+                // Use the same radius as the category boxes (12)
+                borderRadius: BorderRadius.circular(12),
+                child: ListView.builder(
+                  itemCount: sortedCategories.length,
+                  padding: EdgeInsets.zero, // Remove default padding so clipping works properly
+                  itemBuilder: (context, index) {
+                    final category = sortedCategories[index];
+                    final categoryName = getCategoryName(category);
+                    final isSelected = category == selected;
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppTheme.brand : AppTheme.colorScheme.onPrimary,
-                        border: Border.all(color: AppTheme.border, width: 2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () => onCategorySelected(category),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                            horizontal: 8,
-                          ),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: ScalableText(
-                              categoryName,
-                              style: TextStyle(
-                                color: isSelected ? AppTheme.colorScheme.onPrimary : Colors.black,
-                                fontWeight: FontWeight.bold,
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isSelected ? AppTheme.brand : AppTheme.colorScheme.onPrimary,
+                          border: Border.all(color: AppTheme.border, width: 2),
+                          // This radius (12) should match the ClipRRect radius above
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () => onCategorySelected(category),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 8,
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: ScalableText(
+                                categoryName,
+                                style: TextStyle(
+                                  color: isSelected ? AppTheme.colorScheme.onPrimary : Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ),
