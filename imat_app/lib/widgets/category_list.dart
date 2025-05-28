@@ -22,6 +22,7 @@ class CategoryList extends StatefulWidget {
 
 class _CategoryListState extends State<CategoryList> {
   final ScrollController _scrollController = ScrollController();
+  final double borderRadius = 12.0;
 
   @override
   void dispose() {
@@ -82,60 +83,84 @@ class _CategoryListState extends State<CategoryList> {
                     thumbColor: MaterialStateProperty.all(
                       AppTheme.colorScheme.onPrimary.withOpacity(0.6),
                     ),
-                    radius: const Radius.circular(10),
+                    radius: Radius.circular(borderRadius),
                     thickness: MaterialStateProperty.all(6),
+                    mainAxisMargin: 2,
+                    crossAxisMargin: 8, // Increased from 0 to 8 to move scrollbar to the right
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 4), // Add padding for scrollbar
-                  child: Scrollbar(
-                    controller: _scrollController,
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.only(right: 8), // Extra padding for list items
-                      itemCount: sortedCategories.length,
-                      itemBuilder: (context, index) {
-                        final category = sortedCategories[index];
-                        final categoryName = CategoryUtils.getCategoryName(category);
-                        final isSelected = category == widget.selected;
+                // Move Scrollbar outside of ClipRRect to prevent it from being rounded
+                child: Stack(
+                  children: [
+                    // Content with rounded corners
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        thumbVisibility: true,
+                        trackVisibility: false,
+                        child: ListView.separated(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.only(
+                            left: 4,
+                            right: 16,
+                            top: 4,
+                            bottom: 4,
+                          ),
+                          itemCount: sortedCategories.length,
+                          separatorBuilder: (context, index) => const SizedBox(height: 8),
+                          itemBuilder: (context, index) {
+                            final category = sortedCategories[index];
+                            final categoryName = CategoryUtils.getCategoryName(category);
+                            final isSelected = category == widget.selected;
 
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? AppTheme.brand
-                                  : AppTheme.colorScheme.onPrimary,
-                              border: Border.all(color: AppTheme.border, width: 2),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(12),
-                              onTap: () => widget.onCategorySelected(category),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                  horizontal: 8,
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: ScalableText(
-                                    categoryName,
-                                    style: TextStyle(
-                                      color: isSelected
-                                          ? AppTheme.colorScheme.onPrimary
-                                          : AppTheme.colorScheme.onSurface,
-                                      fontWeight: FontWeight.bold,
+                            // Apply the same border radius to all buttons
+                            final BorderRadius itemBorderRadius = BorderRadius.circular(borderRadius);
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? AppTheme.brand
+                                        : AppTheme.colorScheme.onPrimary,
+                                    border: Border.all(color: AppTheme.border, width: 2),
+                                    borderRadius: itemBorderRadius,
+                                  ),
+                                  child: InkWell(
+                                    splashColor: AppTheme.colorScheme.primary.withOpacity(0.3),
+                                    highlightColor: AppTheme.colorScheme.primary.withOpacity(0.1),
+                                    borderRadius: itemBorderRadius,
+                                    onTap: () => widget.onCategorySelected(category),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                        horizontal: 8,
+                                      ),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: ScalableText(
+                                          categoryName,
+                                          style: TextStyle(
+                                            color: isSelected
+                                                ? AppTheme.colorScheme.onPrimary
+                                                : AppTheme.colorScheme.onSurface,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
