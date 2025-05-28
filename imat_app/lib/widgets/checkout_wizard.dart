@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
+import 'package:imat_app/model/imat/credit_card.dart';
+import 'package:imat_app/model/imat/customer.dart';
+import 'package:imat_app/widgets/cart_review.dart';
+import 'package:imat_app/widgets/confirmation.dart';
+import 'package:imat_app/widgets/delivery_info.dart';
+import 'package:imat_app/widgets/payment.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
+import 'package:imat_app/widgets/step_progress_bar.dart';
 import 'package:imat_app/widgets/close-button.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
-import 'package:imat_app/model/imat/shopping_item.dart';
 
 class CheckoutWizard extends StatefulWidget {
   const CheckoutWizard({super.key});
@@ -15,11 +23,105 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
   int _step = 0;
   final int totalSteps = 4;
 
-  void _nextStep() {
-    if (_step < totalSteps - 1) {
-      setState(() => _step++);
-    } else {
-      Navigator.pop(context);
+  DateTime? _selectedDate;
+  String? _selectedTimeSlot;
+
+  final _deliveryFormKey = GlobalKey<FormState>();
+  final _paymentFormKey = GlobalKey<FormState>();
+
+  Map<String, String> _deliveryFormData = {};
+  Map<String, dynamic> _paymentFormData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    final iMat = context.read<ImatDataHandler>();
+
+    // Preload customer and credit card data
+    final customer = iMat.getCustomer();
+    _deliveryFormData = {
+      'firstName': customer.firstName,
+      'lastName': customer.lastName,
+      'phone': customer.phoneNumber,
+      'mobile': customer.mobilePhoneNumber,
+      'email': customer.email,
+      'address': customer.address,
+      'postCode': customer.postCode,
+      'postAddress': customer.postAddress,
+    };
+
+    final creditCard = iMat.getCreditCard();
+    _paymentFormData = {
+      'cardType': creditCard.cardType,
+      'holdersName': creditCard.holdersName,
+      'validMonth': creditCard.validMonth,
+      'validYear': creditCard.validYear,
+      'cardNumber': creditCard.cardNumber,
+      'verificationCode': creditCard.verificationCode,
+    };
+  }
+
+  Future<void> _pickDate(BuildContext context) async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 30)),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  void _selectTimeSlot(String slot) {
+    setState(() {
+      _selectedTimeSlot = slot;
+    });
+  }
+
+  void _nextStep() async {
+    final iMat = context.read<ImatDataHandler>();
+    bool isValid = true;
+
+    if (_step == 1) {
+      isValid = _deliveryFormKey.currentState?.validate() ?? true;
+      if (isValid) {
+        final updatedCustomer = Customer(
+          _deliveryFormData['firstName'] ?? '',
+          _deliveryFormData['lastName'] ?? '',
+          _deliveryFormData['phone'] ?? '',
+          _deliveryFormData['mobile'] ?? '',
+          _deliveryFormData['email'] ?? '',
+          _deliveryFormData['address'] ?? '',
+          _deliveryFormData['postCode'] ?? '',
+          _deliveryFormData['postAddress'] ?? '',
+        );
+        iMat.setCustomer(updatedCustomer);
+      }
+    } else if (_step == 2) {
+      isValid = _paymentFormKey.currentState?.validate() ?? true;
+      if (isValid) {
+        final updatedCard = CreditCard(
+          _paymentFormData['cardType'] ?? '',
+          _paymentFormData['holdersName'] ?? '',
+          _paymentFormData['validMonth'] ?? 1,
+          _paymentFormData['validYear'] ?? 2025,
+          _paymentFormData['cardNumber'] ?? '',
+          _paymentFormData['verificationCode'] ?? 0,
+        );
+        iMat.setCreditCard(updatedCard);
+      }
+    }
+
+    if (isValid) {
+      if (_step < totalSteps - 1) {
+        setState(() => _step++);
+      } else {
+        await _finalizeOrder(iMat);
+      }
     }
   }
 
@@ -27,8 +129,35 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
     if (_step > 0) setState(() => _step--);
   }
 
+  Future<void> _finalizeOrder(ImatDataHandler iMat) async {
+    await iMat.placeOrder();
+    if (mounted) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final steps = [
+      const CartReviewStep(),
+      DeliveryInfoStep(
+        formKey: _deliveryFormKey,
+        onDataChanged: (data) => _deliveryFormData = data,
+        initialData: _deliveryFormData,
+      ),
+      PaymentStep(
+        formKey: _paymentFormKey,
+        onDataChanged: (data) => _paymentFormData = data,
+        initialData: _paymentFormData,
+      ),
+      ConfirmationStep(
+        selectedDate: _selectedDate,
+        selectedTimeSlot: _selectedTimeSlot,
+        onDateSelected: _pickDate,
+        onTimeSlotSelected: _selectTimeSlot,
+      ),
+    ];
+
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -36,15 +165,15 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: SizedBox(
-        width: 500,
+        width: 700,
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildStepProgressBar(),
+              StepProgressBar(currentStep: _step, totalSteps: totalSteps),
               const SizedBox(height: 24),
-              _buildStepContent(),
+              steps[_step],
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,17 +186,19 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
                         onPressed: _previousStep,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.teal,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppTheme.colorScheme.onPrimary,
                         ),
-                        child: const Text("Tillbaka"),
+                        child: const ScalableText("Tillbaka"),
                       ),
                   ElevatedButton(
                     onPressed: _nextStep,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.teal,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppTheme.colorScheme.onPrimary,
                     ),
-                    child: Text(_step == totalSteps - 1 ? "Slutför" : "Nästa"),
+                    child: ScalableText(
+                      _step == totalSteps - 1 ? "Slutför" : "Nästa",
+                    ),
                   ),
                 ],
               ),
@@ -77,145 +208,4 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
       ),
     );
   }
-
-  Widget _buildStepProgressBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(totalSteps * 2 - 1, (index) {
-        if (index % 2 == 0) {
-          final stepIndex = index ~/ 2;
-          final isActive = stepIndex <= _step;
-          return Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isActive ? Colors.teal : Colors.white,
-              border: Border.all(color: Colors.teal, width: 2),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              '${stepIndex + 1}',
-              style: TextStyle(
-                color: isActive ? Colors.white : Colors.teal,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          );
-        } else {
-          return Expanded(child: Container(height: 2, color: Colors.teal));
-        }
-      }),
-    );
-  }
-
-  Widget _buildStepContent() {
-    final steps = [
-      _buildCartReviewStep(),
-      _buildDeliveryInfoStep(),
-      _buildPaymentStep(),
-      _buildConfirmationStep(),
-    ];
-    return steps[_step];
-  }
-
-  Widget _buildCartReviewStep() {
-    final iMat = context.watch<ImatDataHandler>();
-    final items = iMat.getShoppingCart().items;
-
-    if (items.isEmpty) {
-      return const Text("Kundvagnen är tom.");
-    }
-
-    final total = iMat.shoppingCartTotal().toStringAsFixed(2);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Granska din kundvagn:",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 12),
-        Container(
-          constraints: const BoxConstraints(maxHeight: 200),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              final item = items[index];
-              final product = item.product;
-              final quantity = item.amount.toInt();
-              final price = (item.amount * product.price).toStringAsFixed(2);
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: [
-                    // Product image
-                    Container(
-                      width: 40,
-                      height: 40,
-                      margin: const EdgeInsets.only(right: 12),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(4),
-                        image: DecorationImage(
-                          image: iMat.getImage(product).image,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    // Product info
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product.name,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          Text(
-                            "$quantity st • ${product.price.toStringAsFixed(2)} kr/st",
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Price and remove button
-                    Column(
-                      children: [
-                        Text(
-                          "$price kr",
-                          style: const TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.delete,
-                            size: 18,
-                            color: Colors.redAccent,
-                          ),
-                          onPressed: () => iMat.shoppingCartRemove(item),
-                          tooltip: "Ta bort",
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          "Totalt: $total kr",
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDeliveryInfoStep() => const Text("2. Leveransinformation");
-
-  Widget _buildPaymentStep() => const Text("3. Betalningsmetod");
-
-  Widget _buildConfirmationStep() => const Text("4. Bekräftelse");
 }

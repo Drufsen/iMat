@@ -15,7 +15,7 @@ class ScalableText extends StatelessWidget {
 
   const ScalableText(
     this.text, {
-    Key? key,
+    super.key,
     this.style,
     this.textAlign,
     this.overflow,
@@ -24,7 +24,7 @@ class ScalableText extends StatelessWidget {
     this.color,
     this.fontWeight,
     this.softWrap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

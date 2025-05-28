@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/Controller/cart_overlay_controller.dart';
-import 'package:imat_app/widgets/transaction_history_modal.dart';
+import 'package:imat_app/model/Controller/settings_controller.dart';
+import 'package:imat_app/model/Controller/show_favorites.dart';
+import 'package:imat_app/model/imat_data_handler.dart';
+import 'package:imat_app/widgets/cart_button.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
+import 'package:imat_app/widgets/search_bar.dart';
+import 'package:imat_app/widgets/OrderHistoryModalState.dart';
+import 'package:provider/provider.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
-  const TopBar({super.key});
+  final VoidCallback onSearchStarted;
+
+  const TopBar({super.key, required this.onSearchStarted});
 
   @override
   State<TopBar> createState() => _TopBarState();
@@ -15,13 +24,15 @@ class TopBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _TopBarState extends State<TopBar> {
   final GlobalKey _cartIconKey = GlobalKey();
+  final GlobalKey _settingsIconKey = GlobalKey();
   late CartOverlayController _cartOverlayController;
+  late SettingsOverlayController _settingsOverlayController;
 
   void _showTransactionHistory(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const TransactionHistoryModal();
+        return const OrderHistoryModal();
       },
     );
   }
@@ -30,11 +41,13 @@ class _TopBarState extends State<TopBar> {
   void initState() {
     super.initState();
     _cartOverlayController = CartOverlayController();
+    _settingsOverlayController = SettingsOverlayController();
   }
 
   @override
   void dispose() {
     _cartOverlayController.removeCartPopup();
+    _settingsOverlayController.removeSettingsPopup();
     super.dispose();
   }
 
@@ -49,51 +62,27 @@ class _TopBarState extends State<TopBar> {
       leadingWidth: 0,
       title: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 40),
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.home,
-                    color: Colors.tealAccent,
-                    size: 35,
-                  ),
-                  padding: EdgeInsets.zero,
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'iMat',
-                  style: TextStyle(
-                    color: Colors.tealAccent,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.home,
+              color: AppTheme.colorScheme.onPrimary,
+              size: 35,
+            ),
+            padding: EdgeInsets.zero,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'iMat',
+            style: TextStyle(
+              color: AppTheme.colorScheme.onPrimary,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          const Expanded(
+          Expanded(
             child: Center(
-              child: SizedBox(
-                height: 40,
-                width: 500,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Sök efter produkter...',
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search),
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding: EdgeInsets.zero,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ),
+              child: SearchBarWidget(onSearchStarted: widget.onSearchStarted),
             ),
           ),
         ],
@@ -105,44 +94,46 @@ class _TopBarState extends State<TopBar> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () {},
-                icon: const Icon(
+                onPressed: () {
+                  final dataHandler = context.read<ImatDataHandler>();
+                  showFavoritesDialog(context, dataHandler);
+                },
+                icon: Icon(
                   Icons.favorite_outlined,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
               ),
-              const SizedBox(width: 16), // Add spacing here
-              IconButton(
-                key: _cartIconKey,
-                icon: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: Colors.tealAccent,
-                  size: 35,
-                ),
-                onPressed:
-                    () => _cartOverlayController.toggleCartPopup(
-                      context,
-                      _cartIconKey,
-                    ),
+              const SizedBox(width: 16),
+
+              // Cart icon with badge
+              CartIconWithBadge(
+                targetKey: _cartIconKey,
+                controller: _cartOverlayController,
               ),
-              const SizedBox(width: 16), // Add spacing here
+
+              const SizedBox(width: 16),
+
               IconButton(
                 onPressed: () => _showTransactionHistory(context),
-                icon: const Icon(
+                icon: Icon(
                   Icons.receipt_long,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
               ),
-              const SizedBox(width: 16), // Add spacing here
+              const SizedBox(width: 16),
+
               IconButton(
-                onPressed: () {
-                  // Add settings functionality here
-                },
-                icon: const Icon(
+                key: _settingsIconKey,
+                onPressed:
+                    () => _settingsOverlayController.toggleSettingsPopup(
+                      context,
+                      _settingsIconKey,
+                    ),
+                icon: Icon(
                   Icons.settings,
-                  color: Colors.tealAccent,
+                  color: AppTheme.colorScheme.onPrimary,
                   size: 35,
                 ),
               ),

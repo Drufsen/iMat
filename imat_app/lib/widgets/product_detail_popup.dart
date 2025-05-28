@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:imat_app/app_theme.dart';
-import 'package:imat_app/widgets/cart_button.dart';
+import 'package:imat_app/widgets/add_to_cart_button.dart';
 import 'package:imat_app/widgets/close-button.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat/product.dart';
@@ -23,43 +22,77 @@ class ProductDetailDialog extends StatelessWidget {
       insetPadding: const EdgeInsets.all(24),
       child: Padding(
         padding: const EdgeInsets.all(24),
-        child: SizedBox(
-          width: 420, // Limit dialog width
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: SizedBox(height: 200, child: iMat.getImage(product)),
-              ),
-              const SizedBox(height: 16),
-              ScalableText(
-                product.name,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              ScalableText(
-                '${product.price.toStringAsFixed(2)} ${product.unit}',
-                style: const TextStyle(fontSize: 18),
-              ),
-              const SizedBox(height: 16),
-              ScalableText(description, style: const TextStyle(fontSize: 16)),
-
-              const SizedBox(height: 24),
-
-              // ✅ Row with buttons aligned to left and right
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            SizedBox(
+              width: 420,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CloseButtonWidget(),
-                  AddToCartButton(product: product),
+                  Center(
+                    child: SizedBox(height: 200, child: iMat.getImage(product)),
+                  ),
+                  const SizedBox(height: 16),
+                  ScalableText(
+                    product.name,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ScalableText(
+                    '${product.price.toStringAsFixed(2)} ${product.unit}',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 16),
+                  ScalableText(
+                    description,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CloseButtonWidget(),
+                      AddToCartButton(product: product),
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
+            ),
+
+            // 🔴 Red badge in top-left of card
+            if (iMat.getQuantityInCart(product) > 0)
+              Positioned(
+                top: -12,
+                left: -12,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2,
+                    ), // Optional for clarity
+                  ),
+                  child: Text(
+                    iMat.getQuantityInCart(product).toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

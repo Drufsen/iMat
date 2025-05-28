@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/help_button.dart';
 import 'package:imat_app/widgets/help_window.dart';
 
 /// A widget that handles the expandable help feature.
 /// This combines the help button and the expandable help window.
 class ExpandableHelpOverlay extends StatefulWidget {
-  const ExpandableHelpOverlay({Key? key}) : super(key: key);
+  const ExpandableHelpOverlay({super.key});
 
   @override
   State<ExpandableHelpOverlay> createState() => _ExpandableHelpOverlayState();
@@ -64,7 +65,7 @@ class _ExpandableHelpOverlayState extends State<ExpandableHelpOverlay>
                 width: 300,
                 height: _animation.value * 400, // Animate the height
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppTheme.colorScheme.onPrimary,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -86,8 +87,8 @@ class _ExpandableHelpOverlayState extends State<ExpandableHelpOverlay>
 
         // Floating help button
         Positioned(
-          right: 16,
-          bottom: 16,
+          right: 32,
+          bottom: 20,
           child: FloatingHelpButton(onToggle: _handleHelpToggle),
         ),
       ],
