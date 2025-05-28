@@ -18,9 +18,14 @@ class CategoryList extends StatelessWidget {
     final sortedCategories =
         List<ProductCategory>.from(ProductCategory.values)
           ..removeWhere(
-            (category) => getCategoryName(category) == "Okänd kategori",
+            (category) =>
+                CategoryUtils.getCategoryName(category) == "Okänd kategori",
           )
-          ..sort((a, b) => getCategoryName(a).compareTo(getCategoryName(b)));
+          ..sort(
+            (a, b) => CategoryUtils.getCategoryName(
+              a,
+            ).compareTo(CategoryUtils.getCategoryName(b)),
+          );
 
     return Container(
       margin: const EdgeInsets.all(8),
@@ -36,7 +41,7 @@ class CategoryList extends StatelessWidget {
           itemCount: sortedCategories.length,
           itemBuilder: (context, index) {
             final category = sortedCategories[index];
-            final categoryName = getCategoryName(category);
+            final categoryName = CategoryUtils.getCategoryName(category);
             final isSelected = category == selected;
 
             return Padding(
