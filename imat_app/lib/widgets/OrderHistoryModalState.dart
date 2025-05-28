@@ -107,8 +107,8 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                     Navigator.of(context).pop(); // Close modal after adding
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppTheme.brand,
+                    foregroundColor: AppTheme.colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -134,7 +134,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
       width: double.infinity, // ✅ Fill full width
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.teal, // ✅ Match border color
+        color: AppTheme.brand, // ✅ Match border color
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,7 +144,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.white, // ✅ White text for contrast
+              color: AppTheme.colorScheme.onPrimary, // ✅ White text for contrast
             ),
           ),
         ],
