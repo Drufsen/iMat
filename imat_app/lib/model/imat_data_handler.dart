@@ -37,6 +37,12 @@ class ImatDataHandler extends ChangeNotifier {
   // Returnernar de produkter som är valda
   List<Product> get selectProducts => _selectProducts;
 
+  void clearSearch() {
+    isSearching = false; // ✅ Reset the search flag
+    selectSelection(products); // ✅ Reset the product selection
+    notifyListeners(); // ✅ Ensure UI rebuilds
+  }
+
   // Nollställer urvalet till alla produkter.
   // Anropar notifyListeners så att GUI:t får
   // veta att urvalet ändrats.

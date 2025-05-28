@@ -84,11 +84,10 @@ class _MainViewState extends State<MainView> {
                             setState(() {
                               selectedCategory = null;
                             });
-                            searchController.clear(); // ✅ Clear search text
-                            iMat.selectSelection(
-                              iMat.products,
-                            ); // ✅ Reset product selection
+                            searchController.clear();
+                            iMat.clearSearch(); // ✅ Add this line
                           },
+
                           categorizedProducts: filteredProducts,
                           iMat: iMat,
                           sortMode: sortMode, // 🔥 Pass it down
