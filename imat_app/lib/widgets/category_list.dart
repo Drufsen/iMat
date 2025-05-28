@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat/util/product_categories.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
@@ -26,7 +27,7 @@ class CategoryList extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.teal, // ✅ Teal background for the whole sidebar
+        color: AppTheme.brand,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.teal, width: 4),
       ),
