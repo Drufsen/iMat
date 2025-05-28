@@ -120,20 +120,25 @@ class _CategoryListState extends State<CategoryList> {
                             return Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 4.0),
                               child: Material(
-                                color: Colors.transparent,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? AppTheme.brand
-                                        : AppTheme.colorScheme.onPrimary,
-                                    border: Border.all(color: AppTheme.border, width: 2),
-                                    borderRadius: itemBorderRadius,
-                                  ),
-                                  child: InkWell(
-                                    splashColor: AppTheme.colorScheme.primary.withOpacity(0.3),
-                                    highlightColor: AppTheme.colorScheme.primary.withOpacity(0.1),
-                                    borderRadius: itemBorderRadius,
-                                    onTap: () => widget.onCategorySelected(category),
+                                color: isSelected ? AppTheme.brand : AppTheme.colorScheme.onPrimary,
+                                borderRadius: itemBorderRadius,
+                                elevation: 0,
+                                child: InkWell(
+                                  splashColor: AppTheme.colorScheme.primary.withOpacity(0.3),
+                                  highlightColor: AppTheme.colorScheme.primary.withOpacity(0.1),
+                                  hoverColor: AppTheme.colorScheme.primary.withOpacity(0.04),
+                                  borderRadius: itemBorderRadius,
+                                  onTap: () => widget.onCategorySelected(category),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: isSelected 
+                                            ? AppTheme.colorScheme.onPrimary 
+                                            : AppTheme.border, 
+                                        width: isSelected ? 2.5 : 2,
+                                      ),
+                                      borderRadius: itemBorderRadius,
+                                    ),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 12,
