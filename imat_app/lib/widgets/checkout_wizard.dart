@@ -29,6 +29,38 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
   final _deliveryFormKey = GlobalKey<FormState>();
   final _paymentFormKey = GlobalKey<FormState>();
 
+  Map<String, String> _deliveryFormData = {};
+  Map<String, dynamic> _paymentFormData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    final iMat = context.read<ImatDataHandler>();
+
+    // Preload customer and credit card data
+    final customer = iMat.getCustomer();
+    _deliveryFormData = {
+      'firstName': customer.firstName,
+      'lastName': customer.lastName,
+      'phone': customer.phoneNumber,
+      'mobile': customer.mobilePhoneNumber,
+      'email': customer.email,
+      'address': customer.address,
+      'postCode': customer.postCode,
+      'postAddress': customer.postAddress,
+    };
+
+    final creditCard = iMat.getCreditCard();
+    _paymentFormData = {
+      'cardType': creditCard.cardType,
+      'holdersName': creditCard.holdersName,
+      'validMonth': creditCard.validMonth,
+      'validYear': creditCard.validYear,
+      'cardNumber': creditCard.cardNumber,
+      'verificationCode': creditCard.verificationCode,
+    };
+  }
+
   Future<void> _pickDate(BuildContext context) async {
     final now = DateTime.now();
     final picked = await showDatePicker(
@@ -50,44 +82,38 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
     });
   }
 
-  void _saveCustomerData(ImatDataHandler iMat) {
-    final customer = iMat.getCustomer();
-    final updatedCustomer = Customer(
-      customer.firstName,
-      customer.lastName,
-      customer.phoneNumber,
-      customer.mobilePhoneNumber,
-      customer.email,
-      customer.address,
-      customer.postCode,
-      customer.postAddress,
-    );
-    iMat.setCustomer(updatedCustomer);
-  }
-
-  void _savePaymentData(ImatDataHandler iMat) {
-    final creditCard = iMat.getCreditCard();
-    final updatedCard = CreditCard(
-      creditCard.cardType,
-      creditCard.holdersName,
-      creditCard.validMonth,
-      creditCard.validYear,
-      creditCard.cardNumber,
-      creditCard.verificationCode,
-    );
-    iMat.setCreditCard(updatedCard);
-  }
-
   void _nextStep() async {
     final iMat = context.read<ImatDataHandler>();
     bool isValid = true;
 
     if (_step == 1) {
       isValid = _deliveryFormKey.currentState?.validate() ?? true;
-      if (isValid) _saveCustomerData(iMat);
+      if (isValid) {
+        final updatedCustomer = Customer(
+          _deliveryFormData['firstName'] ?? '',
+          _deliveryFormData['lastName'] ?? '',
+          _deliveryFormData['phone'] ?? '',
+          _deliveryFormData['mobile'] ?? '',
+          _deliveryFormData['email'] ?? '',
+          _deliveryFormData['address'] ?? '',
+          _deliveryFormData['postCode'] ?? '',
+          _deliveryFormData['postAddress'] ?? '',
+        );
+        iMat.setCustomer(updatedCustomer);
+      }
     } else if (_step == 2) {
       isValid = _paymentFormKey.currentState?.validate() ?? true;
-      if (isValid) _savePaymentData(iMat);
+      if (isValid) {
+        final updatedCard = CreditCard(
+          _paymentFormData['cardType'] ?? '',
+          _paymentFormData['holdersName'] ?? '',
+          _paymentFormData['validMonth'] ?? 1,
+          _paymentFormData['validYear'] ?? 2025,
+          _paymentFormData['cardNumber'] ?? '',
+          _paymentFormData['verificationCode'] ?? 0,
+        );
+        iMat.setCreditCard(updatedCard);
+      }
     }
 
     if (isValid) {
@@ -112,6 +138,26 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
 
   @override
   Widget build(BuildContext context) {
+    final steps = [
+      const CartReviewStep(),
+      DeliveryInfoStep(
+        formKey: _deliveryFormKey,
+        onDataChanged: (data) => _deliveryFormData = data,
+        initialData: _deliveryFormData,
+      ),
+      PaymentStep(
+        formKey: _paymentFormKey,
+        onDataChanged: (data) => _paymentFormData = data,
+        initialData: _paymentFormData,
+      ),
+      ConfirmationStep(
+        selectedDate: _selectedDate,
+        selectedTimeSlot: _selectedTimeSlot,
+        onDateSelected: _pickDate,
+        onTimeSlotSelected: _selectTimeSlot,
+      ),
+    ];
+
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -127,7 +173,7 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
             children: [
               StepProgressBar(currentStep: _step, totalSteps: totalSteps),
               const SizedBox(height: 24),
-              _buildStepContent(),
+              steps[_step],
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,7 +196,9 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
                       backgroundColor: Colors.teal,
                       foregroundColor: AppTheme.colorScheme.onPrimary,
                     ),
-                    child: ScalableText(_step == totalSteps - 1 ? "Slutför" : "Nästa"),
+                    child: ScalableText(
+                      _step == totalSteps - 1 ? "Slutför" : "Nästa",
+                    ),
                   ),
                 ],
               ),
@@ -159,20 +207,5 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
         ),
       ),
     );
-  }
-
-  Widget _buildStepContent() {
-    final steps = [
-      const CartReviewStep(),
-      DeliveryInfoStep(formKey: _deliveryFormKey),
-      PaymentStep(formKey: _paymentFormKey),
-      ConfirmationStep(
-        selectedDate: _selectedDate,
-        selectedTimeSlot: _selectedTimeSlot,
-        onDateSelected: _pickDate,
-        onTimeSlotSelected: _selectTimeSlot,
-      ),
-    ];
-    return steps[_step];
   }
 }
