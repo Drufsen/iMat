@@ -47,14 +47,14 @@ class SettingsPopupContent extends StatelessWidget {
               const Divider(thickness: 1.5),
 
               // Text Size Adjustment
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ScalableText(
                   'Textstorlek:',
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
               ),
-              const TextSizeSlider(),
+              TextSizeSlider(),
 
               const SizedBox(height: 16),
 
