@@ -29,16 +29,19 @@ class _FloatingHelpButtonState extends State<FloatingHelpButton> {
 
   @override
   Widget build(BuildContext context) {
-    // Position the FAB in the bottom-right corner
-    return FloatingActionButton(
-      onPressed: _toggleExpansion,
-      backgroundColor: AppTheme.colorScheme.primary,
-      shape: const CircleBorder(),
-      tooltip: 'Hjälp',
-      child: Icon(
-        size: 50,
-        _isExpanded ? Icons.close : Icons.help_sharp,
-        color: AppTheme.colorScheme.onPrimary,
+    return SizedBox(
+      width: 70, // Set your custom width
+      height: 70, // Set your custom height
+      child: FloatingActionButton(
+        onPressed: _toggleExpansion,
+        backgroundColor: AppTheme.colorScheme.primary,
+        shape: const CircleBorder(),
+        tooltip: 'Hjälp',
+        child: Icon(
+          _isExpanded ? Icons.close : Icons.help_sharp,
+          size: 60,
+          color: AppTheme.colorScheme.onPrimary,
+        ),
       ),
     );
   }
