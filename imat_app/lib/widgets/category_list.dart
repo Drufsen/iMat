@@ -29,7 +29,7 @@ class CategoryList extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.brand,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.teal, width: 4),
+        border: Border.all(color: AppTheme.border, width: 4),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,10 +38,10 @@ class CategoryList extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
             child: Text(
               "Kategorier",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: AppTheme.colorScheme.onPrimary,
               ),
             ),
           ),
@@ -59,8 +59,8 @@ class CategoryList extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.teal : Colors.white,
-                        border: Border.all(color: Colors.teal, width: 2),
+                        color: isSelected ? AppTheme.brand : AppTheme.colorScheme.onPrimary,
+                        border: Border.all(color: AppTheme.border, width: 2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: InkWell(
@@ -76,7 +76,7 @@ class CategoryList extends StatelessWidget {
                             child: ScalableText(
                               categoryName,
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.black,
+                                color: isSelected ? AppTheme.colorScheme.onPrimary : Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
