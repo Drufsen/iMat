@@ -33,7 +33,13 @@ class _MainViewState extends State<MainView> {
             : allProducts;
 
     return Scaffold(
-      appBar: TopBar(),
+      appBar: TopBar(
+        onSearchStarted: () {
+          setState(() {
+            selectedCategory = null;
+          });
+        },
+      ),
       body: Stack(
         children: [
           Padding(
