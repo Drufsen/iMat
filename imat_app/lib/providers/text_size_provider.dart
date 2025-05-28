@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 // Define our text size options
-enum TextSize { small, medium, large }
+enum TextSize { normal, storre, storst }
 
 class TextSizeProvider extends ChangeNotifier {
-  // Default to medium
-  TextSize _currentSize = TextSize.medium;
+  // Default to normal
+  TextSize _currentSize = TextSize.normal;
   
   // Map enum to actual scaling factors
   final Map<TextSize, double> _sizeFactors = {
-    TextSize.small: 0.8,
-    TextSize.medium: 1.0,
-    TextSize.large: 1.2,
+    TextSize.normal: 1.0,    // Normal size (default)
+    TextSize.storre: 1.2,    // 20% bigger
+    TextSize.storst: 1.4,    // 40% bigger
   };
   
   // Getter for current text size

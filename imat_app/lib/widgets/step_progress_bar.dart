@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 
 class StepProgressBar extends StatelessWidget {
   final int currentStep;
@@ -23,20 +25,20 @@ class StepProgressBar extends StatelessWidget {
             height: 32,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isActive ? Colors.teal : Colors.white,
-              border: Border.all(color: Colors.teal, width: 2),
+              color: isActive ? AppTheme.brand : Colors.white,
+              border: Border.all(color: AppTheme.border, width: 2),
             ),
             alignment: Alignment.center,
-            child: Text(
+            child: ScalableText(
               '${stepIndex + 1}',
               style: TextStyle(
-                color: isActive ? Colors.white : Colors.teal,
+                color: isActive ? AppTheme.colorScheme.onPrimary : AppTheme.brand,
                 fontWeight: FontWeight.bold,
               ),
             ),
           );
         } else {
-          return Expanded(child: Container(height: 2, color: Colors.teal));
+          return Expanded(child: Container(height: 2, color: AppTheme.brand));
         }
       }),
     );
