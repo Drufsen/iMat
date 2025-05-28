@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
-import 'package:imat_app/widgets/close-button.dart';
 
 class SuccessStep extends StatelessWidget {
   const SuccessStep({super.key});

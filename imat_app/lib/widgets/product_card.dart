@@ -22,7 +22,6 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isFavorite = iMat.isFavorite(product);
-    final quantity = iMat.getQuantityInCart(product);
 
     return InkWell(
       onTap: onTap,

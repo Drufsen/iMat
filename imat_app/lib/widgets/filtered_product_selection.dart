@@ -5,7 +5,6 @@ import 'package:imat_app/model/imat/sort_mode.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/widgets/product_grid.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
-import 'package:imat_app/widgets/sorting_dropdown.dart';
 
 class FilteredProductSection extends StatefulWidget {
   final ProductCategory? selectedCategory;
