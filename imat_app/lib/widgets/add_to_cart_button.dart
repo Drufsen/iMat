@@ -16,18 +16,6 @@ class AddToCartButton extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: () {
         iMat.shoppingCartAdd(ShoppingItem(product, amount: 1));
-        final cleanUnit = product.unit.replaceFirst("kr/", "");
-
-        // Show a snackbar to confirm the addition to the cart
-        // This is a simple way to provide feedback to the user
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              '1 $cleanUnit ${product.name} har lagts till i kundvagnen.',
-            ),
-            duration: const Duration(seconds: 2),
-          ),
-        );
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.teal,

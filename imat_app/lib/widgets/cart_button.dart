@@ -43,7 +43,7 @@ class CartIconWithBadge extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.white, width: 2),
               ),
-              child: Text(
+              child: ScalableText(
                 totalQuantity.toString(),
                 style: const TextStyle(
                   color: Colors.white,
