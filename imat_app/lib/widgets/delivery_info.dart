@@ -1,34 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
-import 'package:provider/provider.dart';
-import 'package:imat_app/model/imat_data_handler.dart';
 
-class DeliveryInfoStep extends StatelessWidget {
+class DeliveryInfoStep extends StatefulWidget {
   final GlobalKey<FormState> formKey;
+  final Function(Map<String, String>) onDataChanged;
+  final Map<String, String>? initialData; // New optional initial data
 
-  const DeliveryInfoStep({super.key, required this.formKey});
+  const DeliveryInfoStep({
+    super.key,
+    required this.formKey,
+    required this.onDataChanged,
+    this.initialData,
+  });
+
+  @override
+  State<DeliveryInfoStep> createState() => _DeliveryInfoStepState();
+}
+
+class _DeliveryInfoStepState extends State<DeliveryInfoStep> {
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final mobileController = TextEditingController();
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
+  final postCodeController = TextEditingController();
+  final postAddressController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _populateInitialData();
+    _addListeners();
+  }
+
+  void _populateInitialData() {
+    final data = widget.initialData ?? {};
+
+    firstNameController.text = data['firstName'] ?? '';
+    lastNameController.text = data['lastName'] ?? '';
+    phoneController.text = data['phone'] ?? '';
+    mobileController.text = data['mobile'] ?? '';
+    emailController.text = data['email'] ?? '';
+    addressController.text = data['address'] ?? '';
+    postCodeController.text = data['postCode'] ?? '';
+    postAddressController.text = data['postAddress'] ?? '';
+  }
+
+  void _addListeners() {
+    final controllers = [
+      firstNameController,
+      lastNameController,
+      phoneController,
+      mobileController,
+      emailController,
+      addressController,
+      postCodeController,
+      postAddressController,
+    ];
+    for (final controller in controllers) {
+      controller.addListener(_updateData);
+    }
+  }
+
+  void _updateData() {
+    widget.onDataChanged({
+      'firstName': firstNameController.text,
+      'lastName': lastNameController.text,
+      'phone': phoneController.text,
+      'mobile': mobileController.text,
+      'email': emailController.text,
+      'address': addressController.text,
+      'postCode': postCodeController.text,
+      'postAddress': postAddressController.text,
+    });
+  }
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    phoneController.dispose();
+    mobileController.dispose();
+    emailController.dispose();
+    addressController.dispose();
+    postCodeController.dispose();
+    postAddressController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final iMat = context.watch<ImatDataHandler>();
-    final customer = iMat.getCustomer();
-
-    final firstNameController = TextEditingController(text: customer.firstName);
-    final lastNameController = TextEditingController(text: customer.lastName);
-    final phoneController = TextEditingController(text: customer.phoneNumber);
-    final mobileController = TextEditingController(
-      text: customer.mobilePhoneNumber,
-    );
-    final emailController = TextEditingController(text: customer.email);
-    final addressController = TextEditingController(text: customer.address);
-    final postCodeController = TextEditingController(text: customer.postCode);
-    final postAddressController = TextEditingController(
-      text: customer.postAddress,
-    );
-
     return SingleChildScrollView(
       child: Form(
-        key: formKey,
+        key: widget.formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -78,13 +143,13 @@ class DeliveryInfoStep extends StatelessWidget {
             (value) => value == null || value.isEmpty ? 'Måste fyllas i' : null,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
         ),
@@ -103,13 +168,13 @@ class DeliveryInfoStep extends StatelessWidget {
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
         ),

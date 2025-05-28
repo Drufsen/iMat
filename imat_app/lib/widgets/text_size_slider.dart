@@ -10,6 +10,10 @@ class TextSizeSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TextSizeProvider>(
       builder: (context, textSizeProvider, child) {
+        final currentIndex = textSizeProvider.currentSize.index;
+        final isMinSize = currentIndex == 0; // normal
+        final isMaxSize = currentIndex == 2; // storst
+
         return Container(
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
@@ -28,10 +32,34 @@ class TextSizeSlider extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  ScalableText('Liten', style: TextStyle(fontSize: 14)),
+                  // Minus button
+                  IconButton(
+                    iconSize: 32, // Increased from default size
+                    padding: const EdgeInsets.all(
+                      12,
+                    ), // Added padding around icon
+                    icon: const Icon(Icons.remove_circle_outline),
+                    onPressed:
+                        isMinSize
+                            ? null // Disable when at minimum size
+                            : () {
+                              final newIndex = currentIndex - 1;
+                              if (newIndex >= 0) {
+                                textSizeProvider.setTextSize(
+                                  TextSize.values[newIndex],
+                                );
+                              }
+                            },
+                    color:
+                        isMinSize
+                            ? Colors
+                                .grey
+                                .shade400 // Grayed out when disabled
+                            : Theme.of(context).primaryColor,
+                  ),
                   Expanded(
                     child: Slider(
-                      value: textSizeProvider.currentSize.index.toDouble(),
+                      value: currentIndex.toDouble(),
                       min: 0,
                       max: 2,
                       divisions: 2,
@@ -42,19 +70,60 @@ class TextSizeSlider extends StatelessWidget {
                       },
                     ),
                   ),
-                  ScalableText('Stor', style: TextStyle(fontSize: 14)),
+                  // Plus button
+                  IconButton(
+                    iconSize: 32, // Increased from default size
+                    padding: const EdgeInsets.all(
+                      12,
+                    ), // Added padding around icon
+                    icon: const Icon(Icons.add_circle_outline),
+                    onPressed:
+                        isMaxSize
+                            ? null // Disable when at maximum size
+                            : () {
+                              final newIndex = currentIndex + 1;
+                              if (newIndex <= 2) {
+                                textSizeProvider.setTextSize(
+                                  TextSize.values[newIndex],
+                                );
+                              }
+                            },
+                    color:
+                        isMaxSize
+                            ? Colors
+                                .grey
+                                .shade400 // Grayed out when disabled
+                            : Theme.of(context).primaryColor,
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
-              // Current size indicator
+              // Current size indicator with proper display names
               ScalableText(
-                'Nuvarande: ${textSizeProvider.currentSize.toString().split('.').last}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                'Textstorlek: ${_getSizeLabel(textSizeProvider.currentSize)}',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
         );
       },
     );
+  }
+
+  // Helper method to convert enum values to user-friendly labels
+  String _getSizeLabel(TextSize size) {
+    switch (size) {
+      case TextSize.normal:
+        return 'Normal';
+      case TextSize.storre:
+        return 'Större';
+      case TextSize.storst:
+        return 'Störst';
+      default:
+        return 'Normal';
+    }
   }
 }

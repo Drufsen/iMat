@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
-import 'package:provider/provider.dart';
-import 'package:imat_app/model/imat_data_handler.dart';
 
 class PaymentStep extends StatefulWidget {
   final GlobalKey<FormState> formKey;
+  final Function(Map<String, dynamic>) onDataChanged;
+  final Map<String, dynamic>? initialData;
 
-  const PaymentStep({super.key, required this.formKey});
+  const PaymentStep({
+    super.key,
+    required this.formKey,
+    required this.onDataChanged,
+    this.initialData,
+  });
 
   @override
   State<PaymentStep> createState() => _PaymentStepState();
@@ -18,31 +22,55 @@ class _PaymentStepState extends State<PaymentStep> {
   late String selectedMonth;
   late String selectedYear;
 
+  final holderNameController = TextEditingController();
+  final cardNumberController = TextEditingController();
+  final verificationCodeController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    final creditCard = context.read<ImatDataHandler>().getCreditCard();
-    selectedCardType =
-        creditCard.cardType.isNotEmpty ? creditCard.cardType : 'Visa';
-    selectedMonth = creditCard.validMonth.toString().padLeft(2, '0');
-    selectedYear = creditCard.validYear.toString();
+
+    final data = widget.initialData ?? {};
+
+    selectedCardType = data['cardType'] ?? 'Visa';
+    selectedMonth = (data['validMonth'] ?? 1).toString().padLeft(2, '0');
+    selectedYear = (data['validYear'] ?? 2025).toString();
+
+    holderNameController.text = data['holdersName'] ?? '';
+    cardNumberController.text = data['cardNumber'] ?? '';
+    verificationCodeController.text =
+        data['verificationCode']?.toString() ?? '';
+
+    _addListeners();
+  }
+
+  void _addListeners() {
+    holderNameController.addListener(_updateData);
+    cardNumberController.addListener(_updateData);
+    verificationCodeController.addListener(_updateData);
+  }
+
+  void _updateData() {
+    widget.onDataChanged({
+      'cardType': selectedCardType,
+      'holdersName': holderNameController.text,
+      'validMonth': int.tryParse(selectedMonth) ?? 1,
+      'validYear': int.tryParse(selectedYear) ?? 2025,
+      'cardNumber': cardNumberController.text,
+      'verificationCode': int.tryParse(verificationCodeController.text) ?? 0,
+    });
+  }
+
+  @override
+  void dispose() {
+    holderNameController.dispose();
+    cardNumberController.dispose();
+    verificationCodeController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final iMat = context.watch<ImatDataHandler>();
-    final creditCard = iMat.getCreditCard();
-
-    final holderNameController = TextEditingController(
-      text: creditCard.holdersName,
-    );
-    final cardNumberController = TextEditingController(
-      text: creditCard.cardNumber,
-    );
-    final verificationCodeController = TextEditingController(
-      text: creditCard.verificationCode.toString(),
-    );
-
     return SingleChildScrollView(
       child: Form(
         key: widget.formKey,
@@ -64,7 +92,10 @@ class _PaymentStepState extends State<PaymentStep> {
                   items: ['Visa', 'Mastercard'],
                   onChanged: (value) {
                     if (value != null) {
-                      setState(() => selectedCardType = value);
+                      setState(() {
+                        selectedCardType = value;
+                        _updateData();
+                      });
                     }
                   },
                 ),
@@ -88,7 +119,10 @@ class _PaymentStepState extends State<PaymentStep> {
                       width: 140,
                       onChanged: (value) {
                         if (value != null) {
-                          setState(() => selectedMonth = value);
+                          setState(() {
+                            selectedMonth = value;
+                            _updateData();
+                          });
                         }
                       },
                     ),
@@ -103,7 +137,10 @@ class _PaymentStepState extends State<PaymentStep> {
                       width: 140,
                       onChanged: (value) {
                         if (value != null) {
-                          setState(() => selectedYear = value);
+                          setState(() {
+                            selectedYear = value;
+                            _updateData();
+                          });
                         }
                       },
                     ),
@@ -167,13 +204,13 @@ class _PaymentStepState extends State<PaymentStep> {
         onChanged: onChanged,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
         ),
@@ -203,13 +240,13 @@ class _PaymentStepState extends State<PaymentStep> {
         keyboardType: keyboardType,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),
         ),
