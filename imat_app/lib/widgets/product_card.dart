@@ -22,7 +22,6 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isFavorite = iMat.isFavorite(product);
-    final quantity = iMat.getQuantityInCart(product);
 
     return InkWell(
       onTap: onTap,
@@ -112,30 +111,6 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
             ),
-            if (quantity > 0)
-              Positioned(
-                top: 4,
-                left: 5,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                  child: Text(
-                    quantity.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
       ),

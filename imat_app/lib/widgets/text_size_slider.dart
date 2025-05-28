@@ -122,8 +122,6 @@ class TextSizeSlider extends StatelessWidget {
         return 'Större';
       case TextSize.storst:
         return 'Störst';
-      default:
-        return 'Normal';
     }
   }
 }
