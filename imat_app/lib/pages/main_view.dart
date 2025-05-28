@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/model/imat/product.dart';
+import 'package:imat_app/model/imat/sort_mode.dart';
 import 'package:imat_app/model/imat/util/product_categories.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/widgets/category_sidebar';
 import 'package:imat_app/widgets/expandable_help_overlay.dart';
 import 'package:imat_app/widgets/filtered_product_selection.dart';
+import 'package:imat_app/widgets/sorting_dropdown.dart';
 import 'package:imat_app/widgets/top_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -16,16 +18,17 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   ProductCategory? selectedCategory;
+  SortMode sortMode = SortMode.none; // 🔥 New state for sorting
 
   @override
   Widget build(BuildContext context) {
     var iMat = context.watch<ImatDataHandler>();
-    final allProducts = buildCategorizedProducts(iMat);
+    final allProducts = CategoryUtils.buildCategorizedProducts(iMat);
 
     final filteredProducts =
         selectedCategory != null
             ? {
-              getCategoryName(selectedCategory!):
+              CategoryUtils.getCategoryName(selectedCategory!):
                   iMat.selectProducts
                       .where((p) => p.category == selectedCategory)
                       .toList(),
@@ -56,15 +59,34 @@ class _MainViewState extends State<MainView> {
                   },
                 ),
                 Expanded(
-                  child: FilteredProductSection(
-                    selectedCategory: selectedCategory,
-                    onClearFilter: () {
-                      setState(() {
-                        selectedCategory = null;
-                      });
-                    },
-                    categorizedProducts: filteredProducts,
-                    iMat: iMat,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: SortingDropdown(
+                          currentSort: sortMode,
+                          onSortChanged: (mode) {
+                            setState(() {
+                              sortMode = mode;
+                            });
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: FilteredProductSection(
+                          selectedCategory: selectedCategory,
+                          onClearFilter: () {
+                            setState(() {
+                              selectedCategory = null;
+                            });
+                          },
+                          categorizedProducts: filteredProducts,
+                          iMat: iMat,
+                          sortMode: sortMode, // 🔥 Pass it down
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
