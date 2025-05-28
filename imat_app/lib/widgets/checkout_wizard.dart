@@ -7,6 +7,7 @@ import 'package:imat_app/widgets/confirmation.dart';
 import 'package:imat_app/widgets/delivery_info.dart';
 import 'package:imat_app/widgets/payment.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
+import 'package:imat_app/widgets/success_step.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/widgets/step_progress_bar.dart';
 import 'package:imat_app/widgets/close-button.dart';
@@ -31,6 +32,8 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
 
   Map<String, String> _deliveryFormData = {};
   Map<String, dynamic> _paymentFormData = {};
+
+  bool _isOrderCompleted = false;
 
   @override
   void initState() {
@@ -132,7 +135,9 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
   Future<void> _finalizeOrder(ImatDataHandler iMat) async {
     await iMat.placeOrder();
     if (mounted) {
-      Navigator.pop(context);
+      setState(() {
+        _isOrderCompleted = true;
+      });
     }
   }
 
@@ -165,45 +170,66 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: SizedBox(
-        width: 700,
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              StepProgressBar(currentStep: _step, totalSteps: totalSteps),
-              const SizedBox(height: 24),
-              steps[_step],
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _step == 0
-                      ? CloseButtonWidget(
-                        onPressed: () => Navigator.pop(context),
-                      )
-                      : ElevatedButton(
-                        onPressed: _previousStep,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          foregroundColor: AppTheme.colorScheme.onPrimary,
-                        ),
-                        child: const ScalableText("Tillbaka"),
+        width: _isOrderCompleted ? 400 : 700,
+        height: _isOrderCompleted ? 300 : null,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(32),
+              child:
+                  _isOrderCompleted
+                      ? const SuccessStep()
+                      : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          StepProgressBar(
+                            currentStep: _step,
+                            totalSteps: totalSteps,
+                          ),
+                          const SizedBox(height: 24),
+                          steps[_step],
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _step == 0
+                                  ? CloseButtonWidget(
+                                    onPressed: () => Navigator.pop(context),
+                                  )
+                                  : ElevatedButton(
+                                    onPressed: _previousStep,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.teal,
+                                      foregroundColor:
+                                          AppTheme.colorScheme.onPrimary,
+                                    ),
+                                    child: const ScalableText("Tillbaka"),
+                                  ),
+                              ElevatedButton(
+                                onPressed: _nextStep,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.teal,
+                                  foregroundColor:
+                                      AppTheme.colorScheme.onPrimary,
+                                ),
+                                child: ScalableText(
+                                  _step == totalSteps - 1 ? "Slutför" : "Nästa",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                  ElevatedButton(
-                    onPressed: _nextStep,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal,
-                      foregroundColor: AppTheme.colorScheme.onPrimary,
-                    ),
-                    child: ScalableText(
-                      _step == totalSteps - 1 ? "Slutför" : "Nästa",
-                    ),
-                  ),
-                ],
+            ),
+            if (_isOrderCompleted)
+              Positioned(
+                bottom: 8,
+                left: 8,
+                child: CloseButtonWidget(
+                  onPressed: () => Navigator.pop(context),
+                ),
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );
