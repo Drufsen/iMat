@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
@@ -24,9 +25,9 @@ class CartIconWithBadge extends StatelessWidget {
       children: [
         IconButton(
           key: targetKey,
-          icon: const Icon(
+          icon: Icon(
             Icons.shopping_cart_outlined,
-            color: Colors.tealAccent,
+            color: AppTheme.colorScheme.onPrimary,
             size: 35,
           ),
           onPressed: () => controller.toggleCartPopup(context, targetKey),
