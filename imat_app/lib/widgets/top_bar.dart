@@ -61,22 +61,14 @@ class _TopBarState extends State<TopBar> {
       leading: null,
       leadingWidth: 0,
       title: Row(
-        children: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.home,
-              color: AppTheme.colorScheme.onPrimary,
-              size: 35,
-            ),
-            padding: EdgeInsets.zero,
-          ),
+        children:
+        [
           const SizedBox(width: 8),
           Text(
             'iMat',
             style: TextStyle(
               color: AppTheme.colorScheme.onPrimary,
-              fontSize: 24,
+              fontSize: 32,
               fontWeight: FontWeight.bold,
             ),
           ),
