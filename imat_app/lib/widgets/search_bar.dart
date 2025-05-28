@@ -5,18 +5,22 @@ import 'package:imat_app/model/imat_data_handler.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final VoidCallback onSearchStarted;
+  final TextEditingController controller; // ✅ Add this
 
-  const SearchBarWidget({Key? key, required this.onSearchStarted}) : super(key: key);
+  const SearchBarWidget({
+    Key? key,
+    required this.onSearchStarted,
+    required this.controller, // ✅ Include in constructor
+  }) : super(key: key);
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
 }
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
-  final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   bool _isFocused = false;
-  
+
   @override
   void initState() {
     super.initState();
@@ -32,7 +36,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
 
   @override
   void dispose() {
-    _controller.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -49,14 +52,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         color: AppTheme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: _isFocused 
-              ? AppTheme.colorScheme.primary 
-              : Colors.transparent,
+          color: _isFocused ? AppTheme.colorScheme.primary : Colors.transparent,
           width: 1.5,
         ),
       ),
       child: TextField(
-        controller: _controller,
+        controller: widget.controller, // ✅ Use the passed-in controller
         focusNode: _focusNode,
         decoration: InputDecoration(
           hintText: 'Sök efter produkter...',
@@ -67,28 +68,29 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             Icons.search,
             color: AppTheme.colorScheme.onSurface.withOpacity(0.8),
           ),
-          suffixIcon: _controller.text.isNotEmpty
-              ? IconButton(
-                  icon: Icon(
-                    Icons.clear,
-                    color: AppTheme.colorScheme.onSurface.withOpacity(0.8),
-                  ),
-                  onPressed: () {
-                    _controller.clear();
-                    widget.onSearchStarted();
-                    final results = iMat.findProducts('');
-                    iMat.selectSelection(results);
-                  },
-                )
-              : null,
+          suffixIcon:
+              widget.controller.text.isNotEmpty
+                  ? IconButton(
+                    icon: Icon(
+                      Icons.clear,
+                      color: AppTheme.colorScheme.onSurface.withOpacity(0.8),
+                    ),
+                    onPressed: () {
+                      widget.controller.clear(); // ✅ Use widget.controller
+                      widget.onSearchStarted();
+                      final results = iMat.findProducts('');
+                      iMat.selectSelection(results);
+                    },
+                  )
+                  : null,
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 4.0,
+          ),
           isDense: true,
         ),
-        style: TextStyle(
-          color: AppTheme.colorScheme.onSurface,
-          fontSize: 16,
-        ),
+        style: TextStyle(color: AppTheme.colorScheme.onSurface, fontSize: 16),
         onChanged: (value) {
           setState(() {});
           widget.onSearchStarted();
@@ -100,4 +102,3 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     );
   }
 }
-
