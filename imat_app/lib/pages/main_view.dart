@@ -20,12 +20,12 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     var iMat = context.watch<ImatDataHandler>();
-    final allProducts = buildCategorizedProducts(iMat);
+    final allProducts = CategoryUtils.buildCategorizedProducts(iMat);
 
     final filteredProducts =
         selectedCategory != null
             ? {
-              getCategoryName(selectedCategory!):
+              CategoryUtils.getCategoryName(selectedCategory!):
                   iMat.selectProducts
                       .where((p) => p.category == selectedCategory)
                       .toList(),

@@ -1,5 +1,3 @@
-// New file: widgets/filtered_product_section.dart
-
 import 'package:flutter/material.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/imat/product.dart';
@@ -46,6 +44,7 @@ class FilteredProductSection extends StatelessWidget {
           child: ProductGrid(
             categorizedProducts: categorizedProducts,
             iMat: iMat,
+            selectedCategory: selectedCategory, // ✅ Pass this down!
           ),
         ),
       ],

@@ -19,9 +19,14 @@ class CategoryList extends StatelessWidget {
     final sortedCategories =
         List<ProductCategory>.from(ProductCategory.values)
           ..removeWhere(
-            (category) => getCategoryName(category) == "Okänd kategori",
+            (category) =>
+                CategoryUtils.getCategoryName(category) == "Okänd kategori",
           )
-          ..sort((a, b) => getCategoryName(a).compareTo(getCategoryName(b)));
+          ..sort(
+            (a, b) => CategoryUtils.getCategoryName(
+              a,
+            ).compareTo(CategoryUtils.getCategoryName(b)),
+          );
 
     return Container(
       margin: const EdgeInsets.all(8),
@@ -31,37 +36,14 @@ class CategoryList extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.border, width: 4),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
-            child: Text(
-              "Kategorier",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.colorScheme.onPrimary,
-              ),
-            ),
-          ),
-          Expanded(
-            child: SizedBox(
-              width: 200,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: RawScrollbar(
-                  thumbColor: Colors.white.withOpacity(0.6),
-                  radius: const Radius.circular(10),
-                  thickness: 6,
-                  thumbVisibility: true,
-                  child: ListView.builder(
-                    itemCount: sortedCategories.length,
-                    padding: const EdgeInsets.only(right: 8), // Add padding on the right for the scrollbar
-                    itemBuilder: (context, index) {
-                      final category = sortedCategories[index];
-                      final categoryName = getCategoryName(category);
-                      final isSelected = category == selected;
+      child: SizedBox(
+        width: 200,
+        child: ListView.builder(
+          itemCount: sortedCategories.length,
+          itemBuilder: (context, index) {
+            final category = sortedCategories[index];
+            final categoryName = CategoryUtils.getCategoryName(category);
+            final isSelected = category == selected;
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),

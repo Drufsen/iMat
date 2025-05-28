@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/model/imat/util/product_categories.dart';
 import 'package:imat_app/widgets/product_card.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/model/imat/product.dart';
@@ -9,11 +10,13 @@ import 'package:imat_app/widgets/scalable_text.dart';
 class ProductGrid extends StatelessWidget {
   final Map<String, List<Product>> categorizedProducts;
   final ImatDataHandler iMat;
+  final ProductCategory? selectedCategory;
 
   const ProductGrid({
     super.key,
     required this.categorizedProducts,
     required this.iMat,
+    required this.selectedCategory,
   });
 
   static const double productWidth = 250;
@@ -22,6 +25,68 @@ class ProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (selectedCategory != null) {
+      final categoryName = CategoryUtils.getCategoryName(selectedCategory!);
+      final products = categorizedProducts[categoryName] ?? [];
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  color: Colors.teal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  child: ScalableText(
+                    categoryName,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 1.2, // Compact height
+              ),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return ProductCard(
+                  product,
+                  iMat,
+                  compact: true,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      barrierColor: Colors.black.withOpacity(0.5),
+                      builder:
+                          (context) => ProductDetailDialog(product: product),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    }
+
+    // Default horizontal layout
     return ListView.builder(
       padding: const EdgeInsets.all(AppTheme.paddingSmall),
       itemCount: categorizedProducts.length,
@@ -59,7 +124,6 @@ class ProductGrid extends StatelessWidget {
               height: 300,
               child: Stack(
                 children: [
-                  // Själva produktlistan
                   ListView.separated(
                     controller: scrollController,
                     scrollDirection: Axis.horizontal,
@@ -87,8 +151,6 @@ class ProductGrid extends StatelessWidget {
                       );
                     },
                   ),
-
-                  // Vänsterpil
                   Positioned(
                     left: 0,
                     top: 0,
@@ -112,8 +174,6 @@ class ProductGrid extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                  // Högerpil
                   Positioned(
                     right: 0,
                     top: 0,
@@ -125,7 +185,6 @@ class ProductGrid extends StatelessWidget {
                           scrollController.offset + scrollAmount,
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeOut,
-
                         );
                       },
                       child: const Padding(
@@ -141,7 +200,6 @@ class ProductGrid extends StatelessWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: AppTheme.paddingLarge),
           ],
         );
