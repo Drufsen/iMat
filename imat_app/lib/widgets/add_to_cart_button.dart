@@ -106,6 +106,7 @@ class _AddToCartButtonState extends State<AddToCartButton> {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  height: 1.2,
                 ),
               ),
             ),
