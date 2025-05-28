@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 
@@ -11,7 +12,7 @@ class CartReviewStep extends StatelessWidget {
     final items = iMat.getShoppingCart().items;
 
     if (items.isEmpty) {
-      return const Text("Kundvagnen är tom.");
+      return const ScalableText("Kundvagnen är tom.");
     }
 
     final total = iMat.shoppingCartTotal().toStringAsFixed(2);
@@ -19,7 +20,7 @@ class CartReviewStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        const ScalableText(
           "Granska din kundvagn:",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
@@ -61,7 +62,7 @@ class CartReviewStep extends StatelessWidget {
                             product.name,
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
-                          Text(
+                          ScalableText(
                             "$quantity st • ${product.price.toStringAsFixed(2)} kr/st",
                           ),
                         ],
@@ -70,7 +71,7 @@ class CartReviewStep extends StatelessWidget {
                     // Price and remove button
                     Column(
                       children: [
-                        Text(
+                        ScalableText(
                           "$price kr",
                           style: const TextStyle(fontWeight: FontWeight.w500),
                         ),
@@ -92,7 +93,7 @@ class CartReviewStep extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Text(
+        ScalableText(
           "Totalt: $total kr",
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),

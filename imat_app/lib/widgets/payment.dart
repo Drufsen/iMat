@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/app_theme.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 
@@ -13,6 +15,8 @@ class PaymentStep extends StatefulWidget {
 
 class _PaymentStepState extends State<PaymentStep> {
   late String selectedCardType;
+  late String selectedMonth;
+  late String selectedYear;
 
   @override
   void initState() {
@@ -20,6 +24,8 @@ class _PaymentStepState extends State<PaymentStep> {
     final creditCard = context.read<ImatDataHandler>().getCreditCard();
     selectedCardType =
         creditCard.cardType.isNotEmpty ? creditCard.cardType : 'Visa';
+    selectedMonth = creditCard.validMonth.toString().padLeft(2, '0');
+    selectedYear = creditCard.validYear.toString();
   }
 
   @override
@@ -29,12 +35,6 @@ class _PaymentStepState extends State<PaymentStep> {
 
     final holderNameController = TextEditingController(
       text: creditCard.holdersName,
-    );
-    final validMonthController = TextEditingController(
-      text: creditCard.validMonth.toString(),
-    );
-    final validYearController = TextEditingController(
-      text: creditCard.validYear.toString(),
     );
     final cardNumberController = TextEditingController(
       text: creditCard.cardNumber,
@@ -49,7 +49,7 @@ class _PaymentStepState extends State<PaymentStep> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            const ScalableText(
               "Betalningsinformation:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -58,66 +58,53 @@ class _PaymentStepState extends State<PaymentStep> {
               spacing: 16,
               runSpacing: 16,
               children: [
-                SizedBox(
-                  width: 200,
-                  child: DropdownButtonFormField<String>(
-                    value: selectedCardType,
-                    decoration: const InputDecoration(
-                      labelText: 'Korttyp',
-                      border: OutlineInputBorder(),
-                    ),
-                    items:
-                        ['Visa', 'Mastercard']
-                            .map(
-                              (type) => DropdownMenuItem(
-                                value: type,
-                                child: Text(type),
-                              ),
-                            )
-                            .toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          selectedCardType = value;
-                        });
-                      }
-                    },
-                  ),
+                _buildDropdownField(
+                  label: "Korttyp",
+                  value: selectedCardType,
+                  items: ['Visa', 'Mastercard'],
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() => selectedCardType = value);
+                    }
+                  },
                 ),
                 _buildValidatedField(
                   "Korthållarens namn",
                   holderNameController,
                   300,
-                  (value) {
-                    if (value == null || value.isEmpty) return "Måste fyllas i";
-                    return null;
-                  },
+                  (value) =>
+                      value == null || value.isEmpty ? "Måste fyllas i" : null,
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildValidatedField(
-                      "Giltig månad (MM)",
-                      validMonthController,
-                      140,
-                      (value) {
-                        final month = int.tryParse(value ?? '');
-                        if (month == null || month < 1 || month > 12)
-                          return '1-12';
-                        return null;
+                    _buildDropdownField(
+                      label: "Giltig månad (MM)",
+                      value: selectedMonth,
+                      items: List.generate(
+                        12,
+                        (index) => (index + 1).toString().padLeft(2, '0'),
+                      ),
+                      width: 140,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() => selectedMonth = value);
+                        }
                       },
                     ),
                     const SizedBox(width: 16),
-                    _buildValidatedField(
-                      "Giltigt år (ÅÅÅÅ)",
-                      validYearController,
-                      140,
-                      (value) {
-                        final year = int.tryParse(value ?? '');
-                        final currentYear = DateTime.now().year;
-                        if (year == null || year < currentYear)
-                          return '$currentYear+';
-                        return null;
+                    _buildDropdownField(
+                      label: "Giltigt år (ÅÅÅÅ)",
+                      value: selectedYear,
+                      items: List.generate(
+                        16,
+                        (index) => (2025 + index).toString(),
+                      ),
+                      width: 140,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() => selectedYear = value);
+                        }
                       },
                     ),
                   ],
@@ -129,21 +116,23 @@ class _PaymentStepState extends State<PaymentStep> {
                   (value) {
                     if (value == null ||
                         value.length != 16 ||
-                        int.tryParse(value) == null)
+                        int.tryParse(value) == null) {
                       return '16 siffror';
+                    }
                     return null;
                   },
                   keyboardType: TextInputType.number,
                 ),
                 _buildValidatedField(
-                  "CVC/CVV-kod",
+                  "CVC-kod",
                   verificationCodeController,
                   140,
                   (value) {
                     if (value == null ||
-                        (value.length != 3 && value.length != 4) ||
-                        int.tryParse(value) == null)
-                      return '3-4 siffror';
+                        value.length != 3 ||
+                        int.tryParse(value) == null) {
+                      return '3 siffror';
+                    }
                     return null;
                   },
                   keyboardType: TextInputType.number,
@@ -153,13 +142,48 @@ class _PaymentStepState extends State<PaymentStep> {
             const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.only(top: 16.0),
-              child: Text(
+              child: ScalableText(
                 "Vi sparar givna informationen för nästa gång du handlar hos oss.",
                 style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    required String value,
+    required List<String> items,
+    required Function(String?) onChanged,
+    double width = 200,
+  }) {
+    return SizedBox(
+      width: width,
+      child: DropdownButtonFormField<String>(
+        value: value,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+        ),
+        items:
+            items
+                .map(
+                  (item) =>
+                      DropdownMenuItem(value: item, child: ScalableText(item)),
+                )
+                .toList(),
       ),
     );
   }
@@ -179,7 +203,15 @@ class _PaymentStepState extends State<PaymentStep> {
         keyboardType: keyboardType,
         decoration: InputDecoration(
           labelText: label,
-          border: const OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
         ),
       ),
     );

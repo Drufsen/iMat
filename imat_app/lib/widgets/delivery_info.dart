@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 
@@ -31,7 +32,7 @@ class DeliveryInfoStep extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            const ScalableText(
               "Leveransinformation:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -40,20 +41,20 @@ class DeliveryInfoStep extends StatelessWidget {
               spacing: 16,
               runSpacing: 16,
               children: [
-                _buildSizedTextField("Förnamn", firstNameController, 200),
-                _buildSizedTextField("Efternamn", lastNameController, 200),
-                _buildSizedTextField("Telefonnummer", phoneController, 200),
-                _buildSizedTextField("Mobilnummer", mobileController, 200),
-                _buildSizedTextField("E-post", emailController, 420),
-                _buildSizedTextField("Adress", addressController, 420),
-                _buildSizedTextField("Postnummer", postCodeController, 200),
-                _buildSizedTextField("Postort", postAddressController, 200),
+                _buildValidatedField("Förnamn", firstNameController, 200),
+                _buildValidatedField("Efternamn", lastNameController, 200),
+                _buildOptionalField("Telefonnummer", phoneController, 200),
+                _buildOptionalField("Mobilnummer", mobileController, 200),
+                _buildValidatedField("E-post", emailController, 420),
+                _buildValidatedField("Adress", addressController, 420),
+                _buildValidatedField("Postnummer", postCodeController, 200),
+                _buildValidatedField("Postort", postAddressController, 200),
               ],
             ),
             const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.only(top: 16.0),
-              child: Text(
+              child: ScalableText(
                 "Vi sparar givna informationen för nästa gång du handlar hos oss.",
                 style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
               ),
@@ -64,18 +65,53 @@ class DeliveryInfoStep extends StatelessWidget {
     );
   }
 
-  Widget _buildSizedTextField(
+  Widget _buildValidatedField(
     String label,
     TextEditingController controller,
     double width,
   ) {
     return SizedBox(
       width: width,
-      child: TextField(
+      child: TextFormField(
+        controller: controller,
+        validator:
+            (value) => value == null || value.isEmpty ? 'Måste fyllas i' : null,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOptionalField(
+    String label,
+    TextEditingController controller,
+    double width,
+  ) {
+    return SizedBox(
+      width: width,
+      child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
-          border: const OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.teal, width: 2),
+          ),
         ),
       ),
     );

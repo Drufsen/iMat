@@ -20,6 +20,7 @@ class ImatDataHandler extends ChangeNotifier {
   ImatDataHandler() {
     _setUp();
   }
+  bool isSearching = false;
 
   // Never changing, only loaded on startup
   List<Product> get products => _products;
@@ -76,12 +77,20 @@ class ImatDataHandler extends ChangeNotifier {
   // Sökningen görs utan hänsyn till case och var i strängen search finns.
   // T ex så hittar "me" både Clementin och Lime.
   List<Product> findProducts(String search) {
+    isSearching = search.isNotEmpty;
     final lowerSearch = search.toLowerCase();
-
     return products.where((product) {
       final name = product.name.toLowerCase();
       return name.contains(lowerSearch);
     }).toList();
+  }
+
+  int getTotalCartQuantity() {
+    int total = 0;
+    for (final item in _shoppingCart.items) {
+      total += item.amount.toInt();
+    }
+    return total;
   }
 
   // Returnerar produkten med productId idNbr eller null
@@ -213,6 +222,11 @@ class ImatDataHandler extends ChangeNotifier {
 
     _orders.clear();
     _orders.addAll(jsonData.map((item) => Order.fromJson(item)).toList());
+    notifyListeners();
+  }
+
+  void removeOrder(Order order) {
+    _orders.remove(order);
     notifyListeners();
   }
 

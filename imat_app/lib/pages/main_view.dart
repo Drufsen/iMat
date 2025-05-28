@@ -49,7 +49,6 @@ class _MainViewState extends State<MainView> {
                     });
                   },
                 ),
-                const SizedBox(width: 25),
                 Expanded(
                   child: FilteredProductSection(
                     selectedCategory: selectedCategory,

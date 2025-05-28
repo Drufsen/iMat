@@ -12,7 +12,8 @@ class AppTheme {
     seedColor: Color.fromARGB(255, 0, 169, 211),
   );
   static const Color ITColor = Color.fromARGB(255, 0, 169, 211);
-
+  static const Color border = Colors.teal;
+  static const Color brand = Colors.teal;
   // Varierbar text
   static TextStyle get headingStyle =>
       TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black);

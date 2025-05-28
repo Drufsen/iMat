@@ -15,42 +15,62 @@ class CategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Create a filtered and alphabetically sorted list without "Okänd kategori"
-    final sortedCategories = List<ProductCategory>.from(ProductCategory.values)
-      ..removeWhere((category) => getCategoryName(category) == "Okänd kategori")
-      ..sort((a, b) => getCategoryName(a).compareTo(getCategoryName(b)));
+    final sortedCategories =
+        List<ProductCategory>.from(ProductCategory.values)
+          ..removeWhere(
+            (category) => getCategoryName(category) == "Okänd kategori",
+          )
+          ..sort((a, b) => getCategoryName(a).compareTo(getCategoryName(b)));
 
-    return SizedBox(
-      width: 200,
-      child: ListView.builder(
-        itemCount: sortedCategories.length,
-        itemBuilder: (context, index) {
-          final category = sortedCategories[index];
-          final categoryName = getCategoryName(category);
-          final isSelected = category == selected;
+    return Container(
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.teal, // ✅ Teal background for the whole sidebar
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.teal, width: 4),
+      ),
+      child: SizedBox(
+        width: 200,
+        child: ListView.builder(
+          itemCount: sortedCategories.length,
+          itemBuilder: (context, index) {
+            final category = sortedCategories[index];
+            final categoryName = getCategoryName(category);
+            final isSelected = category == selected;
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    isSelected ? Colors.teal : Colors.teal.shade100,
-                foregroundColor: isSelected ? Colors.white : Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.teal : Colors.white,
+                  border: Border.all(color: Colors.teal, width: 2),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                alignment: Alignment.centerLeft, // Add this line to align text left
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => onCategorySelected(category),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 8,
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: ScalableText(
+                        categoryName,
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              onPressed: () {
-                onCategorySelected(category);
-              },
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: ScalableText(categoryName),
-              ), // Wrap ScalableText with Align widget
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

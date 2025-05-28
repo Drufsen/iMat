@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/widgets/close-button.dart';
+import 'package:imat_app/widgets/add_to_cart_button.dart'; // ✅ Add import for AddToCartButton
 import '../../model/imat_data_handler.dart';
 
 void showFavoritesDialog(BuildContext context, ImatDataHandler dataHandler) {
@@ -64,16 +65,25 @@ void showFavoritesDialog(BuildContext context, ImatDataHandler dataHandler) {
                               subtitle: Text(
                                 '${product.price.toStringAsFixed(2)} kr',
                               ),
-                              trailing: IconButton(
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () {
-                                  dataHandler.toggleFavorite(product);
-                                  Navigator.pop(context);
-                                  showFavoritesDialog(context, dataHandler);
-                                },
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  AddToCartButton(
+                                    product: product,
+                                  ), // ✅ Add your custom button
+                                  const SizedBox(width: 8),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      dataHandler.toggleFavorite(product);
+                                      Navigator.pop(context);
+                                      showFavoritesDialog(context, dataHandler);
+                                    },
+                                  ),
+                                ],
                               ),
                             );
                           },
