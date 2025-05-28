@@ -35,7 +35,7 @@ class AddToCartButton extends StatelessWidget {
           backgroundColor: Colors.teal,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(30),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         ),
