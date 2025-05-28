@@ -18,7 +18,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   ProductCategory? selectedCategory;
-  SortMode sortMode = SortMode.none; // 🔥 New state for sorting
+  SortMode sortMode = SortMode.alphabetical; // 🔥 New state for sorting
 
   @override
   Widget build(BuildContext context) {

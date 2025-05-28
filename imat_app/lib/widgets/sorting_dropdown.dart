@@ -22,10 +22,6 @@ class SortingDropdown extends StatelessWidget {
           value: currentSort,
           items: const [
             DropdownMenuItem(
-              value: SortMode.none,
-              child: ScalableText("Ingen"),
-            ),
-            DropdownMenuItem(
               value: SortMode.byPrice,
               child: ScalableText("Pris"),
             ),

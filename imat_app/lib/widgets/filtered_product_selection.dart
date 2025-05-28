@@ -28,7 +28,7 @@ class FilteredProductSection extends StatefulWidget {
 }
 
 class _FilteredProductSectionState extends State<FilteredProductSection> {
-  SortMode _sortMode = SortMode.none;
+  SortMode _sortMode = SortMode.alphabetical;
 
   bool get isFilteredView =>
       widget.selectedCategory != null || widget.iMat.isSearching;

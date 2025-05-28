@@ -1,1 +1,1 @@
-enum SortMode { none, byPrice, alphabetical }
+enum SortMode { byPrice, alphabetical }
