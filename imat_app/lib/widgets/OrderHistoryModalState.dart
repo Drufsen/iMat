@@ -33,7 +33,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                   decoration: BoxDecoration(
                     color: AppTheme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.teal, width: 5),
+                    border: Border.all(color: AppTheme.border, width: 5),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -57,7 +57,11 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
     ImatDataHandler iMat,
     List<Order> orders,
   ) {
-    final selectedOrder = orders[_selectedOrderIndex];
+    // Sort orders by date (newest first)
+    final sortedOrders = List<Order>.from(orders)
+      ..sort((a, b) => b.date.compareTo(a.date));
+    
+    final selectedOrder = sortedOrders[_selectedOrderIndex];
 
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
@@ -66,7 +70,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
         shape: BoxShape.rectangle,
         color: AppTheme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.teal, width: 5),
+        border: Border.all(color: AppTheme.border, width: 5),
         boxShadow: const [
           BoxShadow(
             color: Colors.black26,
@@ -82,7 +86,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOrderList(orders),
+                _buildOrderList(sortedOrders), // Pass the sorted list
                 _buildOrderDetails(selectedOrder),
               ],
             ),
@@ -149,6 +153,10 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
   }
 
   Widget _buildOrderList(List<Order> orders) {
+    // Sort orders by date (newest first)
+    final sortedOrders = List<Order>.from(orders)
+      ..sort((a, b) => b.date.compareTo(a.date));
+    
     return Container(
       width: 275,
       decoration: BoxDecoration(
@@ -157,9 +165,9 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
         ),
       ),
       child: ListView.builder(
-        itemCount: orders.length,
+        itemCount: sortedOrders.length,
         itemBuilder: (context, index) {
-          final order = orders[index];
+          final order = sortedOrders[index];
           final isSelected = index == _selectedOrderIndex;
           return Material(
             elevation: isSelected ? 2 : 0,
