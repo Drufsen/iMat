@@ -63,35 +63,6 @@ class ProductDetailDialog extends StatelessWidget {
                 ],
               ),
             ),
-
-            // 🔴 Red badge in top-left of card
-            if (iMat.getQuantityInCart(product) > 0)
-              Positioned(
-                top: -12,
-                left: -12,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
-                    ), // Optional for clarity
-                  ),
-                  child: Text(
-                    iMat.getQuantityInCart(product).toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
       ),
