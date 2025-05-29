@@ -89,7 +89,7 @@ class ProductGrid extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    color: Colors.teal,
+                    color: AppTheme.colorScheme.primary,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 6,

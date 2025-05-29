@@ -65,8 +65,7 @@ class _TopBarState extends State<TopBar> {
       leading: null,
       leadingWidth: 0,
       title: Row(
-        children:
-        [
+        children: [
           const SizedBox(width: 8),
           Text(
             'iMat',

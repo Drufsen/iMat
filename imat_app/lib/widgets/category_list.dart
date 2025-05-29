@@ -48,9 +48,9 @@ class _CategoryListState extends State<CategoryList> {
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppTheme.brand,
+        color: AppTheme.colorScheme.primary,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.border, width: 4),
+        border: Border.all(color: AppTheme.colorScheme.primary, width: 4),
       ),
       child: SizedBox(
         width: widget.width,
@@ -130,7 +130,7 @@ class _CategoryListState extends State<CategoryList> {
                               child: Material(
                                 color:
                                     isSelected
-                                        ? AppTheme.brand
+                                        ? AppTheme.colorScheme.primary
                                         : AppTheme.colorScheme.onPrimary,
                                 borderRadius: itemBorderRadius,
                                 elevation: 0,
@@ -150,7 +150,7 @@ class _CategoryListState extends State<CategoryList> {
                                         color:
                                             isSelected
                                                 ? AppTheme.colorScheme.onPrimary
-                                                : AppTheme.ITColor,
+                                                : AppTheme.colorScheme.primary,
                                         width: isSelected ? 2.5 : 2,
                                       ),
                                       borderRadius: itemBorderRadius,
