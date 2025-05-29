@@ -39,8 +39,9 @@ class _CategoryListState extends State<CategoryList> {
                 CategoryUtils.getCategoryName(category) == "Okänd kategori",
           )
           ..sort(
-            (a, b) => CategoryUtils.getCategoryName(a)
-                .compareTo(CategoryUtils.getCategoryName(b)),
+            (a, b) => CategoryUtils.getCategoryName(
+              a,
+            ).compareTo(CategoryUtils.getCategoryName(b)),
           );
 
     return Container(
@@ -86,7 +87,8 @@ class _CategoryListState extends State<CategoryList> {
                     radius: Radius.circular(borderRadius),
                     thickness: MaterialStateProperty.all(6),
                     mainAxisMargin: 2,
-                    crossAxisMargin: 8, // Increased from 0 to 8 to move scrollbar to the right
+                    crossAxisMargin:
+                        8, // Increased from 0 to 8 to move scrollbar to the right
                   ),
                 ),
                 // Move Scrollbar outside of ClipRRect to prevent it from being rounded
@@ -108,33 +110,47 @@ class _CategoryListState extends State<CategoryList> {
                             bottom: 4,
                           ),
                           itemCount: sortedCategories.length,
-                          separatorBuilder: (context, index) => const SizedBox(height: 8),
+                          separatorBuilder:
+                              (context, index) => const SizedBox(height: 8),
                           itemBuilder: (context, index) {
                             final category = sortedCategories[index];
-                            final categoryName = CategoryUtils.getCategoryName(category);
+                            final categoryName = CategoryUtils.getCategoryName(
+                              category,
+                            );
                             final isSelected = category == widget.selected;
 
                             // Apply the same border radius to all buttons
-                            final BorderRadius itemBorderRadius = BorderRadius.circular(borderRadius);
+                            final BorderRadius itemBorderRadius =
+                                BorderRadius.circular(borderRadius);
 
                             return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4.0,
+                              ),
                               child: Material(
-                                color: isSelected ? AppTheme.brand : AppTheme.colorScheme.onPrimary,
+                                color:
+                                    isSelected
+                                        ? AppTheme.brand
+                                        : AppTheme.colorScheme.onPrimary,
                                 borderRadius: itemBorderRadius,
                                 elevation: 0,
                                 child: InkWell(
-                                  splashColor: AppTheme.colorScheme.primary.withOpacity(0.3),
-                                  highlightColor: AppTheme.colorScheme.primary.withOpacity(0.1),
-                                  hoverColor: AppTheme.colorScheme.primary.withOpacity(0.04),
+                                  splashColor: AppTheme.colorScheme.primary
+                                      .withOpacity(0.3),
+                                  highlightColor: AppTheme.colorScheme.primary
+                                      .withOpacity(0.1),
+                                  hoverColor: AppTheme.colorScheme.primary
+                                      .withOpacity(0.04),
                                   borderRadius: itemBorderRadius,
-                                  onTap: () => widget.onCategorySelected(category),
+                                  onTap:
+                                      () => widget.onCategorySelected(category),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: isSelected 
-                                            ? AppTheme.colorScheme.onPrimary 
-                                            : AppTheme.border, 
+                                        color:
+                                            isSelected
+                                                ? AppTheme.colorScheme.onPrimary
+                                                : AppTheme.ITColor,
                                         width: isSelected ? 2.5 : 2,
                                       ),
                                       borderRadius: itemBorderRadius,
@@ -149,9 +165,14 @@ class _CategoryListState extends State<CategoryList> {
                                         child: ScalableText(
                                           categoryName,
                                           style: TextStyle(
-                                            color: isSelected
-                                                ? AppTheme.colorScheme.onPrimary
-                                                : AppTheme.colorScheme.onSurface,
+                                            color:
+                                                isSelected
+                                                    ? AppTheme
+                                                        .colorScheme
+                                                        .onPrimary
+                                                    : AppTheme
+                                                        .colorScheme
+                                                        .onSurface,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
