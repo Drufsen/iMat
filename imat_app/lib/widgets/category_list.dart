@@ -150,7 +150,7 @@ class _CategoryListState extends State<CategoryList> {
                                         color:
                                             isSelected
                                                 ? AppTheme.colorScheme.onPrimary
-                                                : AppTheme.ITColor,
+                                                : AppTheme.colorScheme.primary,
                                         width: isSelected ? 2.5 : 2,
                                       ),
                                       borderRadius: itemBorderRadius,
