@@ -43,7 +43,7 @@ class ProductGrid extends StatelessWidget {
           crossAxisCount: 4,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 1.2,
+          childAspectRatio: 0.9,
         ),
         itemCount: products.length,
         itemBuilder: (context, index) {
@@ -51,7 +51,6 @@ class ProductGrid extends StatelessWidget {
           return ProductCard(
             product,
             iMat,
-            compact: true,
             onTap: () {
               showDialog(
                 context: context,
@@ -127,7 +126,6 @@ class ProductGrid extends StatelessWidget {
                         child: ProductCard(
                           product,
                           iMat,
-                          compact: false,
                           onTap: () {
                             showDialog(
                               context: context,

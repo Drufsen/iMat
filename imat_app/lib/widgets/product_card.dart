@@ -9,15 +9,8 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final ImatDataHandler iMat;
   final VoidCallback? onTap;
-  final bool compact;
 
-  const ProductCard(
-    this.product,
-    this.iMat, {
-    super.key,
-    this.onTap,
-    this.compact = false,
-  });
+  const ProductCard(this.product, this.iMat, {super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +20,8 @@ class ProductCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
-        width: compact ? null : 280, // ✅ Allow null width for compact mode
-        height: compact ? 180 : 300,
+        width: 280,
+        height: 300,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -39,29 +32,21 @@ class ProductCard extends StatelessWidget {
                 border: Border.all(color: Colors.teal, width: 3),
               ),
               child: Padding(
-                padding: EdgeInsets.all(compact ? 8 : AppTheme.paddingSmall),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 10), // 🔥 Shift image a bit lower
+                    const SizedBox(height: 10),
                     SizedBox(
-                      height:
-                          compact
-                              ? 80
-                              : 140, // 🔥 Increased image height in horizontal
-                      width:
-                          compact
-                              ? 150
-                              : 220, // 🔥 Increased image width in horizontal
+                      height: 140,
+                      width: 150,
                       child: iMat.getImage(product),
                     ),
-                    const SizedBox(
-                      height: 12,
-                    ), // 🔥 Slightly larger gap under image
+                    const SizedBox(height: 12),
                     ScalableText(
                       product.name,
-                      style: TextStyle(
-                        fontSize: compact ? 14 : 18,
+                      style: const TextStyle(
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
@@ -69,13 +54,13 @@ class ProductCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     ScalableText(
                       '${product.price.toStringAsFixed(2)} ${product.unit}',
-                      style: TextStyle(fontSize: compact ? 12 : 14),
+                      style: const TextStyle(fontSize: 12),
                       textAlign: TextAlign.center,
                     ),
-                    const Spacer(), // 🔥 Pushes the button to the bottom
-                    const SizedBox(height: 5), // 🔥 5px spacing above button
+                    const Spacer(),
+                    const SizedBox(height: 5),
                     SizedBox(
-                      height: compact ? 40 : 50,
+                      height: 50,
                       width: double.infinity,
                       child: AddToCartButton(product: product),
                     ),

@@ -15,7 +15,6 @@ class ProductDetailDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final iMat = context.watch<ImatDataHandler>();
     final detail = iMat.getDetail(product);
-    final description = detail?.description ?? 'Ingen beskrivning tillgänglig.';
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -48,10 +47,22 @@ class ProductDetailDialog extends StatelessWidget {
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 16),
-                  ScalableText(
-                    description,
-                    style: const TextStyle(fontSize: 16),
-                  ),
+
+                  if (detail != null) ...[
+                    _detailRow("Märke", detail.brand),
+                    _detailRow("Innehåll", detail.contents),
+                    _detailRow("Ursprung", detail.origin),
+                    const SizedBox(height: 16),
+                    ScalableText(
+                      detail.description,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ] else
+                    ScalableText(
+                      "Ingen beskrivning tillgänglig.",
+                      style: const TextStyle(fontSize: 16),
+                    ),
+
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,7 +75,6 @@ class ProductDetailDialog extends StatelessWidget {
               ),
             ),
 
-            // 🔴 Red badge in top-left of card
             if (iMat.getQuantityInCart(product) > 0)
               Positioned(
                 top: -12,
@@ -77,10 +87,7 @@ class ProductDetailDialog extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.redAccent,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
-                    ), // Optional for clarity
+                    border: Border.all(color: Colors.white, width: 2),
                   ),
                   child: Text(
                     iMat.getQuantityInCart(product).toString(),
@@ -94,6 +101,26 @@ class ProductDetailDialog extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _detailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          ScalableText(
+            "$label: ",
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          Expanded(
+            child: ScalableText(
+              value.isNotEmpty ? value : "-",
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+        ],
       ),
     );
   }
