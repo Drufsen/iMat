@@ -14,7 +14,7 @@ class RensaButton extends StatelessWidget {
       icon: const Icon(Icons.delete),
       label: const Text("Rensa"),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.red,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
