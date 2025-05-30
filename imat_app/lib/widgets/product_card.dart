@@ -60,7 +60,7 @@ class ProductCard extends StatelessWidget {
                     const Spacer(),
                     const SizedBox(height: 5),
                     SizedBox(
-                      height: 50,
+                      height: 47,
                       width: double.infinity,
                       child: AddToCartButton(product: product),
                     ),
