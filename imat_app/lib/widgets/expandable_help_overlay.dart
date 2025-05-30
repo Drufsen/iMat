@@ -57,7 +57,8 @@ class _ExpandableHelpOverlayState extends State<ExpandableHelpOverlay>
         // Help window overlay
         Positioned(
           right: 16,
-          bottom: 100, // Increase this value to position it higher above the button
+          bottom:
+              100, // Increase this value to position it higher above the button
           child: AnimatedBuilder(
             animation: _animation,
             builder: (context, child) {

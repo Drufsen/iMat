@@ -45,7 +45,7 @@ class _FloatingHelpButtonState extends State<FloatingHelpButton> {
       ),
       child: FloatingActionButton(
         onPressed: _toggleExpansion,
-        backgroundColor: AppTheme.colorScheme.primary,
+        backgroundColor: Colors.teal,
         shape: const CircleBorder(),
         tooltip: 'Hjälp',
         elevation: 0, // Remove built-in shadow since we have custom shadow

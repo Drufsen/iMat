@@ -87,14 +87,11 @@ class _CategoryListState extends State<CategoryList> {
                     radius: Radius.circular(borderRadius),
                     thickness: MaterialStateProperty.all(6),
                     mainAxisMargin: 2,
-                    crossAxisMargin:
-                        8, // Increased from 0 to 8 to move scrollbar to the right
+                    crossAxisMargin: 8,
                   ),
                 ),
-                // Move Scrollbar outside of ClipRRect to prevent it from being rounded
                 child: Stack(
                   children: [
-                    // Content with rounded corners
                     ClipRRect(
                       borderRadius: BorderRadius.circular(borderRadius),
                       child: Scrollbar(
@@ -119,7 +116,6 @@ class _CategoryListState extends State<CategoryList> {
                             );
                             final isSelected = category == widget.selected;
 
-                            // Apply the same border radius to all buttons
                             final BorderRadius itemBorderRadius =
                                 BorderRadius.circular(borderRadius);
 
@@ -130,27 +126,21 @@ class _CategoryListState extends State<CategoryList> {
                               child: Material(
                                 color:
                                     isSelected
-                                        ? AppTheme.colorScheme.primary
+                                        ? Colors.teal
                                         : AppTheme.colorScheme.onPrimary,
                                 borderRadius: itemBorderRadius,
                                 elevation: 0,
                                 child: InkWell(
-                                  splashColor: AppTheme.colorScheme.primary
-                                      .withOpacity(0.3),
-                                  highlightColor: AppTheme.colorScheme.primary
-                                      .withOpacity(0.1),
-                                  hoverColor: AppTheme.colorScheme.primary
-                                      .withOpacity(0.04),
+                                  splashColor: Colors.teal.withOpacity(0.3),
+                                  highlightColor: Colors.teal.withOpacity(0.1),
+                                  hoverColor: Colors.teal.withOpacity(0.04),
                                   borderRadius: itemBorderRadius,
                                   onTap:
                                       () => widget.onCategorySelected(category),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color:
-                                            isSelected
-                                                ? AppTheme.colorScheme.onPrimary
-                                                : AppTheme.colorScheme.primary,
+                                        color: Colors.teal,
                                         width: isSelected ? 2.5 : 2,
                                       ),
                                       borderRadius: itemBorderRadius,
@@ -167,9 +157,7 @@ class _CategoryListState extends State<CategoryList> {
                                           style: TextStyle(
                                             color:
                                                 isSelected
-                                                    ? AppTheme
-                                                        .colorScheme
-                                                        .onPrimary
+                                                    ? Colors.white
                                                     : AppTheme
                                                         .colorScheme
                                                         .onSurface,

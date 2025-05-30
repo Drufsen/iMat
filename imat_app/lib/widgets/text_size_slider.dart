@@ -34,14 +34,12 @@ class TextSizeSlider extends StatelessWidget {
                 children: [
                   // Minus button
                   IconButton(
-                    iconSize: 32, // Increased from default size
-                    padding: const EdgeInsets.all(
-                      12,
-                    ), // Added padding around icon
+                    iconSize: 32,
+                    padding: const EdgeInsets.all(12),
                     icon: const Icon(Icons.remove_circle_outline),
                     onPressed:
                         isMinSize
-                            ? null // Disable when at minimum size
+                            ? null
                             : () {
                               final newIndex = currentIndex - 1;
                               if (newIndex >= 0) {
@@ -52,34 +50,39 @@ class TextSizeSlider extends StatelessWidget {
                             },
                     color:
                         isMinSize
-                            ? Colors
-                                .grey
-                                .shade400 // Grayed out when disabled
-                            : Theme.of(context).primaryColor,
+                            ? Colors.grey.shade400
+                            : Colors.teal, // Changed to teal
                   ),
                   Expanded(
-                    child: Slider(
-                      value: currentIndex.toDouble(),
-                      min: 0,
-                      max: 2,
-                      divisions: 2,
-                      onChanged: (value) {
-                        textSizeProvider.setTextSize(
-                          TextSize.values[value.toInt()],
-                        );
-                      },
+                    child: SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: Colors.teal,
+                        inactiveTrackColor: Colors.teal.withOpacity(0.3),
+                        thumbColor: Colors.teal,
+                        overlayColor: Colors.teal.withOpacity(0.2),
+                        trackHeight: 4,
+                      ),
+                      child: Slider(
+                        value: currentIndex.toDouble(),
+                        min: 0,
+                        max: 2,
+                        divisions: 2,
+                        onChanged: (value) {
+                          textSizeProvider.setTextSize(
+                            TextSize.values[value.toInt()],
+                          );
+                        },
+                      ),
                     ),
                   ),
                   // Plus button
                   IconButton(
-                    iconSize: 32, // Increased from default size
-                    padding: const EdgeInsets.all(
-                      12,
-                    ), // Added padding around icon
+                    iconSize: 32,
+                    padding: const EdgeInsets.all(12),
                     icon: const Icon(Icons.add_circle_outline),
                     onPressed:
                         isMaxSize
-                            ? null // Disable when at maximum size
+                            ? null
                             : () {
                               final newIndex = currentIndex + 1;
                               if (newIndex <= 2) {
@@ -90,15 +93,12 @@ class TextSizeSlider extends StatelessWidget {
                             },
                     color:
                         isMaxSize
-                            ? Colors
-                                .grey
-                                .shade400 // Grayed out when disabled
-                            : Theme.of(context).primaryColor,
+                            ? Colors.grey.shade400
+                            : Colors.teal, // Changed to teal
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              // Current size indicator with proper display names
               ScalableText(
                 'Textstorlek: ${_getSizeLabel(textSizeProvider.currentSize)}',
                 style: const TextStyle(
@@ -113,7 +113,6 @@ class TextSizeSlider extends StatelessWidget {
     );
   }
 
-  // Helper method to convert enum values to user-friendly labels
   String _getSizeLabel(TextSize size) {
     switch (size) {
       case TextSize.normal:
