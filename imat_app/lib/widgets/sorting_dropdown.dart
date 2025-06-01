@@ -44,7 +44,7 @@ class SortingDropdown extends StatelessWidget {
           },
           underline: Container(
             height: 1,
-            color: Colors.teal, // Match the app's color scheme
+            color: Theme.of(context).colorScheme.primary, // Match the app's color scheme
           ),
         ),
       ],
