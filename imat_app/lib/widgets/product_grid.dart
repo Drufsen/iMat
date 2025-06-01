@@ -175,7 +175,14 @@ class ProductGrid extends StatelessWidget {
                             child: Material(
                               elevation: 3,
                               color: Colors.grey[200], // Light gray color
-                              shape: const CircleBorder(),
+                              shape: CircleBorder(
+                                side: BorderSide(
+                                  color:
+                                      Colors
+                                          .teal, // Match your app's teal theme
+                                  width: 2.0, // Moderately thick border
+                                ),
+                              ),
                               child: InkWell(
                                 onTap: () {
                                   const scrollAmount = 250.0 * 4;
@@ -231,7 +238,14 @@ class ProductGrid extends StatelessWidget {
                             child: Material(
                               elevation: 3,
                               color: Colors.grey[200], // Light gray color
-                              shape: const CircleBorder(),
+                              shape: CircleBorder(
+                                side: BorderSide(
+                                  color:
+                                      Colors
+                                          .teal, // Match your app's teal theme
+                                  width: 2.0, // Moderately thick border
+                                ),
+                              ),
                               child: InkWell(
                                 onTap: () {
                                   const scrollAmount = 250.0 * 4;
