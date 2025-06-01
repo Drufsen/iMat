@@ -8,6 +8,7 @@ import 'package:imat_app/widgets/product_detail_popup.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
 import 'package:provider/provider.dart';
 import 'package:imat_app/providers/text_size_provider.dart';
+import 'package:imat_app/widgets/hover_button.dart';
 
 class ProductGrid extends StatelessWidget {
   final Map<String, List<Product>> categorizedProducts;
@@ -153,22 +154,31 @@ class ProductGrid extends StatelessWidget {
                     left: 0,
                     top: 0,
                     bottom: 0,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        const scrollAmount = 250.0 * 4;
-                        scrollController.animateTo(
-                          scrollController.offset - scrollAmount,
-                          duration: const Duration(milliseconds: 400),
-                          curve: Curves.easeOut,
-                        );
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          size: 20,
-                          color: Colors.black54,
+                    child: Center(
+                      child: Material(
+                        elevation: 3,
+                        color: Colors.grey[200], // Light gray color
+                        shape: const CircleBorder(),
+                        child: InkWell(
+                          onTap: () {
+                            const scrollAmount = 250.0 * 4;
+                            scrollController.animateTo(
+                              scrollController.offset - scrollAmount,
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeOut,
+                            );
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              size: 20,
+                              color: Colors.grey[700],
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -179,22 +189,31 @@ class ProductGrid extends StatelessWidget {
                     right: 0,
                     top: 0,
                     bottom: 0,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        const scrollAmount = 250.0 * 4;
-                        scrollController.animateTo(
-                          scrollController.offset + scrollAmount,
-                          duration: const Duration(milliseconds: 400),
-                          curve: Curves.easeOut,
-                        );
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 20,
-                          color: Colors.black54,
+                    child: Center(
+                      child: Material(
+                        elevation: 3,
+                        color: Colors.grey[200], // Light gray color
+                        shape: const CircleBorder(),
+                        child: InkWell(
+                          onTap: () {
+                            const scrollAmount = 250.0 * 4;
+                            scrollController.animateTo(
+                              scrollController.offset + scrollAmount,
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeOut,
+                            );
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              size: 20,
+                              color: Colors.grey[700],
+                            ),
+                          ),
                         ),
                       ),
                     ),
