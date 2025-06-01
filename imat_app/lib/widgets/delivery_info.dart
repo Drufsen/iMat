@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
+import 'dart:async';
 
 class DeliveryInfoStep extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final Function(Map<String, String>) onDataChanged;
-  final Map<String, String>? initialData; // New optional initial data
+  final Map<String, String>? initialData;
+  final Function(bool) onValidationChanged;
 
   const DeliveryInfoStep({
     super.key,
     required this.formKey,
     required this.onDataChanged,
     this.initialData,
+    required this.onValidationChanged,
   });
 
   @override
@@ -27,11 +30,18 @@ class _DeliveryInfoStepState extends State<DeliveryInfoStep> {
   final postCodeController = TextEditingController();
   final postAddressController = TextEditingController();
 
+  Timer? _debounceTimer;
+  final Set<TextEditingController> _visitedFields = {};
+
   @override
   void initState() {
     super.initState();
     _populateInitialData();
     _addListeners();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _validateForm();
+    });
   }
 
   void _populateInitialData() {
@@ -59,7 +69,14 @@ class _DeliveryInfoStepState extends State<DeliveryInfoStep> {
       postAddressController,
     ];
     for (final controller in controllers) {
-      controller.addListener(_updateData);
+      controller.addListener(() {
+        _updateData();
+
+        _debounceTimer?.cancel();
+        _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+          _validateForm();
+        });
+      });
     }
   }
 
@@ -76,8 +93,14 @@ class _DeliveryInfoStepState extends State<DeliveryInfoStep> {
     });
   }
 
+  void _validateForm() {
+    final isValid = widget.formKey.currentState?.validate() ?? false;
+    widget.onValidationChanged(isValid);
+  }
+
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     firstNameController.dispose();
     lastNameController.dispose();
     phoneController.dispose();
@@ -137,20 +160,35 @@ class _DeliveryInfoStepState extends State<DeliveryInfoStep> {
   ) {
     return SizedBox(
       width: width,
-      child: TextFormField(
-        controller: controller,
-        validator:
-            (value) => value == null || value.isEmpty ? 'Måste fyllas i' : null,
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2),
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.teal, width: 2),
+      child: Focus(
+        onFocusChange: (hasFocus) {
+          // Only validate when focus is lost, not when initially gaining focus
+          if (!hasFocus && !_visitedFields.contains(controller)) {
+            setState(() {
+              _visitedFields.add(controller);
+            });
+            _validateForm();
+          }
+        },
+        child: TextFormField(
+          controller: controller,
+          validator:
+              (value) =>
+                  value == null || value.isEmpty
+                      ? 'Fältet får inte vara tomt'
+                      : null,
+          // Don't auto-validate - we'll handle this separately
+          autovalidateMode:
+              _visitedFields.contains(controller)
+                  ? AutovalidateMode.onUserInteraction
+                  : AutovalidateMode.disabled,
+          decoration: InputDecoration(
+            labelText: label,
+            errorStyle: const TextStyle(height: 0.5),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.teal, width: 2),
+            ),
+            // Remove the suffixIcon completely
           ),
         ),
       ),
@@ -166,8 +204,10 @@ class _DeliveryInfoStepState extends State<DeliveryInfoStep> {
       width: width,
       child: TextFormField(
         controller: controller,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
           labelText: label,
+          errorStyle: const TextStyle(height: 0.5),
           border: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal, width: 2),
           ),

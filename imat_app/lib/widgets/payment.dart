@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
+import 'dart:async'; // Add this import for Timer
 
 class PaymentStep extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final Function(Map<String, dynamic>) onDataChanged;
   final Map<String, dynamic>? initialData;
+  // Add new callback for validation state changes
+  final Function(bool) onValidationChanged;
 
   const PaymentStep({
     super.key,
     required this.formKey,
     required this.onDataChanged,
     this.initialData,
+    required this.onValidationChanged, // Add this parameter
   });
 
   @override
@@ -25,6 +29,9 @@ class _PaymentStepState extends State<PaymentStep> {
   final holderNameController = TextEditingController();
   final cardNumberController = TextEditingController();
   final verificationCodeController = TextEditingController();
+
+  // Add timer for debouncing validation
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -42,6 +49,11 @@ class _PaymentStepState extends State<PaymentStep> {
         data['verificationCode']?.toString() ?? '';
 
     _addListeners();
+
+    // Initial validation check
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _validateForm();
+    });
   }
 
   void _addListeners() {
@@ -59,6 +71,17 @@ class _PaymentStepState extends State<PaymentStep> {
       'cardNumber': cardNumberController.text,
       'verificationCode': int.tryParse(verificationCodeController.text) ?? 0,
     });
+
+    // Debounce validation
+    if (_debounceTimer?.isActive ?? false) _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      _validateForm();
+    });
+  }
+
+  void _validateForm() {
+    final isValid = widget.formKey.currentState?.validate() ?? false;
+    widget.onValidationChanged(isValid);
   }
 
   @override
@@ -66,6 +89,7 @@ class _PaymentStepState extends State<PaymentStep> {
     holderNameController.dispose();
     cardNumberController.dispose();
     verificationCodeController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
