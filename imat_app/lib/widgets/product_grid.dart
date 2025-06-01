@@ -149,74 +149,115 @@ class ProductGrid extends StatelessWidget {
                     },
                   ),
 
-                  // Left arrow
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Center(
-                      child: Material(
-                        elevation: 3,
-                        color: Colors.grey[200], // Light gray color
-                        shape: const CircleBorder(),
-                        child: InkWell(
-                          onTap: () {
-                            const scrollAmount = 250.0 * 4;
-                            scrollController.animateTo(
-                              scrollController.offset - scrollAmount,
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeOut,
-                            );
-                          },
-                          customBorder: const CircleBorder(),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              size: 20,
-                              color: Colors.grey[700],
+                  // Left arrow - only show when not at the beginning
+                  StreamBuilder<double>(
+                    stream: Stream.periodic(const Duration(milliseconds: 100), (
+                      _,
+                    ) {
+                      return scrollController.hasClients
+                          ? scrollController.offset
+                          : 0;
+                    }),
+                    builder: (context, snapshot) {
+                      final showLeftArrow =
+                          snapshot.hasData && snapshot.data! > 0;
+
+                      return Positioned(
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        child: Visibility(
+                          visible: showLeftArrow,
+                          maintainState: true,
+                          maintainAnimation: true,
+                          maintainSize: true,
+                          child: Center(
+                            child: Material(
+                              elevation: 3,
+                              color: Colors.grey[200], // Light gray color
+                              shape: const CircleBorder(),
+                              child: InkWell(
+                                onTap: () {
+                                  const scrollAmount = 250.0 * 4;
+                                  scrollController.animateTo(
+                                    scrollController.offset - scrollAmount,
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeOut,
+                                  );
+                                },
+                                customBorder: const CircleBorder(),
+                                child: Container(
+                                  width: 48, // Increased from 40
+                                  height: 48, // Increased from 40
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.arrow_back_ios,
+                                    size: 24, // Increased from 20
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
 
-                  // Right arrow
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Center(
-                      child: Material(
-                        elevation: 3,
-                        color: Colors.grey[200], // Light gray color
-                        shape: const CircleBorder(),
-                        child: InkWell(
-                          onTap: () {
-                            const scrollAmount = 250.0 * 4;
-                            scrollController.animateTo(
-                              scrollController.offset + scrollAmount,
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeOut,
-                            );
-                          },
-                          customBorder: const CircleBorder(),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 20,
-                              color: Colors.grey[700],
+                  // Right arrow - only show when not at the end
+                  StreamBuilder<double>(
+                    stream: Stream.periodic(const Duration(milliseconds: 100), (
+                      _,
+                    ) {
+                      if (!scrollController.hasClients) return 0.0;
+                      return scrollController.position.maxScrollExtent -
+                          scrollController.offset;
+                    }),
+                    builder: (context, snapshot) {
+                      final showRightArrow =
+                          snapshot.hasData &&
+                          snapshot.data! > 5; // Small threshold
+
+                      return Positioned(
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        child: Visibility(
+                          visible: showRightArrow,
+                          maintainState: true,
+                          maintainAnimation: true,
+                          maintainSize: true,
+                          child: Center(
+                            child: Material(
+                              elevation: 3,
+                              color: Colors.grey[200], // Light gray color
+                              shape: const CircleBorder(),
+                              child: InkWell(
+                                onTap: () {
+                                  const scrollAmount = 250.0 * 4;
+                                  scrollController.animateTo(
+                                    scrollController.offset + scrollAmount,
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeOut,
+                                  );
+                                },
+                                customBorder: const CircleBorder(),
+                                child: Container(
+                                  width: 48, // Increased from 40
+                                  height: 48, // Increased from 40
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 24, // Increased from 20
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),
