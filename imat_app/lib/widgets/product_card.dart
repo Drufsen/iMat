@@ -19,15 +19,18 @@ class ProductCard extends StatelessWidget {
     final isFavorite = iMat.isFavorite(product);
     final textScale = Provider.of<TextSizeProvider>(context).textScale;
 
-    // Fixed height for card that scales with text size
-    final cardHeight = 300 * textScale;
+    // Use a more moderate scaling factor to avoid excessive spaces
+    final scaleFactor = 1.0 + ((textScale - 1.0) * 0.7);
+
+    // Fixed height for card with adjusted scaling
+    final cardHeight = 300 * scaleFactor;
 
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         width: 280,
-        height: cardHeight, // Fixed height that scales with text size
+        height: cardHeight, // Using adjusted scale factor
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -36,12 +39,11 @@ class ProductCard extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            // Using a Column with MainAxisAlignment.spaceBetween to push button to bottom
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Key change
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Top content in its own column
                   Column(
@@ -55,7 +57,8 @@ class ProductCard extends StatelessWidget {
                         width: 150,
                         child: iMat.getImage(product),
                       ),
-                      const SizedBox(height: 12),
+                      // Reduce this spacing a bit
+                      SizedBox(height: 12 * (textScale < 1.3 ? 1.0 : 0.8)),
 
                       // Product name
                       ScalableText(
@@ -68,7 +71,8 @@ class ProductCard extends StatelessWidget {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      // Reduce this spacing a bit
+                      SizedBox(height: 4 * (textScale < 1.3 ? 1.0 : 0.8)),
 
                       // Price
                       ScalableText(
@@ -79,9 +83,11 @@ class ProductCard extends StatelessWidget {
                     ],
                   ),
 
-                  // Button at the bottom
+                  // Button at the bottom - using the adjusted scale factor
                   SizedBox(
-                    height: 47 * textScale, // Scale button height with text
+                    height:
+                        47 *
+                        scaleFactor, // Scale button height with adjusted factor
                     width: double.infinity,
                     child: AddToCartButton(product: product),
                   ),

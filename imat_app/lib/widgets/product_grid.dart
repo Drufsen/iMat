@@ -113,11 +113,9 @@ class ProductGrid extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            // Adjust the height based on text scale
+            // Adjust the height based on the adjusted scale factor
             SizedBox(
-              height:
-                  300 *
-                  textScale, // Dynamically scale height from a base of 300
+              height: 300 * (1.0 + ((textScale - 1.0) * 0.7)),
               child: Stack(
                 children: [
                   // Product list
