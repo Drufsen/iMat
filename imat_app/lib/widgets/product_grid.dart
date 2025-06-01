@@ -54,8 +54,8 @@ class ProductGrid extends StatelessWidget {
         padding: const EdgeInsets.all(AppTheme.paddingSmall), // Match padding with non-filtered view
         child: SingleChildScrollView(
           child: Wrap(
-            spacing: 16,
-            runSpacing: 16,
+            spacing: AppTheme.paddingSmall, // Change to match horizontal ListView spacing
+            runSpacing: AppTheme.paddingSmall, // Change to match horizontal ListView spacing
             children: products.map((product) {
               return SizedBox(
                 width: 250, // Match exactly the width in non-filtered view
