@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
+import 'package:imat_app/providers/text_size_provider.dart';
 
 class ProductDetailDialog extends StatelessWidget {
   final Product product;
@@ -16,6 +17,12 @@ class ProductDetailDialog extends StatelessWidget {
     final iMat = context.watch<ImatDataHandler>();
     final detail = iMat.getDetail(product);
     final isFavorite = iMat.isFavorite(product);
+    
+    // Get the text scale factor to adjust width
+    final textScale = Provider.of<TextSizeProvider>(context).textScale;
+    
+    // Calculate width with moderate scaling
+    final dialogWidth = 480.0;  // Increased from 420
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -26,53 +33,55 @@ class ProductDetailDialog extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             SizedBox(
-              width: 420,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: SizedBox(height: 200, child: iMat.getImage(product)),
-                  ),
-                  const SizedBox(height: 16),
-                  ScalableText(
-                    product.name,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+              width: dialogWidth,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: SizedBox(height: 200, child: iMat.getImage(product)),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  ScalableText(
-                    '${product.price.toStringAsFixed(2)} ${product.unit}',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 16),
-
-                  if (detail != null) ...[
-                    _detailRow("Märke", detail.brand),
-                    _detailRow("Innehåll", detail.contents),
-                    _detailRow("Ursprung", detail.origin),
                     const SizedBox(height: 16),
                     ScalableText(
-                      detail.description,
-                      style: const TextStyle(fontSize: 16),
+                      product.name,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ] else
+                    const SizedBox(height: 8),
                     ScalableText(
-                      "Ingen beskrivning tillgänglig.",
-                      style: const TextStyle(fontSize: 16),
+                      '${product.price.toStringAsFixed(2)} ${product.unit}',
+                      style: const TextStyle(fontSize: 18),
                     ),
+                    const SizedBox(height: 16),
 
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CloseButtonWidget(),
-                      AddToCartButton(product: product),
-                    ],
-                  ),
-                ],
+                    if (detail != null) ...[
+                      _detailRow("Märke", detail.brand),
+                      _detailRow("Innehåll", detail.contents),
+                      _detailRow("Ursprung", detail.origin),
+                      const SizedBox(height: 16),
+                      ScalableText(
+                        detail.description,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ] else
+                      ScalableText(
+                        "Ingen beskrivning tillgänglig.",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CloseButtonWidget(),
+                        AddToCartButton(product: product),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
 
@@ -116,6 +125,7 @@ class ProductDetailDialog extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ScalableText(
             "$label: ",
