@@ -64,7 +64,7 @@ class ProductCard extends StatelessWidget {
                       ScalableText(
                         product.name,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -77,7 +77,7 @@ class ProductCard extends StatelessWidget {
                       // Price
                       ScalableText(
                         '${product.price.toStringAsFixed(2)} ${product.unit}',
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
                     ],
