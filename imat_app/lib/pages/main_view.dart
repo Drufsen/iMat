@@ -3,12 +3,13 @@ import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat/sort_mode.dart';
 import 'package:imat_app/model/imat/util/product_categories.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
-import 'package:imat_app/widgets/category_sidebar';
+import 'package:imat_app/widgets/category_list.dart';
 import 'package:imat_app/widgets/expandable_help_overlay.dart';
 import 'package:imat_app/widgets/filtered_product_selection.dart';
 import 'package:imat_app/widgets/sorting_dropdown.dart';
 import 'package:imat_app/widgets/top_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:imat_app/providers/text_size_provider.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -21,7 +22,13 @@ class _MainViewState extends State<MainView> {
   SortMode sortMode = SortMode.alphabetical;
 
   final TextEditingController searchController = TextEditingController();
-  // 🔥 New state for sorting
+
+  void _handleCategorySelected(ProductCategory category) {
+    setState(() {
+      selectedCategory = category;
+    });
+    searchController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +44,18 @@ class _MainViewState extends State<MainView> {
                       .toList(),
             }
             : allProducts;
+
+    // Get text scale for dynamic sizing
+    final textScale = Provider.of<TextSizeProvider>(context).textScale;
+
+    // Increase the base size with an additional constant for more breathing room
+    const double baseWidth = 220.0;
+    const double extraConstantWidth = 20.0; // Additional constant width
+    // Add extra width only when text scale increases
+    final double extraScaleWidth =
+        textScale > 1.0 ? baseWidth * (textScale - 1.0) * 0.8 : 0.0;
+    final double categoryListWidth =
+        baseWidth + extraConstantWidth + extraScaleWidth;
 
     return Scaffold(
       appBar: TopBar(
@@ -54,14 +73,16 @@ class _MainViewState extends State<MainView> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CategorySidebar(
-                  selectedCategory: selectedCategory,
-                  onSelect: (category) {
-                    setState(() {
-                      selectedCategory = category;
-                    });
-                  },
+                // Category list with original width plus scaling
+                SizedBox(
+                  width: categoryListWidth,
+                  child: CategoryList(
+                    onCategorySelected: _handleCategorySelected,
+                    selected: selectedCategory,
+                    width: categoryListWidth, // DON'T subtract any padding
+                  ),
                 ),
+
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,12 +106,11 @@ class _MainViewState extends State<MainView> {
                               selectedCategory = null;
                             });
                             searchController.clear();
-                            iMat.clearSearch(); // ✅ Add this line
+                            iMat.clearSearch();
                           },
-
                           categorizedProducts: filteredProducts,
                           iMat: iMat,
-                          sortMode: sortMode, // 🔥 Pass it down
+                          sortMode: sortMode,
                         ),
                       ),
                     ],

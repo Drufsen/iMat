@@ -3,6 +3,8 @@ import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat/util/product_categories.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
+import 'package:provider/provider.dart';
+import 'package:imat_app/providers/text_size_provider.dart';
 
 class CategoryList extends StatefulWidget {
   final void Function(ProductCategory) onCategorySelected;
@@ -32,6 +34,14 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the current text scale factor
+    final textScale = Provider.of<TextSizeProvider>(context).textScale;
+
+    // Use the width passed from MainView
+    // Make sure we're not subtracting too much from the base width
+    // The container itself adds margins of 16 total (8+8)
+    final effectiveWidth = widget.width - 16;
+
     final sortedCategories =
         List<ProductCategory>.from(ProductCategory.values)
           ..removeWhere(
@@ -53,7 +63,7 @@ class _CategoryListState extends State<CategoryList> {
         border: Border.all(color: AppTheme.colorScheme.primary, width: 4),
       ),
       child: SizedBox(
-        width: widget.width,
+        width: effectiveWidth, // Use the adjusted width
         child: Column(
           children: [
             // Header for the category list
@@ -155,6 +165,7 @@ class _CategoryListState extends State<CategoryList> {
                                         child: ScalableText(
                                           categoryName,
                                           style: TextStyle(
+                                            fontSize: 18,
                                             color:
                                                 isSelected
                                                     ? Colors.white
@@ -163,6 +174,10 @@ class _CategoryListState extends State<CategoryList> {
                                                         .onSurface,
                                             fontWeight: FontWeight.bold,
                                           ),
+                                          // Add this to prevent awkward text wrapping
+                                          softWrap: true,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
                                         ),
                                       ),
                                     ),
