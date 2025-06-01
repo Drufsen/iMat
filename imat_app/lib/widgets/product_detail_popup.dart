@@ -15,6 +15,7 @@ class ProductDetailDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final iMat = context.watch<ImatDataHandler>();
     final detail = iMat.getDetail(product);
+    final isFavorite = iMat.isFavorite(product);
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -75,6 +76,36 @@ class ProductDetailDialog extends StatelessWidget {
               ),
             ),
 
+            // Favorite button - same style as in product grid
+            Positioned(
+              top: 10,
+              right: 10,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: IconButton(
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: Colors.redAccent,
+                    size: 32,
+                  ),
+                  onPressed: () {
+                    iMat.toggleFavorite(product);
+                  },
+                  padding: const EdgeInsets.all(8),
+                  constraints: const BoxConstraints(),
+                ),
+              ),
+            ),
           ],
         ),
       ),
