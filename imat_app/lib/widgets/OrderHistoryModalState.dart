@@ -39,7 +39,10 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const ScalableText("Ingen köphistorik ännu."),
+                      const ScalableText(
+                        "Ingen köphistorik ännu.",
+                        style: TextStyle(fontSize: 16),
+                      ),
                       const SizedBox(height: 16),
                       CloseButtonWidget(
                         onPressed: () => Navigator.of(context).pop(),
@@ -60,7 +63,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
     // Sort orders by date (newest first)
     final sortedOrders = List<Order>.from(orders)
       ..sort((a, b) => b.date.compareTo(a.date));
-    
+
     final selectedOrder = sortedOrders[_selectedOrderIndex];
 
     return Container(
@@ -144,7 +147,8 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: AppTheme.colorScheme.onPrimary, // ✅ White text for contrast
+              color:
+                  AppTheme.colorScheme.onPrimary, // ✅ White text for contrast
             ),
           ),
         ],
@@ -156,45 +160,95 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
     // Sort orders by date (newest first)
     final sortedOrders = List<Order>.from(orders)
       ..sort((a, b) => b.date.compareTo(a.date));
-    
-    return Container(
-      width: 275,
-      decoration: BoxDecoration(
-        border: Border(
-          right: BorderSide(color: AppTheme.colorScheme.outline, width: 1),
-        ),
-      ),
-      child: ListView.builder(
-        itemCount: sortedOrders.length,
-        itemBuilder: (context, index) {
-          final order = sortedOrders[index];
-          final isSelected = index == _selectedOrderIndex;
-          return Material(
-            elevation: isSelected ? 2 : 0,
-            color:
-                isSelected
-                    ? AppTheme.colorScheme.secondaryContainer
-                    : Colors.transparent,
-            child: ListTile(
-              title: ScalableText(
-                '${order.date.year}-${order.date.month.toString().padLeft(2, '0')}-${order.date.day.toString().padLeft(2, '0')} | ${order.getTotal().toStringAsFixed(2)} kr',
-              ),
-              subtitle: ScalableText('Kvitto #${order.orderNumber}'),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: () {
-                  _removeOrder(context, order);
-                },
-              ),
-              onTap: () {
-                setState(() {
-                  _selectedOrderIndex = index;
-                });
-              },
+
+    return LayoutBuilder(
+      builder: (context, parentConstraints) {
+        // Calculate a dynamic width based on text scale factor
+        final textScaleFactor = MediaQuery.textScaleFactorOf(context);
+
+        // Calculate width needed for the longest text
+        final longestOrderText = sortedOrders
+            .map((order) {
+              return '${order.date.year}-${order.date.month.toString().padLeft(2, '0')}-${order.date.day.toString().padLeft(2, '0')} | ${order.getTotal().toStringAsFixed(2)} kr';
+            })
+            .reduce((a, b) => a.length > b.length ? a : b);
+
+        // Increase the per-character width estimate for better accommodation
+        // Using 12 pixels per character instead of 10
+        final perCharWidth = 12.0;
+        final textWidth =
+            longestOrderText.length * perCharWidth * textScaleFactor;
+
+        // Add more padding for larger text sizes
+        final buttonPadding = 40 + (40 * (textScaleFactor - 1));
+        final baseWidth = textWidth + buttonPadding + 60;
+
+        // Allow the width to grow more for large text sizes
+        // If textScaleFactor > 1.5, allow even more width expansion
+        final maxWidthProportion = textScaleFactor > 1.5 ? 0.5 : 0.4;
+        final width = baseWidth.clamp(
+          325.0,
+          parentConstraints.maxWidth * maxWidthProportion,
+        );
+
+        return Container(
+          // Width now depends on both text scale factor and content length
+          width: width,
+          decoration: BoxDecoration(
+            border: Border(
+              right: BorderSide(color: AppTheme.colorScheme.outline, width: 1),
             ),
-          );
-        },
-      ),
+          ),
+          child: ListView.builder(
+            itemCount: sortedOrders.length,
+            itemBuilder: (context, index) {
+              final order = sortedOrders[index];
+              final isSelected = index == _selectedOrderIndex;
+
+              return Material(
+                elevation: isSelected ? 2 : 0,
+                color:
+                    isSelected
+                        ? AppTheme.colorScheme.secondaryContainer
+                        : Colors.transparent,
+                child: ListTile(
+                  title: ScalableText(
+                    '${order.date.year}-${order.date.month.toString().padLeft(2, '0')}-${order.date.day.toString().padLeft(2, '0')} | ${order.getTotal().toStringAsFixed(2)} kr',
+                    style: const TextStyle(fontSize: 18),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: ScalableText(
+                    'Kvitto #${order.orderNumber}',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      _removeOrder(context, order);
+                    },
+                    iconSize: 22 * textScaleFactor,
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(
+                      minWidth: 40 * textScaleFactor,
+                      minHeight: 40 * textScaleFactor,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
+                  dense: true,
+                  onTap: () {
+                    setState(() {
+                      _selectedOrderIndex = index;
+                    });
+                  },
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -219,9 +273,12 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
           children: [
             ScalableText(
               '${order.date.year}-${order.date.month.toString().padLeft(2, '0')}-${order.date.day.toString().padLeft(2, '0')}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            ScalableText('Kvitto #${order.orderNumber}'),
+            ScalableText(
+              'Kvitto #${order.orderNumber}',
+              style: const TextStyle(fontSize: 18),
+            ),
             const Divider(thickness: 1),
             Expanded(
               child: ListView.builder(
@@ -234,13 +291,17 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                       children: [
                         Expanded(
                           flex: 4,
-                          child: ScalableText(item.product.name),
+                          child: ScalableText(
+                            item.product.name,
+                            style: const TextStyle(fontSize: 18),
+                          ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: Text(
+                          child: ScalableText(
                             '${item.amount.toInt()} ${item.product.unit.replaceFirst("kr/", "")}',
                             textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18),
                           ),
                         ),
                         Expanded(
@@ -248,6 +309,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                           child: ScalableText(
                             '${item.product.price.toStringAsFixed(2)} kr',
                             textAlign: TextAlign.right,
+                            style: TextStyle(fontSize: 18),
                           ),
                         ),
                         Expanded(
@@ -255,6 +317,7 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                           child: ScalableText(
                             '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
                             textAlign: TextAlign.right,
+                            style: TextStyle(fontSize: 18),
                           ),
                         ),
                       ],
@@ -271,12 +334,15 @@ class _OrderHistoryModalState extends State<OrderHistoryModal> {
                   const Spacer(flex: 5),
                   ScalableText(
                     'Totalt:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   ScalableText(
                     '${order.getTotal().toStringAsFixed(2)} kr',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),
