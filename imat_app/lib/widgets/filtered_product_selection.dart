@@ -45,8 +45,8 @@ class _FilteredProductSectionState extends State<FilteredProductSection> {
               children: [
                 ElevatedButton.icon(
                   onPressed: widget.onClearFilter,
-                  icon: const Icon(Icons.arrow_back),
-                  label: const ScalableText("Tillbaka"),
+                  icon: Icon(Icons.arrow_back),
+                  label: ScalableText("Tillbaka", style: TextStyle(fontSize: 16)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.brand,
                     foregroundColor: AppTheme.colorScheme.onPrimary,
