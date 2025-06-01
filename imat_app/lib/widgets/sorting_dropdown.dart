@@ -21,7 +21,8 @@ class SortingDropdown extends StatelessWidget {
           "Sortera efter:",
           style: TextStyle(
             fontWeight: FontWeight.w500,
-          ), // Make it slightly bold
+            fontSize: 18, // Increase from default size
+          ),
         ),
         const SizedBox(width: 8),
         DropdownButton<SortMode>(
