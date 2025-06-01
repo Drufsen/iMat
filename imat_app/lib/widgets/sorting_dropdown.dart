@@ -15,19 +15,25 @@ class SortingDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start, // Ensure left alignment
       children: [
-        const ScalableText("Sortera efter: "),
+        const ScalableText(
+          "Sortera efter:",
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+          ), // Make it slightly bold
+        ),
         const SizedBox(width: 8),
         DropdownButton<SortMode>(
           value: currentSort,
           items: const [
             DropdownMenuItem(
-              value: SortMode.byPrice,
-              child: ScalableText("Pris"),
-            ),
-            DropdownMenuItem(
               value: SortMode.alphabetical,
               child: ScalableText("Namn"),
+            ),
+            DropdownMenuItem(
+              value: SortMode.byPrice,
+              child: ScalableText("Pris"),
             ),
           ],
           onChanged: (mode) {
@@ -35,6 +41,10 @@ class SortingDropdown extends StatelessWidget {
               onSortChanged(mode);
             }
           },
+          underline: Container(
+            height: 1,
+            color: Colors.teal, // Match the app's color scheme
+          ),
         ),
       ],
     );

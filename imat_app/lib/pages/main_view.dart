@@ -88,7 +88,7 @@ class _MainViewState extends State<MainView> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.only(bottom: 8, left: 16),  // Add left padding to align with products
                         child: SortingDropdown(
                           currentSort: sortMode,
                           onSortChanged: (mode) {
