@@ -30,6 +30,9 @@ class ProductGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get the text scale factor to adjust heights
     final textScale = Provider.of<TextSizeProvider>(context).textScale;
+    
+    // Use a more moderate scaling factor to avoid excessive spaces - same as in ProductCard
+    final scaleFactor = 1.0 + ((textScale - 1.0) * 0.7);
 
     if (isFilteredView) {
       // Flatten products into a single list
@@ -43,30 +46,35 @@ class ProductGrid extends StatelessWidget {
         products.sort((a, b) => a.name.compareTo(b.name));
       }
 
-      return GridView.builder(
+      // Calculate the same height as used in non-filtered view
+      final cardHeight = 300 * scaleFactor;
+
+      // Use a wrap layout with height-constrained items
+      return Padding(
         padding: const EdgeInsets.all(16),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          // Remove fixed aspect ratio to allow variable heights
-          childAspectRatio: 0.7, // Base aspect ratio
+        child: SingleChildScrollView(
+          child: Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            children: products.map((product) {
+              return SizedBox(
+                width: 250, // Match exactly the width in non-filtered view
+                height: cardHeight, // Add height constraint to match non-filtered view
+                child: ProductCard(
+                  product,
+                  iMat,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      barrierColor: Colors.black.withOpacity(0.5),
+                      builder: (context) => ProductDetailDialog(product: product),
+                    );
+                  },
+                ),
+              );
+            }).toList(),
+          ),
         ),
-        itemCount: products.length,
-        itemBuilder:
-            (context, index) => ProductCard(
-              products[index],
-              iMat,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  barrierColor: Colors.black.withOpacity(0.5),
-                  builder:
-                      (context) =>
-                          ProductDetailDialog(product: products[index]),
-                );
-              },
-            ),
       );
     }
 
