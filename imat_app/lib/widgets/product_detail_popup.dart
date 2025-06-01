@@ -9,8 +9,9 @@ import 'package:imat_app/providers/text_size_provider.dart';
 
 class ProductDetailDialog extends StatelessWidget {
   final Product product;
+  final ScrollController _scrollController = ScrollController();
 
-  const ProductDetailDialog({super.key, required this.product});
+  ProductDetailDialog({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +22,10 @@ class ProductDetailDialog extends StatelessWidget {
     // Get the text scale factor to adjust width
     final textScale = Provider.of<TextSizeProvider>(context).textScale;
     
-    // Calculate width with moderate scaling
-    final dialogWidth = 480.0;  // Increased from 420
+    // Calculate width with scaling based on text size
+    // Increase base width for more content space
+    final baseWidth = 480.0;
+    final dialogWidth = baseWidth * (1.0 + ((textScale - 1.0) * 0.5));
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -34,53 +37,74 @@ class ProductDetailDialog extends StatelessWidget {
           children: [
             SizedBox(
               width: dialogWidth,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: SizedBox(height: 200, child: iMat.getImage(product)),
+              child: Theme(
+                // Apply scrollbar theme with gray color
+                data: Theme.of(context).copyWith(
+                  scrollbarTheme: ScrollbarThemeData(
+                    thumbVisibility: MaterialStateProperty.all(true),
+                    thumbColor: MaterialStateProperty.all(
+                      Colors.grey.withOpacity(0.6),
                     ),
-                    const SizedBox(height: 16),
-                    ScalableText(
-                      product.name,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ScalableText(
-                      '${product.price.toStringAsFixed(2)} ${product.unit}',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 16),
-
-                    if (detail != null) ...[
-                      _detailRow("Märke", detail.brand),
-                      _detailRow("Innehåll", detail.contents),
-                      _detailRow("Ursprung", detail.origin),
-                      const SizedBox(height: 16),
-                      ScalableText(
-                        detail.description,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ] else
-                      ScalableText(
-                        "Ingen beskrivning tillgänglig.",
-                        style: const TextStyle(fontSize: 16),
-                      ),
-
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    radius: const Radius.circular(8),
+                    thickness: MaterialStateProperty.all(6),
+                    mainAxisMargin: 2,
+                    crossAxisMargin: 2,
+                  ),
+                ),
+                child: Scrollbar(
+                  controller: _scrollController,
+                  thumbVisibility: true,
+                  trackVisibility: false,
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CloseButtonWidget(),
-                        AddToCartButton(product: product),
+                        Center(
+                          child: SizedBox(height: 200, child: iMat.getImage(product)),
+                        ),
+                        const SizedBox(height: 16),
+                        ScalableText(
+                          product.name,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ScalableText(
+                          '${product.price.toStringAsFixed(2)} ${product.unit}',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        const SizedBox(height: 16),
+
+                        if (detail != null) ...[
+                          _detailRow("Märke", detail.brand),
+                          _detailRow("Innehåll", detail.contents),
+                          _detailRow("Ursprung", detail.origin),
+                          const SizedBox(height: 16),
+                          ScalableText(
+                            detail.description,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ] else
+                          ScalableText(
+                            "Ingen beskrivning tillgänglig.",
+                            style: const TextStyle(fontSize: 16),
+                          ),
+
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CloseButtonWidget(),
+                            AddToCartButton(product: product),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
