@@ -51,7 +51,7 @@ class ProductGrid extends StatelessWidget {
 
       // Use a wrap layout with height-constrained items
       return Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppTheme.paddingSmall), // Match padding with non-filtered view
         child: SingleChildScrollView(
           child: Wrap(
             spacing: 16,
@@ -132,7 +132,7 @@ class ProductGrid extends StatelessWidget {
                     controller: scrollController,
                     scrollDirection: Axis.horizontal,
                     itemCount: products.length,
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: const EdgeInsets.only(right: 40), // Remove left padding
                     separatorBuilder:
                         (_, __) => const SizedBox(width: AppTheme.paddingSmall),
                     itemBuilder: (context, idx) {
@@ -147,9 +147,7 @@ class ProductGrid extends StatelessWidget {
                             showDialog(
                               context: context,
                               barrierColor: Colors.black.withOpacity(0.5),
-                              builder:
-                                  (context) =>
-                                      ProductDetailDialog(product: product),
+                              builder: (context) => ProductDetailDialog(product: product),
                             );
                           },
                         ),
@@ -193,7 +191,8 @@ class ProductGrid extends StatelessWidget {
                               ),
                               child: InkWell(
                                 onTap: () {
-                                  const scrollAmount = 250.0 * 4;
+                                  // Increase scroll amount to see more items
+                                  final scrollAmount = 250.0 * 4.5; // Increased from 4 to 4.5
                                   scrollController.animateTo(
                                     scrollController.offset - scrollAmount,
                                     duration: const Duration(milliseconds: 400),
@@ -256,7 +255,8 @@ class ProductGrid extends StatelessWidget {
                               ),
                               child: InkWell(
                                 onTap: () {
-                                  const scrollAmount = 250.0 * 4;
+                                  // Increase scroll amount to see more items
+                                  final scrollAmount = 250.0 * 4.5; // Increased from 4 to 4.5
                                   scrollController.animateTo(
                                     scrollController.offset + scrollAmount,
                                     duration: const Duration(milliseconds: 400),
