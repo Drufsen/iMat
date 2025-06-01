@@ -7,6 +7,8 @@ import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/product_detail_popup.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
 
+/// Widget som visar produkter antingen i ett rutnät (filtrerat läge)
+/// eller horisontellt per kategori (standardläge).
 class ProductGrid extends StatelessWidget {
   final Map<String, List<Product>> categorizedProducts;
   final ImatDataHandler iMat;
@@ -25,18 +27,20 @@ class ProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Om filtrerat läge: visa alla produkter i ett rutnät
     if (isFilteredView) {
-      // Flatten products into a single list
+      // Platta ut alla produkter till en lista
       List<Product> products =
           categorizedProducts.values.expand((x) => x).toList();
 
-      // Apply sorting
+      // Sortera produkterna enligt valt sorteringsläge
       if (sortMode == SortMode.byPrice) {
         products.sort((a, b) => a.price.compareTo(b.price));
       } else if (sortMode == SortMode.alphabetical) {
         products.sort((a, b) => a.name.compareTo(b.name));
       }
 
+      // Bygg rutnätsvyn
       return GridView.builder(
         padding: const EdgeInsets.all(16),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -52,6 +56,7 @@ class ProductGrid extends StatelessWidget {
             product,
             iMat,
             onTap: () {
+              // Visa popup med produktdetaljer vid klick
               showDialog(
                 context: context,
                 barrierColor: Colors.black.withOpacity(0.5),
@@ -63,7 +68,7 @@ class ProductGrid extends StatelessWidget {
       );
     }
 
-    // Horizontal layout (default)
+    // Standardläge: visa produkter horisontellt per kategori
     return ListView.builder(
       padding: const EdgeInsets.all(AppTheme.paddingSmall),
       itemCount: categorizedProducts.length,
@@ -73,18 +78,20 @@ class ProductGrid extends StatelessWidget {
           categorizedProducts[category]!,
         );
 
-        // Apply sorting
+        // Sortera produkterna enligt valt sorteringsläge
         if (sortMode == SortMode.byPrice) {
           products.sort((a, b) => a.price.compareTo(b.price));
         } else if (sortMode == SortMode.alphabetical) {
           products.sort((a, b) => a.name.compareTo(b.name));
         }
 
+        // ScrollController för horisontell scrollning
         final scrollController = ScrollController();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Kategorirubrik
             Row(
               children: [
                 Expanded(
@@ -111,7 +118,7 @@ class ProductGrid extends StatelessWidget {
               height: 300,
               child: Stack(
                 children: [
-                  // Själva produktlistan
+                  // Horisontell lista med produkter
                   ListView.separated(
                     controller: scrollController,
                     scrollDirection: Axis.horizontal,
@@ -127,6 +134,7 @@ class ProductGrid extends StatelessWidget {
                           product,
                           iMat,
                           onTap: () {
+                            // Visa popup med produktdetaljer vid klick
                             showDialog(
                               context: context,
                               barrierColor: Colors.black.withOpacity(0.5),
@@ -140,7 +148,7 @@ class ProductGrid extends StatelessWidget {
                     },
                   ),
 
-                  // Vänsterpil
+                  // Vänsterpil för att scrolla bakåt
                   Positioned(
                     left: 0,
                     top: 0,
@@ -166,7 +174,7 @@ class ProductGrid extends StatelessWidget {
                     ),
                   ),
 
-                  // Högerpil
+                  // Högerpil för att scrolla framåt
                   Positioned(
                     right: 0,
                     top: 0,
@@ -194,7 +202,7 @@ class ProductGrid extends StatelessWidget {
                 ],
               ),
             ),
-
+            // Extra utrymme mellan kategorier
             const SizedBox(height: AppTheme.paddingLarge),
           ],
         );
