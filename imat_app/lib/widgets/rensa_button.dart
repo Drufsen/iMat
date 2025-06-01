@@ -1,6 +1,7 @@
 // lib/widgets/rensa_button.dart
 
 import 'package:flutter/material.dart';
+import 'package:imat_app/widgets/scalable_text.dart';
 
 class RensaButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -12,7 +13,7 @@ class RensaButton extends StatelessWidget {
     final button = ElevatedButton.icon(
       onPressed: onPressed,
       icon: const Icon(Icons.delete),
-      label: const Text("Rensa"),
+      label: const ScalableText("Rensa", style: TextStyle(fontSize: 16)),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.red,
         foregroundColor: Colors.white,
@@ -22,6 +23,6 @@ class RensaButton extends StatelessWidget {
       ),
     );
 
-    return button; // ✅ Add this line
+    return button;
   }
 }

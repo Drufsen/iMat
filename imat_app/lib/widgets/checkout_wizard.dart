@@ -35,6 +35,10 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
 
   bool _isOrderCompleted = false;
 
+  // Add state variables to track validation
+  bool _deliveryFormValid = false;
+  bool _paymentFormValid = false;
+
   @override
   void initState() {
     super.initState();
@@ -149,11 +153,21 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
         formKey: _deliveryFormKey,
         onDataChanged: (data) => _deliveryFormData = data,
         initialData: _deliveryFormData,
+        onValidationChanged: (isValid) {
+          setState(() {
+            _deliveryFormValid = isValid;
+          });
+        },
       ),
       PaymentStep(
         formKey: _paymentFormKey,
         onDataChanged: (data) => _paymentFormData = data,
         initialData: _paymentFormData,
+        onValidationChanged: (isValid) {
+          setState(() {
+            _paymentFormValid = isValid;
+          });
+        },
       ),
       ConfirmationStep(
         selectedDate: _selectedDate,
@@ -162,6 +176,13 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
         onTimeSlotSelected: _selectTimeSlot,
       ),
     ];
+
+    // Then in your UI, update the Next button based on form validity
+    bool isNextEnabled =
+        _step == 0 || // Cart review always enabled
+        (_step == 1 && _deliveryFormValid) ||
+        (_step == 2 && _paymentFormValid) ||
+        _step == 3; // Confirmation always enabled
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -206,11 +227,15 @@ class _CheckoutWizardState extends State<CheckoutWizard> {
                                     child: const ScalableText("Tillbaka"),
                                   ),
                               ElevatedButton(
-                                onPressed: _nextStep,
+                                onPressed:
+                                    isNextEnabled
+                                        ? _nextStep
+                                        : null, // Disable if not valid
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.teal,
                                   foregroundColor:
                                       AppTheme.colorScheme.onPrimary,
+                                  disabledBackgroundColor: Colors.grey,
                                 ),
                                 child: ScalableText(
                                   _step == totalSteps - 1 ? "Slutför" : "Nästa",

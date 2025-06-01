@@ -36,19 +36,24 @@ class _FilteredProductSectionState extends State<FilteredProductSection> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (isFilteredView)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ElevatedButton.icon(
-                onPressed: widget.onClearFilter,
-                icon: const Icon(Icons.arrow_back),
-                label: const ScalableText("Tillbaka"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.brand,
-                  foregroundColor: AppTheme.colorScheme.onPrimary,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppTheme.paddingMedium,
+              vertical: AppTheme.paddingSmall,
+            ),
+            child: Row(
+              children: [
+                ElevatedButton.icon(
+                  onPressed: widget.onClearFilter,
+                  icon: Icon(Icons.arrow_back),
+                  label: ScalableText("Tillbaka", style: TextStyle(fontSize: 16)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.brand,
+                    foregroundColor: AppTheme.colorScheme.onPrimary,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         Expanded(
           child: ProductGrid(
@@ -56,7 +61,7 @@ class _FilteredProductSectionState extends State<FilteredProductSection> {
             iMat: widget.iMat,
             selectedCategory: widget.selectedCategory,
             isFilteredView: isFilteredView,
-            sortMode: widget.sortMode, // Pass it down
+            sortMode: widget.sortMode,
           ),
         ),
       ],

@@ -38,8 +38,8 @@ class AddToCartButton extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         ),
-        icon: const Icon(Icons.add_shopping_cart),
-        label: const ScalableText("Lägg till"),
+        icon: Icon(Icons.add_shopping_cart),
+        label: ScalableText("Lägg till", style: TextStyle(fontSize: 16)),
       );
     } else {
       return Container(
@@ -83,7 +83,7 @@ class AddToCartButton extends StatelessWidget {
                 border: Border.all(color: Colors.teal, width: 1),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: Text(
+              child: ScalableText(
                 '${currentAmount.toInt()}',
                 style: const TextStyle(
                   fontSize: 18,

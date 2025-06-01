@@ -19,7 +19,7 @@ class CloseButtonWidget extends StatelessWidget {
         textStyle: const TextStyle(fontWeight: FontWeight.bold),
       ),
       icon: const Icon(Icons.close),
-      label: const ScalableText("Stäng"),
+      label: ScalableText("Stäng", style: TextStyle(fontSize: 16)),
     );
   }
 }
