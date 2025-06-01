@@ -46,8 +46,8 @@ class ProductGrid extends StatelessWidget {
         products.sort((a, b) => a.name.compareTo(b.name));
       }
 
-      // Calculate the same height as used in non-filtered view
-      final cardHeight = 300 * scaleFactor;
+      // Calculate the same height as used in non-filtered view with dynamic adjustment
+      final cardHeight = 300 * scaleFactor * 1.01; // Add 1% extra height to prevent overflow at any text size
 
       // Use a wrap layout with height-constrained items
       return Padding(
