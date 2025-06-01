@@ -83,7 +83,7 @@ class AddToCartButton extends StatelessWidget {
                 border: Border.all(color: Colors.teal, width: 1),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: Text(
+              child: ScalableText(
                 '${currentAmount.toInt()}',
                 style: const TextStyle(
                   fontSize: 18,
