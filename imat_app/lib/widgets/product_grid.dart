@@ -6,6 +6,8 @@ import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/app_theme.dart';
 import 'package:imat_app/widgets/product_detail_popup.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
+import 'package:provider/provider.dart';
+import 'package:imat_app/providers/text_size_provider.dart';
 
 class ProductGrid extends StatelessWidget {
   final Map<String, List<Product>> categorizedProducts;
@@ -25,6 +27,9 @@ class ProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the text scale factor to adjust heights
+    final textScale = Provider.of<TextSizeProvider>(context).textScale;
+
     if (isFilteredView) {
       // Flatten products into a single list
       List<Product> products =
@@ -39,27 +44,28 @@ class ProductGrid extends StatelessWidget {
 
       return GridView.builder(
         padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 0.9,
+          // Remove fixed aspect ratio to allow variable heights
+          childAspectRatio: 0.7, // Base aspect ratio
         ),
         itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return ProductCard(
-            product,
-            iMat,
-            onTap: () {
-              showDialog(
-                context: context,
-                barrierColor: Colors.black.withOpacity(0.5),
-                builder: (context) => ProductDetailDialog(product: product),
-              );
-            },
-          );
-        },
+        itemBuilder:
+            (context, index) => ProductCard(
+              products[index],
+              iMat,
+              onTap: () {
+                showDialog(
+                  context: context,
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  builder:
+                      (context) =>
+                          ProductDetailDialog(product: products[index]),
+                );
+              },
+            ),
       );
     }
 
@@ -107,11 +113,14 @@ class ProductGrid extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
+            // Adjust the height based on text scale
             SizedBox(
-              height: 300,
+              height:
+                  300 *
+                  textScale, // Dynamically scale height from a base of 300
               child: Stack(
                 children: [
-                  // Själva produktlistan
+                  // Product list
                   ListView.separated(
                     controller: scrollController,
                     scrollDirection: Axis.horizontal,
@@ -123,6 +132,7 @@ class ProductGrid extends StatelessWidget {
                       final product = products[idx];
                       return SizedBox(
                         width: 250,
+                        // No fixed height here - let it adapt
                         child: ProductCard(
                           product,
                           iMat,
@@ -140,7 +150,7 @@ class ProductGrid extends StatelessWidget {
                     },
                   ),
 
-                  // Vänsterpil
+                  // Left arrow
                   Positioned(
                     left: 0,
                     top: 0,
@@ -148,7 +158,7 @@ class ProductGrid extends StatelessWidget {
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        const scrollAmount = 250.0 * 4; // 4 produkter à 250px
+                        const scrollAmount = 250.0 * 4;
                         scrollController.animateTo(
                           scrollController.offset - scrollAmount,
                           duration: const Duration(milliseconds: 400),
@@ -166,7 +176,7 @@ class ProductGrid extends StatelessWidget {
                     ),
                   ),
 
-                  // Högerpil
+                  // Right arrow
                   Positioned(
                     right: 0,
                     top: 0,

@@ -4,6 +4,8 @@ import 'package:imat_app/model/imat/product.dart';
 import 'package:imat_app/model/imat_data_handler.dart';
 import 'package:imat_app/widgets/add_to_cart_button.dart';
 import 'package:imat_app/widgets/scalable_text.dart';
+import 'package:provider/provider.dart';
+import 'package:imat_app/providers/text_size_provider.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -15,59 +17,79 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isFavorite = iMat.isFavorite(product);
+    final textScale = Provider.of<TextSizeProvider>(context).textScale;
+
+    // Fixed height for card that scales with text size
+    final cardHeight = 300 * textScale;
 
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
-      child: SizedBox(
+      child: Container(
         width: 280,
-        height: 300,
+        height: cardHeight, // Fixed height that scales with text size
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.teal, width: 3),
+        ),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.teal, width: 3),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 140,
-                      width: 150,
-                      child: iMat.getImage(product),
-                    ),
-                    const SizedBox(height: 12),
-                    ScalableText(
-                      product.name,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+            // Using a Column with MainAxisAlignment.spaceBetween to push button to bottom
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Key change
+                children: [
+                  // Top content in its own column
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 10),
+                      // Keep the image size fixed
+                      SizedBox(
+                        height: 140,
+                        width: 150,
+                        child: iMat.getImage(product),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 4),
-                    ScalableText(
-                      '${product.price.toStringAsFixed(2)} ${product.unit}',
-                      style: const TextStyle(fontSize: 12),
-                      textAlign: TextAlign.center,
-                    ),
-                    const Spacer(),
-                    const SizedBox(height: 5),
-                    SizedBox(
-                      height: 47,
-                      width: double.infinity,
-                      child: AddToCartButton(product: product),
-                    ),
-                  ],
-                ),
+                      const SizedBox(height: 12),
+
+                      // Product name
+                      ScalableText(
+                        product.name,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+
+                      // Price
+                      ScalableText(
+                        '${product.price.toStringAsFixed(2)} ${product.unit}',
+                        style: const TextStyle(fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+
+                  // Button at the bottom
+                  SizedBox(
+                    height: 47 * textScale, // Scale button height with text
+                    width: double.infinity,
+                    child: AddToCartButton(product: product),
+                  ),
+                ],
               ),
             ),
+
+            // Favorite button
             Positioned(
               top: 10,
               right: 10,
