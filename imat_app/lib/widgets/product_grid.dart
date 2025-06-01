@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:imat_app/providers/text_size_provider.dart';
 import 'package:imat_app/widgets/hover_button.dart';
 
+/// Widget som visar produkter antingen i ett rutnät (filtrerat läge)
+/// eller horisontellt per kategori (standardläge).
 class ProductGrid extends StatelessWidget {
   final Map<String, List<Product>> categorizedProducts;
   final ImatDataHandler iMat;
@@ -28,24 +30,24 @@ class ProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     // Get the text scale factor to adjust heights
     final textScale = Provider.of<TextSizeProvider>(context).textScale;
     
     // Use a more moderate scaling factor to avoid excessive spaces - same as in ProductCard
     final scaleFactor = 1.0 + ((textScale - 1.0) * 0.7);
-
+    
     if (isFilteredView) {
-      // Flatten products into a single list
+      // Platta ut alla produkter till en lista
       List<Product> products =
           categorizedProducts.values.expand((x) => x).toList();
 
-      // Apply sorting
+      // Sortera produkterna enligt valt sorteringsläge
       if (sortMode == SortMode.byPrice) {
         products.sort((a, b) => a.price.compareTo(b.price));
       } else if (sortMode == SortMode.alphabetical) {
         products.sort((a, b) => a.name.compareTo(b.name));
       }
-
       // Calculate the same height as used in non-filtered view with dynamic adjustment
       final cardHeight = 300 * scaleFactor * 1.01; // Add 1% extra height to prevent overflow at any text size
 
@@ -78,7 +80,7 @@ class ProductGrid extends StatelessWidget {
       );
     }
 
-    // Horizontal layout (default)
+    // Standardläge: visa produkter horisontellt per kategori
     return ListView.builder(
       padding: const EdgeInsets.all(AppTheme.paddingSmall),
       itemCount: categorizedProducts.length,
@@ -88,18 +90,20 @@ class ProductGrid extends StatelessWidget {
           categorizedProducts[category]!,
         );
 
-        // Apply sorting
+        // Sortera produkterna enligt valt sorteringsläge
         if (sortMode == SortMode.byPrice) {
           products.sort((a, b) => a.price.compareTo(b.price));
         } else if (sortMode == SortMode.alphabetical) {
           products.sort((a, b) => a.name.compareTo(b.name));
         }
 
+        // ScrollController för horisontell scrollning
         final scrollController = ScrollController();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Kategorirubrik
             Row(
               children: [
                 Expanded(
@@ -144,6 +148,7 @@ class ProductGrid extends StatelessWidget {
                           product,
                           iMat,
                           onTap: () {
+                            // Visa popup med produktdetaljer vid klick
                             showDialog(
                               context: context,
                               barrierColor: Colors.black.withOpacity(0.5),
@@ -154,7 +159,6 @@ class ProductGrid extends StatelessWidget {
                       );
                     },
                   ),
-
                   // Left arrow - only show when not at the beginning
                   StreamBuilder<double>(
                     stream: Stream.periodic(const Duration(milliseconds: 100), (
@@ -217,7 +221,6 @@ class ProductGrid extends StatelessWidget {
                       );
                     },
                   ),
-
                   // Right arrow - only show when not at the end
                   StreamBuilder<double>(
                     stream: Stream.periodic(const Duration(milliseconds: 100), (
@@ -284,7 +287,7 @@ class ProductGrid extends StatelessWidget {
                 ],
               ),
             ),
-
+            // Extra utrymme mellan kategorier
             const SizedBox(height: AppTheme.paddingLarge),
           ],
         );
